@@ -1,2 +1,4 @@
 # PyGame
-Mail repos for our game
+Main repos for our game
+
+Yas
