@@ -57,7 +57,7 @@ class DoGeX():
         if event.key == pygame.K_DOWN:
             self.character.moving_down = True
         
-        elif event.key == pygame.K_q:
+        elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
 
 
