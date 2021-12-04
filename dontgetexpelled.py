@@ -36,33 +36,46 @@ class DoGeX():
                 sys.exit()
                 
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    sys.exit()
-                    
-                if event.key == pygame.K_RIGHT:
-                    self.character.moving_right = True
-                    
-                if event.key == pygame.K_LEFT:
-                    self.character.moving_left = True
-                    
-                if event.key == pygame.K_UP:
-                    self.character.moving_up = True
-
-                if event.key == pygame.K_DOWN:
-                    self.character.moving_down = True
+                self._check_keydown_events(event)
 
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_RIGHT:
-                    self.character.moving_right = False
-                    
-                if event.key == pygame.K_LEFT:
-                    self.character.moving_left = False
+                self._check_keyup_events(event)
 
-                if event.key == pygame.K_UP:
-                    self.character.moving_up = False
 
-                if event.key == pygame.K_DOWN:
-                    self.character.moving_down = False
+
+    def _check_keydown_events(self, event):
+
+        if event.key == pygame.K_RIGHT:
+            self.character.moving_right = True
+            
+        if event.key == pygame.K_LEFT:
+            self.character.moving_left = True
+            
+        if event.key == pygame.K_UP:
+            self.character.moving_up = True
+
+        if event.key == pygame.K_DOWN:
+            self.character.moving_down = True
+        
+        elif event.key == pygame.K_q:
+            sys.exit()
+
+
+
+    def _check_keyup_events(self, event):
+        if event.key == pygame.K_RIGHT:
+            self.character.moving_right = False
+            
+        if event.key == pygame.K_LEFT:
+            self.character.moving_left = False
+
+        if event.key == pygame.K_UP:
+            self.character.moving_up = False
+
+        if event.key == pygame.K_DOWN:
+            self.character.moving_down = False
+
+
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
