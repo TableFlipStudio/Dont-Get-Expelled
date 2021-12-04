@@ -8,3 +8,5 @@ class Settings():
 
         self.character_speed = 1.0
 
+        #yes my comment good
+
