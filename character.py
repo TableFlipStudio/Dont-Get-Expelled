@@ -26,16 +26,16 @@ class MainCharacter():
         """Aktualizacja położenia głównej postaci"""
 
         if self.moving_right and self.rect.right < self.settings.screen_width:
-            self.rect.x += 1
+            self.rect.x += self.settings.character_speed
             
         if self.moving_left and self.rect.left > 0:
-            self.rect.x -= 1
+            self.rect.x -= self.settings.character_speed
 
         if self.moving_up and self.rect.top > 0:
-            self.rect.y -= 1
+            self.rect.y -= self.settings.character_speed
 
         if self.moving_down and self.rect.bottom < self.settings.screen_height:
-            self.rect.y += 1
+            self.rect.y += self.settings.character_speed
 
     def blitme(self):
         """Wyświetlenie postaci głównej na ekranie"""
