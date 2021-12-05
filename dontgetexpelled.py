@@ -27,7 +27,10 @@ class DoGeX():
 
         while True:
             self._check_events()
-            self.character.update()
+
+            if not self.inventory.inventory_active:
+                self.character.update()
+                
             self._update_screen()
 
     def _check_events(self):
