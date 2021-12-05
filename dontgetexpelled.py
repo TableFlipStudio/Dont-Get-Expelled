@@ -59,6 +59,7 @@ class DoGeX():
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
 
+
         #WSAD
         if event.key == pygame.K_a:
             self.ship.moving_left = False
