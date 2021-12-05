@@ -46,52 +46,41 @@ class DoGeX():
     def _check_keydown_events(self, event):
 
         #Arrows
-        if event.key == pygame.K_RIGHT:
+        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = True
-        if event.key == pygame.K_LEFT:
+
+        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = True
-        if event.key == pygame.K_UP:
+
+        if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = True
-        if event.key == pygame.K_DOWN:
+
+        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = True
         
+
+       
         #Exit
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
 
-        #WSAD
-        if event.key == pygame.K_a:
-            self.ship.moving_left = False
-        if event.key == pygame.K_d:
-            self.ship.moving_right = False
-        if event.key == pygame.K_w:
-            self.ship.moving_up = False
-        if event.key == pygame.K_s:
-            self.ship.moving_down = False
-
-
-
     def _check_keyup_events(self, event):
 
         #Arrows
-        if event.key == pygame.K_RIGHT:
+        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = False
-        if event.key == pygame.K_LEFT:
+
+        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = False
-        if event.key == pygame.K_UP:
+
+        if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = False
-        if event.key == pygame.K_DOWN:
+
+        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = False
 
-        #WSAD
-        if event.key == pygame.K_a:
-            self.ship.moving_left = False
-        if event.key == pygame.K_d:
-            self.ship.moving_right = False
-        if event.key == pygame.K_w:
-            self.ship.moving_up = False
-        if event.key == pygame.K_s:
-            self.ship.moving_down = False
+
+       
 
 
     def _update_screen(self):
