@@ -9,3 +9,4 @@ class Settings():
 
         #Ustawienia dotyczące postaci głównej
         self.character_speed = 1.0
+        #somecomments
