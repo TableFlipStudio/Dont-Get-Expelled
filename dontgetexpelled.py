@@ -69,7 +69,7 @@ class DoGeX():
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
-
+        
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = False
 
