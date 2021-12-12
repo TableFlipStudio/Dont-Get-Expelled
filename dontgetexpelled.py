@@ -93,7 +93,6 @@ class DoGeX():
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
 
-
 if __name__ == '__main__':
     dogex = DoGeX()
     dogex.run_game()
