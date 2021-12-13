@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from character import MainCharacter
 from inventory import Inventory
+from inventory import Slot
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -21,6 +22,10 @@ class DoGeX():
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
         self.inventory = Inventory(self)
+        self.slots = pygame.sprite.Group()
+
+        #Utworzenie slotów
+        self._create_slots()
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -69,7 +74,7 @@ class DoGeX():
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
-        
+
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = False
 
@@ -82,13 +87,23 @@ class DoGeX():
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = False
 
+    def _create_slots(self):
+        """Utworzenie wszystkich slotów ekwipunku"""
+        slot = Slot(self.inventory)
+        self.slots.add(slot)
+
+
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
 
         self.screen.fill(self.settings.bg_color)
         self.character.blitme()
+
+        #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
         if self.inventory.inventory_active:
             self.inventory.display_inventory()
+            for slot in self.slots.sprites():
+                slot.draw_slot()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
