@@ -89,8 +89,18 @@ class DoGeX():
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
-        slot = Slot(self.inventory)
-        self.slots.add(slot)
+
+        for row_number in range(2): #Dwa rzędy slotów
+            for slot_number in range(8): #Po 8 slotów każdy
+                slot = Slot(self.inventory)
+                slot_width  = slot.rect.width
+                slot_height = slot.rect.height
+
+                slot.x = (slot.rect.x + slot_width +
+                    1.5 * slot_width * slot_number)
+                slot.rect.x = slot.x
+                slot.rect.y += slot_height + 2 * slot_height * row_number
+                self.slots.add(slot)
 
 
     def _update_screen(self):
