@@ -3,8 +3,8 @@ import pygame
 
 from settings import Settings
 from character import MainCharacter
-from inventory import Inventory
-from inventory import Slot
+from inventory import Inventory, Slot
+from item import Item
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -23,9 +23,15 @@ class DoGeX():
         self.character = MainCharacter(self)
         self.inventory = Inventory(self)
         self.slots = pygame.sprite.Group()
+        self.items = pygame.sprite.Group()
 
         #Utworzenie slotów
         self._create_slots()
+
+        #Testowe rozmieszczenie przedmiotów
+        self.items.add(Item(self, 'red_ball', 100, 100))
+        self.items.add(Item(self, 'blue_ball', 1000, 400))
+        self.items.add(Item(self, 'green_ball', 500, 650))
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -114,6 +120,11 @@ class DoGeX():
             self.inventory.display_inventory()
             for slot in self.slots.sprites():
                 slot.draw_slot()
+
+        #Wyświetlamy przedmioty tylko, gdy ekwipunek jest nieaktywny
+        if not self.inventory.inventory_active:
+            for item in self.items.sprites():
+                item.blit_item()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
