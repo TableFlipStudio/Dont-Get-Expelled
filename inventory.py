@@ -35,6 +35,16 @@ class Slot(Sprite):
         self.rect.left = inventory.rect.centerx - 550
         self.rect.y = inventory.rect.centery - 200
 
+        #Slot początowo jest pusty
+        self.content = None
+        self.content_rect = None
+
     def draw_slot(self):
         """Wyświetlenie slotów na ekwipunku"""
         pygame.draw.rect(self.screen, self.color, self.rect)
+
+    def blit_content(self):
+        """Wyświetlenie przedmiotów w slotach"""
+        if self.content != None:
+            self.content_rect.center = self.rect.center
+            self.screen.blit(self.content, self.content_rect)

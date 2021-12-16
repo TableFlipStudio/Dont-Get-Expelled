@@ -117,6 +117,18 @@ class DoGeX():
 
         for item in self.items.copy():
             if pygame.Rect.colliderect(self.character.rect, item):
+                for slot in self.slots.sprites():
+
+                    #Zignoruj slot jeśli coś już zawiera
+                    if slot.content is not None:
+                        continue
+
+                    #Umieść przedmiot tylko raz
+                    else:
+                        slot.content = item.image
+                        slot.content_rect = item.rect
+                        break
+
                 self.items.remove(item)
 
 
@@ -131,6 +143,7 @@ class DoGeX():
             self.inventory.display_inventory()
             for slot in self.slots.sprites():
                 slot.draw_slot()
+                slot.blit_content()
 
         #Wyświetlamy przedmioty tylko, gdy ekwipunek jest nieaktywny
         if not self.inventory.active:
