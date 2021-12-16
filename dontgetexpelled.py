@@ -39,7 +39,7 @@ class DoGeX():
         while True:
             self._check_events()
 
-            if not self.inventory.inventory_active:
+            if not self.inventory.active:
                 self.character.update()
 
             self._update_screen()
@@ -73,7 +73,10 @@ class DoGeX():
             self.character.moving_down = True
 
         if event.key == pygame.K_i:
-            self.inventory.inventory_active = not self.inventory.inventory_active
+            self.inventory.active = not self.inventory.active
+
+        if event.key == pygame.K_SPACE:
+            self._pickup_item()
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
@@ -108,6 +111,14 @@ class DoGeX():
                 slot.rect.y += slot_height + 2 * slot_height * row_number
                 self.slots.add(slot)
 
+    def _pickup_item(self):
+        """Sprawdzenie, czy postać stoi koło przedmiotu
+        i ewentualne podniesienie"""
+
+        for item in self.items.copy():
+            if pygame.Rect.colliderect(self.character.rect, item):
+                self.items.remove(item)
+
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
@@ -116,13 +127,13 @@ class DoGeX():
         self.character.blitme()
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
-        if self.inventory.inventory_active:
+        if self.inventory.active:
             self.inventory.display_inventory()
             for slot in self.slots.sprites():
                 slot.draw_slot()
 
         #Wyświetlamy przedmioty tylko, gdy ekwipunek jest nieaktywny
-        if not self.inventory.inventory_active:
+        if not self.inventory.active:
             for item in self.items.sprites():
                 item.blit_item()
 

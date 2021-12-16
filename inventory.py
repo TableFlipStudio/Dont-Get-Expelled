@@ -12,7 +12,7 @@ class Inventory():
         self.rect = self.image.get_rect()
 
         #Okno ekwipunku na początku jest zamknięte
-        self.inventory_active = False
+        self.active = False
 
     def display_inventory(self):
         """Wyświetlenie ekwipunku na ekranie"""
