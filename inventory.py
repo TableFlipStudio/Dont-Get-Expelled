@@ -37,7 +37,6 @@ class Slot(Sprite):
 
         #Slot początowo jest pusty
         self.content = None
-        self.content_rect = None
 
     def draw_slot(self):
         """Wyświetlenie slotów na ekwipunku"""
@@ -46,5 +45,5 @@ class Slot(Sprite):
     def blit_content(self):
         """Wyświetlenie przedmiotów w slotach"""
         if self.content != None:
-            self.content_rect.center = self.rect.center
-            self.screen.blit(self.content, self.content_rect)
+            self.content.rect.center = self.rect.center
+            self.screen.blit(self.content.image, self.content.rect)

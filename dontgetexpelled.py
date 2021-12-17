@@ -75,7 +75,7 @@ class DoGeX():
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
 
-        if event.key == pygame.K_SPACE:
+        if event.key == pygame.K_e:
             self._pickup_item()
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
@@ -125,8 +125,7 @@ class DoGeX():
 
                     #Umieść przedmiot tylko raz
                     else:
-                        slot.content = item.image
-                        slot.content_rect = item.rect
+                        slot.content = item
                         break
 
                 self.items.remove(item)
