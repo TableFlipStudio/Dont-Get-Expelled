@@ -57,6 +57,10 @@ class DoGeX():
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
+            elif event.type == pygame.MOUSEBUTTONDOWN and self.inventory.active:
+                mouse_pos = pygame.mouse.get_pos()
+                self.inventory.grab_item(self, mouse_pos)
+
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
 
@@ -130,7 +134,6 @@ class DoGeX():
 
                 self.items.remove(item)
 
-
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
 
@@ -143,6 +146,8 @@ class DoGeX():
             for slot in self.slots.sprites():
                 slot.draw_slot()
                 slot.blit_content()
+
+            self.inventory.display_grabbed_item()
 
         #Wyświetlamy przedmioty tylko, gdy ekwipunek jest nieaktywny
         if not self.inventory.active:
