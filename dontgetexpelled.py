@@ -57,9 +57,13 @@ class DoGeX():
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
-            elif event.type == pygame.MOUSEBUTTONDOWN and self.inventory.active:
+            if event.type == pygame.MOUSEBUTTONDOWN and self.inventory.active:
                 mouse_pos = pygame.mouse.get_pos()
                 self.inventory.grab_item(self, mouse_pos)
+
+            elif event.type == pygame.MOUSEBUTTONUP and self.inventory.active:
+                mouse_pos = pygame.mouse.get_pos()
+                self.inventory.release_item(self, mouse_pos)
 
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
@@ -79,7 +83,7 @@ class DoGeX():
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
 
-        if event.key == pygame.K_e:
+        if event.key == pygame.K_e and not self.inventory.active:
             self._pickup_item()
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
@@ -122,13 +126,8 @@ class DoGeX():
         for item in self.items.copy():
             if pygame.Rect.colliderect(self.character.rect, item):
                 for slot in self.slots.sprites():
-
-                    #Zignoruj slot jeśli coś już zawiera
-                    if slot.content is not None:
-                        continue
-
                     #Umieść przedmiot tylko raz
-                    else:
+                    if slot.content is None:
                         slot.content = item
                         break
 

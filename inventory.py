@@ -28,6 +28,21 @@ class Inventory():
                 self.grabbed_item = slot.content
                 slot.content = None
 
+    def release_item(self, dogex, mouse_pos):
+        """Upuszczenie przedmiotu z powrotem do slotu"""
+        for slot in dogex.slots.sprites():
+            if slot.rect.collidepoint(mouse_pos) and slot.content is None:
+                slot.content = self.grabbed_item
+                self.grabbed_item = None
+                return
+
+        #Uruchamiane tylko, jeśli kursor myszy nie był na żadnym slocie
+        for slot in dogex.slots.sprites():
+            if slot.content is None:
+                slot.content = self.grabbed_item
+                self.grabbed_item = None
+                break
+
     def display_grabbed_item(self):
         """Wyświetlenie przedmiotu podniesionego przy użyciu myszy"""
         if self.grabbed_item is not None:
