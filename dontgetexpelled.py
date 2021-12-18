@@ -25,6 +25,10 @@ class DoGeX():
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
 
+        #Przed wywołaniem _create_slots() nie ma jeszcze slotu do upuszczania
+        #Atrybut wyłącznie dla przejrzystości kodu
+        self.drop_slot = None
+
         #Utworzenie slotów
         self._create_slots()
 
@@ -106,7 +110,6 @@ class DoGeX():
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
-
         for row_number in range(2): #Dwa rzędy slotów
             for slot_number in range(8): #Po 8 slotów każdy
                 slot = Slot(self.inventory)
@@ -118,6 +121,11 @@ class DoGeX():
                 slot.rect.x = slot.x
                 slot.rect.y += slot_height + 2 * slot_height * row_number
                 self.slots.add(slot)
+            else:
+                slot = Slot(self.inventory)
+                slot.rect.centerx = self.screen.get_rect().centerx
+                slot.rect.y += slot_height + 2 * slot_height * 2
+                self.drop_slot = slot
 
     def _pickup_item(self):
         """Sprawdzenie, czy postać stoi koło przedmiotu
@@ -145,6 +153,9 @@ class DoGeX():
             for slot in self.slots.sprites():
                 slot.draw_slot()
                 slot.blit_content()
+
+            #Wyświetlenie slotu do upuszczania przemiotów
+            self.drop_slot.draw_slot()
 
             self.inventory.display_grabbed_item()
 
