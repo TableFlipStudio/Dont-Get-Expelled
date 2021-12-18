@@ -46,19 +46,15 @@ class Inventory():
         #Uruchamiane tylko, jeśli nie upuszczono przedmiotu do żadnego slotu
         #lub slot, do którego go upuszczono był zajęty.
         for slot in dogex.slots.sprites():
-            self._put_item_back(slot, mouse_pos)
-            break   #Umieść przedmiot tylko raz
+            if slot.content is None:
+                slot.content = self.grabbed_item
+                self.grabbed_item = None
+                break   #Umieść przedmiot tylko raz
 
     def _put_item_in_slot(self, slot, mouse_pos):
         """Umieszczenie pochwyconego myszą przedmiotu w slocie,
         jeśli jest on pusty"""
         if slot.rect.collidepoint(mouse_pos) and slot.content is None:
-            slot.content = self.grabbed_item
-            self.grabbed_item = None
-
-    def _put_item_back(self, slot, mouse_pos):
-        """Umieszczenie przedmiotu w pierwszym wolnym slocie"""
-        if slot.content is None:
             slot.content = self.grabbed_item
             self.grabbed_item = None
             return
