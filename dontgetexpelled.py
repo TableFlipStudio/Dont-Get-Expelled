@@ -141,6 +141,11 @@ class DoGeX():
 
                 self.items.remove(item)
 
+    def _lay_item(self, item):
+        """Umieszczenie na mapie przedmiotu wyrzuconego z ekwipunku"""
+        item.rect.midleft = self.character.rect.midright
+        self.items.add(item)
+
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
 
@@ -157,6 +162,7 @@ class DoGeX():
             #Wyświetlenie slotu do upuszczania przemiotów
             self.drop_slot.draw_slot()
 
+            #Wyświetlenie przedmiotu pochwyconego myszą
             self.inventory.display_grabbed_item()
 
         #Wyświetlamy przedmioty tylko, gdy ekwipunek jest nieaktywny

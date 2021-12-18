@@ -30,18 +30,38 @@ class Inventory():
 
     def release_item(self, dogex, mouse_pos):
         """Upuszczenie przedmiotu z powrotem do slotu"""
-        for slot in dogex.slots.sprites():
-            if slot.rect.collidepoint(mouse_pos) and slot.content is None:
-                slot.content = self.grabbed_item
-                self.grabbed_item = None
-                return
 
-        #Uruchamiane tylko, jeśli kursor myszy nie był na żadnym slocie
+        #Wyrzucenie przedmiotu z ekwipunku jesli został wrzucony
+        #do slotu upuszczającego
+        if dogex.drop_slot.rect.collidepoint(mouse_pos):
+            item = self.grabbed_item
+            dogex._lay_item(item)
+            self.grabbed_item = None
+            return
+
+        #Uruchamiane tylko jeśli przedmiot nie został wyrzucony z ekwipunku
         for slot in dogex.slots.sprites():
-            if slot.content is None:
-                slot.content = self.grabbed_item
-                self.grabbed_item = None
-                break
+            self._put_item_in_slot(slot, mouse_pos)
+
+        #Uruchamiane tylko, jeśli nie upuszczono przedmiotu do żadnego slotu
+        #lub slot, do którego go upuszczono był zajęty.
+        for slot in dogex.slots.sprites():
+            self._put_item_back(slot, mouse_pos)
+            break   #Umieść przedmiot tylko raz
+
+    def _put_item_in_slot(self, slot, mouse_pos):
+        """Umieszczenie pochwyconego myszą przedmiotu w slocie,
+        jeśli jest on pusty"""
+        if slot.rect.collidepoint(mouse_pos) and slot.content is None:
+            slot.content = self.grabbed_item
+            self.grabbed_item = None
+
+    def _put_item_back(self, slot, mouse_pos):
+        """Umieszczenie przedmiotu w pierwszym wolnym slocie"""
+        if slot.content is None:
+            slot.content = self.grabbed_item
+            self.grabbed_item = None
+            return
 
     def display_grabbed_item(self):
         """Wyświetlenie przedmiotu podniesionego przy użyciu myszy"""
@@ -49,8 +69,6 @@ class Inventory():
             mouse_pos = pygame.mouse.get_pos()
             self.grabbed_item.rect.center = mouse_pos
             self.screen.blit(self.grabbed_item.image, self.grabbed_item.rect)
-
-
 
 
 class Slot(Sprite):
