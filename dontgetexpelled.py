@@ -3,7 +3,8 @@ import pygame
 
 from settings import Settings
 from character import MainCharacter
-from inventory import Inventory
+from inventory import Inventory, Slot
+from item import Item
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -21,6 +22,20 @@ class DoGeX():
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
         self.inventory = Inventory(self)
+        self.slots = pygame.sprite.Group()
+        self.items = pygame.sprite.Group()
+
+        #Przed wywołaniem _create_slots() nie ma jeszcze slotu do upuszczania
+        #Atrybut wyłącznie dla przejrzystości kodu
+        self.drop_slot = None
+
+        #Utworzenie slotów
+        self._create_slots()
+
+        #Testowe rozmieszczenie przedmiotów
+        self.items.add(Item(self, 'red_ball', 100, 100))
+        self.items.add(Item(self, 'blue_ball', 1000, 400))
+        self.items.add(Item(self, 'green_ball', 500, 650))
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -28,7 +43,7 @@ class DoGeX():
         while True:
             self._check_events()
 
-            if not self.inventory.inventory_active:
+            if not self.inventory.active:
                 self.character.update()
 
             self._update_screen()
@@ -46,6 +61,14 @@ class DoGeX():
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
+            if event.type == pygame.MOUSEBUTTONDOWN and self.inventory.active:
+                mouse_pos = pygame.mouse.get_pos()
+                self.inventory.grab_item(self, mouse_pos)
+
+            elif event.type == pygame.MOUSEBUTTONUP and self.inventory.active:
+                mouse_pos = pygame.mouse.get_pos()
+                self.inventory.release_item(self, mouse_pos)
+
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
 
@@ -62,14 +85,17 @@ class DoGeX():
             self.character.moving_down = True
 
         if event.key == pygame.K_i:
-            self.inventory.inventory_active = not self.inventory.inventory_active
+            self.inventory.active = not self.inventory.active
+
+        if event.key == pygame.K_e and not self.inventory.active:
+            self._pickup_item()
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
-        
+
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = False
 
@@ -82,13 +108,67 @@ class DoGeX():
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = False
 
+    def _create_slots(self):
+        """Utworzenie wszystkich slotów ekwipunku"""
+        for row_number in range(2): #Dwa rzędy slotów
+            for slot_number in range(8): #Po 8 slotów każdy
+                slot = Slot(self.inventory)
+                slot_width  = slot.rect.width
+                slot_height = slot.rect.height
+
+                slot.x = (slot.rect.x + slot_width +
+                    1.5 * slot_width * slot_number)
+                slot.rect.x = slot.x
+                slot.rect.y += slot_height + 2 * slot_height * row_number
+                self.slots.add(slot)
+            else:
+                slot = Slot(self.inventory)
+                slot.rect.centerx = self.screen.get_rect().centerx
+                slot.rect.y += slot_height + 2 * slot_height * 2
+                self.drop_slot = slot
+
+    def _pickup_item(self):
+        """Sprawdzenie, czy postać stoi koło przedmiotu
+        i ewentualne podniesienie"""
+
+        for item in self.items.copy():
+            if pygame.Rect.colliderect(self.character.rect, item):
+                for slot in self.slots.sprites():
+                    #Umieść przedmiot tylko raz
+                    if slot.content is None:
+                        slot.content = item
+                        break
+
+                self.items.remove(item)
+
+    def _lay_item(self, item):
+        """Umieszczenie na mapie przedmiotu wyrzuconego z ekwipunku"""
+        item.rect.midleft = self.character.rect.midright
+        self.items.add(item)
+
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
 
         self.screen.fill(self.settings.bg_color)
         self.character.blitme()
-        if self.inventory.inventory_active:
+
+        #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
+        if self.inventory.active:
             self.inventory.display_inventory()
+            for slot in self.slots.sprites():
+                slot.draw_slot()
+                slot.blit_content()
+
+            #Wyświetlenie slotu do upuszczania przemiotów
+            self.drop_slot.draw_slot()
+
+            #Wyświetlenie przedmiotu pochwyconego myszą
+            self.inventory.display_grabbed_item()
+
+        #Wyświetlamy przedmioty tylko, gdy ekwipunek jest nieaktywny
+        if not self.inventory.active:
+            for item in self.items.sprites():
+                item.blit_item()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
