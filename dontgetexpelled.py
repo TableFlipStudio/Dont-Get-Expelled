@@ -5,6 +5,7 @@ from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
 from item import Item
+from TiledMap import Map
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -22,6 +23,7 @@ class DoGeX():
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
         self.inventory = Inventory(self)
+        self.map = Map(self)
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
 
@@ -87,8 +89,9 @@ class DoGeX():
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
 
-        if event.key == pygame.K_e and not self.inventory.active:
-            self._pickup_item()
+        if event.key == pygame.K_e:
+            if not self.inventory.active:
+                self._pickup_item()
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
@@ -150,6 +153,7 @@ class DoGeX():
         """Aktualizacja zawartości ekranu"""
 
         self.screen.fill(self.settings.bg_color)
+        self.map.blitMap()
         self.character.blitme()
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
