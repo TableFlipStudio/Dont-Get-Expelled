@@ -7,6 +7,9 @@ class MainCharacter():
         """Inicjalizacja postaci głównej i zasobów"""
         self.screen = dogex.screen
         self.screen_rect = self.screen.get_rect()
+        self.screen_height = self.screen_rect.height
+        self.screen_width = self.screen_rect.width
+        
         self.settings = dogex.settings
 
         #Wczytanie obrazu głównej postaci
@@ -30,7 +33,7 @@ class MainCharacter():
         output = (
             self.moving_right 
             and 
-            self.rect.right < self.settings.screen_width
+            self.rect.right < self.screen_width
 
         )
         return output
@@ -55,7 +58,7 @@ class MainCharacter():
         output = (
             self.moving_down 
             and 
-            self.rect.bottom < self.settings.screen_height
+            self.rect.bottom < self.screen_height
         )
         return output
 
@@ -64,16 +67,16 @@ class MainCharacter():
 
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
-            self.x += self.settings.character_speed / 2
+            self.x += self.settings.character_speed
 
         if self.can_move_left():
-            self.x -= self.settings.character_speed / 2
+            self.x -= self.settings.character_speed
 
         if self.can_move_up():
-            self.y -= self.settings.character_speed / 2
+            self.y -= self.settings.character_speed
 
         if self.can_move_down():
-            self.y += self.settings.character_speed / 2
+            self.y += self.settings.character_speed
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x

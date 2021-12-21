@@ -1,5 +1,5 @@
 import pygame
-from pytmx import load_pygame, TiledImageLayer, TiledTileLayer
+from pytmx import load_pygame, TiledImageLayer, TiledTileLayer, TiledObjectGroup
 
 class Map():
     def __init__(self, dogex):
@@ -31,8 +31,6 @@ class Map():
         output = (
             self.moving_right 
             and 
-            self.character.rect.left > self.rect.left
-            and
             self.rect.left < self.screen_rect.left
 
         )
@@ -42,8 +40,6 @@ class Map():
         output = (
             self.moving_left 
             and 
-            self.character.rect.right < self.rect.right
-            and
             self.rect.right > self.screen_rect.right
 
         )
@@ -53,8 +49,6 @@ class Map():
         output = (
             self.moving_up 
             and 
-            self.character.rect.bottom < self.rect.bottom
-            and
             self.rect.bottom > self.screen_rect.bottom
 
         )
@@ -64,14 +58,11 @@ class Map():
         output = (
             self.moving_down 
             and 
-            self.character.rect.top > self.rect.top
-            and 
             self.rect.top < self.screen_rect.top
 
         )
         return output
     
-
     def map_setup(self, tmxdata):
 
         width = tmxdata.width * tmxdata.tilewidth
@@ -86,33 +77,39 @@ class Map():
                     if tile:
                         #image = tmxdata.get_tile_image(x, y, layer)
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
+        
+            if isinstance(layer, TiledObjectGroup):
+                if layer.name == "block":
+                    for obj in layer:
+                        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
+                            print("walłeś w ściane")
         return surface
 
     def update(self):
         if self.map_can_move_right():
             if self.character.can_move_left():
-                self.x += self.settings.character_speed / 2
+                self.x += self.settings.character_speed * 1.05
             else:
                 self.x += self.settings.character_speed
 
 
         if self.map_can_move_left():
             if self.character.can_move_right():
-                self.x -= self.settings.character_speed / 2
+                self.x -= self.settings.character_speed * 1.05
             else:
                 self.x -= self.settings.character_speed
 
 
         if self.map_can_move_up():
             if self.character.can_move_down():
-                self.y -= self.settings.character_speed / 2
+                self.y -= self.settings.character_speed * 1.05
             else:
                 self.y -= self.settings.character_speed
 
 
         if self.map_can_move_down():
             if self.character.can_move_up():
-                self.y += self.settings.character_speed / 2
+                self.y += self.settings.character_speed * 1.05
             else:
                 self.y += self.settings.character_speed
 
