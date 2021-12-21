@@ -1,6 +1,7 @@
 import sys
 import pygame
 
+from pytmx import load_pygame
 from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
@@ -24,6 +25,8 @@ class DoGeX():
         self.character = MainCharacter(self)
         self.inventory = Inventory(self)
         self.map = Map(self)
+        self.map_image = self.map.map_setup(self.map.tmxdata)
+
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
 
@@ -47,6 +50,7 @@ class DoGeX():
 
             if not self.inventory.active:
                 self.character.update()
+                self.map.update()
 
             self._update_screen()
 
@@ -76,16 +80,20 @@ class DoGeX():
 
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = True
+            self.map.moving_left = True
 
         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = True
-
+            self.map.moving_right = True
+            
         if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = True
-
+            self.map.moving_down = True
+            
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = True
-
+            self.map.moving_up = True
+            
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
 
@@ -101,15 +109,19 @@ class DoGeX():
 
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = False
+            self.map.moving_left = False
 
         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = False
+            self.map.moving_right = False
 
         if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = False
+            self.map.moving_down = False
 
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = False
+            self.map.moving_up = False
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
@@ -153,7 +165,7 @@ class DoGeX():
         """Aktualizacja zawartości ekranu"""
 
         self.screen.fill(self.settings.bg_color)
-        self.map.blitMap()
+        self.screen.blit(self.map_image, (self.map.x, self.map.y))
         self.character.blitme()
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)

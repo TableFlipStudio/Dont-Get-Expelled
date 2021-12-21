@@ -26,21 +26,54 @@ class MainCharacter():
         self.moving_up = False
         self.moving_down = False
 
+    def can_move_right(self):
+        output = (
+            self.moving_right 
+            and 
+            self.rect.right < self.settings.screen_width
+
+        )
+        return output
+    
+    def can_move_left(self):
+        output = (
+            self.moving_left 
+            and 
+            self.rect.left > 0
+        )
+        return output
+    
+    def can_move_up(self):
+        output = (
+            self.moving_up 
+            and 
+            self.rect.top > 0
+        )
+        return output
+
+    def can_move_down(self):
+        output = (
+            self.moving_down 
+            and 
+            self.rect.bottom < self.settings.screen_height
+        )
+        return output
+
     def update(self):
         """Aktualizacja położenia postaci"""
 
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
-        if self.moving_right and self.rect.right < self.settings.screen_width:
-            self.x += self.settings.character_speed
+        if self.can_move_right():
+            self.x += self.settings.character_speed / 2
 
-        if self.moving_left and self.rect.left > 0:
-            self.x -= self.settings.character_speed
+        if self.can_move_left():
+            self.x -= self.settings.character_speed / 2
 
-        if self.moving_up and self.rect.top > 0:
-            self.y -= self.settings.character_speed
+        if self.can_move_up():
+            self.y -= self.settings.character_speed / 2
 
-        if self.moving_down and self.rect.bottom < self.settings.screen_height:
-            self.y += self.settings.character_speed
+        if self.can_move_down():
+            self.y += self.settings.character_speed / 2
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
