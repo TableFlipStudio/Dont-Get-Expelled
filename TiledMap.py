@@ -63,6 +63,10 @@ class Map():
         )
         return output
     
+    def speed_setup(self):
+        print()
+        #TODO algorythm thats applying the appropriate speed to map and character movement 
+
     def map_setup(self, tmxdata):
 
         width = tmxdata.width * tmxdata.tilewidth
