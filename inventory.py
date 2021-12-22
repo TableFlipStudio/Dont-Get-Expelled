@@ -79,9 +79,10 @@ class Slot(Sprite):
         self.settings = inventory.settings
 
         #Utworzenie slotu i umieszczenie go na ekwipunku
-        self.rect = pygame.Rect(0, 0, 80, 80)
-        self.color = (115, 115, 115)
-        self.rect.left = inventory.rect.centerx - 550
+        self.rect = pygame.Rect(0, 0, self.settings.slot_width,
+            self.settings.slot_height)
+        self.color = self.settings.slot_color
+        self.rect.x = inventory.rect.centerx - 550
         self.rect.y = inventory.rect.centery - 200
 
         #Slot początowo jest pusty
