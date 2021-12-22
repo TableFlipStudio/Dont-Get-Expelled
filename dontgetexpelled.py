@@ -141,11 +141,6 @@ class DoGeX():
 
                 self.items.remove(item)
 
-    def _lay_item(self, item):
-        """Umieszczenie na mapie przedmiotu wyrzuconego z ekwipunku"""
-        item.rect.midleft = self.character.rect.midright
-        self.items.add(item)
-
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
 
