@@ -61,7 +61,8 @@ class DoGeX():
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
-            if event.type == pygame.MOUSEBUTTONDOWN and self.inventory.active:
+            if (event.type == pygame.MOUSEBUTTONDOWN and
+            self.inventory.grabbed_item is None and self.inventory.active):
                 mouse_pos = pygame.mouse.get_pos()
                 self.inventory.grab_item(self, mouse_pos)
 
