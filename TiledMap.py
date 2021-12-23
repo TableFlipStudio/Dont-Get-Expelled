@@ -9,7 +9,7 @@ class Map():
         self.character = dogex.character
         
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/test.tmx')
+        self.tmxdata = load_pygame('mapfolder/map.tmx')
 
         width = self.tmxdata.width * self.tmxdata.tilewidth
         height = self.tmxdata.height * self.tmxdata.tileheight
