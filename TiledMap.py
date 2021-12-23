@@ -27,6 +27,9 @@ class Map():
         self.moving_up = False
         self.moving_down = False
 
+        self.mapHorizontalMovementSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
+        self.mapVerticalMovementSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+
     def map_can_move_right(self):
         output = (
             self.moving_right 
@@ -63,10 +66,6 @@ class Map():
         )
         return output
     
-    def speed_setup(self):
-        print()
-        #TODO algorythm thats applying the appropriate speed to map and character movement 
-
     def map_setup(self, tmxdata):
 
         width = tmxdata.width * tmxdata.tilewidth
@@ -81,41 +80,34 @@ class Map():
                     if tile:
                         #image = tmxdata.get_tile_image(x, y, layer)
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
-        
+        return surface
+
+    def collision(self, tmxdata):
+        for layer in tmxdata.visible_layers:
             if isinstance(layer, TiledObjectGroup):
                 if layer.name == "block":
                     for obj in layer:
                         if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
-                            print("walłeś w ściane")
-        return surface
+                            print("YOU HIT THE RED BLOCK!!")
+                            print("YOU HIT THE RED BLOCK!!!!!!!!!!!!")
+                            break
+
 
     def update(self):
         if self.map_can_move_right():
-            if self.character.can_move_left():
-                self.x += self.settings.character_speed * 1.05
-            else:
-                self.x += self.settings.character_speed
-
+            self.x += self.mapHorizontalMovementSpeed
+            
 
         if self.map_can_move_left():
-            if self.character.can_move_right():
-                self.x -= self.settings.character_speed * 1.05
-            else:
-                self.x -= self.settings.character_speed
-
+            self.x -= self.mapHorizontalMovementSpeed
+            
 
         if self.map_can_move_up():
-            if self.character.can_move_down():
-                self.y -= self.settings.character_speed * 1.05
-            else:
-                self.y -= self.settings.character_speed
+            self.y -= self.mapVerticalMovementSpeed
 
 
         if self.map_can_move_down():
-            if self.character.can_move_up():
-                self.y += self.settings.character_speed * 1.05
-            else:
-                self.y += self.settings.character_speed
+            self.y += self.mapVerticalMovementSpeed
 
 
 

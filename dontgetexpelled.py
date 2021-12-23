@@ -17,7 +17,8 @@ class DoGeX():
         self.settings = Settings()
 
         #Wczytanie ekranu i nadanie tytułu
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((self.settings.screen_width,
+            self.settings.screen_height))
         pygame.display.set_caption("Don't Get Expelled! The Batory Game")
 
         #Wczytanie zasobów z pliku
@@ -46,7 +47,8 @@ class DoGeX():
 
         while True:
             self._check_events()
-
+            self.map.collision(self.map.tmxdata)
+            
             if not self.inventory.active:
                 self.character.update()
                 self.map.update()
