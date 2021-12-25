@@ -14,3 +14,8 @@ class Settings():
         self.slot_width = 80
         self.slot_height = 80
         self.slot_color = (115, 115, 115)
+
+        #Ustawienia dotyczące NPC
+        self.npc_speed = 0.25
+        self.npc_xDirection = 1
+        self.npc_yDirection = -1

@@ -49,6 +49,7 @@ class DoGeX():
 
             if not self.inventory.active:
                 self.character.update()
+                self.npcs.update()
 
             self._update_screen()
 
