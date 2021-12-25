@@ -5,6 +5,7 @@ from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
 from item import Item
+from npc import NPC
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -24,6 +25,7 @@ class DoGeX():
         self.inventory = Inventory(self)
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
+        self.npcs = pygame.sprite.Group()
 
         #Przed wywołaniem _create_slots() nie ma jeszcze slotu do upuszczania
         #Atrybut wyłącznie dla przejrzystości kodu
@@ -32,10 +34,12 @@ class DoGeX():
         #Utworzenie slotów
         self._create_slots()
 
-        #Testowe rozmieszczenie przedmiotów
+        #Testowe rozmieszczenie przedmiotów i NPC
         self.items.add(Item(self, 'red_ball', 100, 100))
         self.items.add(Item(self, 'blue_ball', 1000, 400))
         self.items.add(Item(self, 'green_ball', 500, 650))
+
+        self.npcs.add(NPC(self))
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -144,9 +148,17 @@ class DoGeX():
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
-
         self.screen.fill(self.settings.bg_color)
-        self.character.blitme()
+
+        #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
+        if not self.inventory.active:
+            self.character.blitme()
+
+            for npc in self.npcs.sprites():
+                npc.blit_npc()
+
+            for item in self.items.sprites():
+                item.blit_item()
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
         if self.inventory.active:
@@ -160,11 +172,6 @@ class DoGeX():
 
             #Wyświetlenie przedmiotu pochwyconego myszą
             self.inventory.display_grabbed_item()
-
-        #Wyświetlamy przedmioty tylko, gdy ekwipunek jest nieaktywny
-        if not self.inventory.active:
-            for item in self.items.sprites():
-                item.blit_item()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
