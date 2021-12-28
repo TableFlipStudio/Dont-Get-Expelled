@@ -2,4 +2,6 @@ tiled size = 16x16
 
 map size = 3840x2160 = 240x135px
 
-map moving speed is = self.settings.character_speed * 1.05
+map moving speed is = self.settings
+
+notes
