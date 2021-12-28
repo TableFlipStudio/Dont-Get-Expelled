@@ -17,5 +17,4 @@ class Settings():
 
         #Ustawienia dotyczące NPC
         self.npc_speed = 0.25
-        self.npc_xDirection = 1
-        self.npc_yDirection = -1
+        self.npc_bounce_at = 20

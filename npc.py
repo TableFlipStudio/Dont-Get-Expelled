@@ -23,10 +23,20 @@ class NPC(Sprite):
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
+        #Kierunek poruszania się NPC
+        self.xDirection = 1
+        self.yDirection = -1
+
+    def check_vertical_edges(self):
+        """Zwraca True, jeśli NPC znajduje w określonej odległości od górnej
+        lub dolnej krawędzi ekranu"""
+        if (self.rect.centery < 100 or
+            self.rect.centery > self.settings.screen_height - 100):
+            return True
+
     def update(self):
         """Przesuwanie postaci dookoła mapy"""
-        self.y += self.settings.npc_speed * self.settings.npc_yDirection
-
+        self.y += self.settings.npc_speed * self.yDirection
         self.rect.y = self.y
 
     def blit_npc(self):

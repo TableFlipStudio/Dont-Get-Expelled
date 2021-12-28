@@ -49,7 +49,7 @@ class DoGeX():
 
             if not self.inventory.active:
                 self.character.update()
-                self.npcs.update()
+                self._update_npcs()
 
             self._update_screen()
 
@@ -146,6 +146,18 @@ class DoGeX():
                         break
 
                 self.items.remove(item)
+
+    def _check_npc_vertical_edges(self):
+        """Zmiana kierunku poruszania się NPC, jeśli dotarł blisko
+        krawędzi ekranu"""
+        for npc in self.npcs.sprites():
+            if npc.check_vertical_edges():
+                npc.yDirection *= -1
+
+    def _update_npcs(self):
+        """Uaktualnienie pozycji wszystkich NPC"""
+        self._check_npc_vertical_edges()
+        self.npcs.update()
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
