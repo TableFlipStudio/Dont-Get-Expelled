@@ -38,9 +38,9 @@ class DoGeX():
         self._create_slots()
 
         #Testowe rozmieszczenie przedmiotów
-        self.items.add(Item(self, 'red_ball', 100, 100))
-        self.items.add(Item(self, 'blue_ball', 1000, 400))
-        self.items.add(Item(self, 'green_ball', 500, 650))
+        #self.items.add(Item(self, 'red_ball', 100, 100))
+        #self.items.add(Item(self, 'blue_ball', 1000, 400))
+        #self.items.add(Item(self, 'green_ball', 500, 650))
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""

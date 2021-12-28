@@ -8,6 +8,7 @@ class Map():
         self.screen  = dogex.screen
         self.character = dogex.character
         
+
         self.screen_rect = self.screen.get_rect()
         self.tmxdata = load_pygame('mapfolder/map.tmx')
 
@@ -85,30 +86,27 @@ class Map():
     def collision(self, tmxdata):
         for layer in tmxdata.visible_layers:
             if isinstance(layer, TiledObjectGroup):
-                if layer.name == "block":
+                if layer.name == "collision":
                     for obj in layer:
-                        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
-                            print("YOU HIT THE RED BLOCK!!")
-                            print("YOU HIT THE RED BLOCK!!!!!!!!!!!!")
-                            break
+                        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True and obj.name == "walls":
+                            print("collision!!!!")
+                            print("collision!")
+                            continue
+                        break
 
 
     def update(self):
         if self.map_can_move_right():
             self.x += self.mapHorizontalMovementSpeed
-            
 
         if self.map_can_move_left():
             self.x -= self.mapHorizontalMovementSpeed
-            
 
         if self.map_can_move_up():
             self.y -= self.mapVerticalMovementSpeed
 
-
         if self.map_can_move_down():
             self.y += self.mapVerticalMovementSpeed
-
 
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
