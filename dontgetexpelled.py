@@ -7,6 +7,7 @@ from character import MainCharacter
 from inventory import Inventory, Slot
 from item import Item
 from TiledMap import Map
+from npc import NPC
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -29,6 +30,7 @@ class DoGeX():
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
+        self.npcs = pygame.sprite.Group()
 
         #Przed wywołaniem _create_slots() nie ma jeszcze slotu do upuszczania
         #Atrybut wyłącznie dla przejrzystości kodu
@@ -37,10 +39,12 @@ class DoGeX():
         #Utworzenie slotów
         self._create_slots()
 
-        #Testowe rozmieszczenie przedmiotów
+        #Testowe rozmieszczenie przedmiotów i NPC
         self.items.add(Item(self, 'red_ball', 100, 100))
         self.items.add(Item(self, 'blue_ball', 1000, 400))
         self.items.add(Item(self, 'green_ball', 500, 650))
+
+        self.npcs.add(NPC(self))
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -52,6 +56,8 @@ class DoGeX():
             if not self.inventory.active:
                 self.character.update()
                 self.map.update()
+                self._update_npcs()
+
 
             self._update_screen()
 
@@ -68,7 +74,8 @@ class DoGeX():
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
-            if event.type == pygame.MOUSEBUTTONDOWN and self.inventory.active:
+            if (event.type == pygame.MOUSEBUTTONDOWN and
+            self.inventory.grabbed_item is None and self.inventory.active):
                 mouse_pos = pygame.mouse.get_pos()
                 self.inventory.grab_item(self, mouse_pos)
 
@@ -157,17 +164,33 @@ class DoGeX():
 
                 self.items.remove(item)
 
-    def _lay_item(self, item):
-        """Umieszczenie na mapie przedmiotu wyrzuconego z ekwipunku"""
-        item.rect.midleft = self.character.rect.midright
-        self.items.add(item)
+    def _check_npc_vertical_edges(self):
+        """Zmiana kierunku poruszania się NPC, jeśli dotarł blisko
+        krawędzi ekranu"""
+        for npc in self.npcs.sprites():
+            if npc.check_vertical_edges():
+                npc.yDirection *= -1
+
+    def _update_npcs(self):
+        """Uaktualnienie pozycji wszystkich NPC"""
+        self._check_npc_vertical_edges()
+        self.npcs.update()
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
-
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.map_image, (self.map.x, self.map.y))
         self.character.blitme()
+
+        #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
+        if not self.inventory.active:
+            self.character.blitme()
+
+            for npc in self.npcs.sprites():
+                npc.blit_npc()
+
+            for item in self.items.sprites():
+                item.blit_item()
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
         if self.inventory.active:
@@ -181,11 +204,6 @@ class DoGeX():
 
             #Wyświetlenie przedmiotu pochwyconego myszą
             self.inventory.display_grabbed_item()
-
-        #Wyświetlamy przedmioty tylko, gdy ekwipunek jest nieaktywny
-        if not self.inventory.active:
-            for item in self.items.sprites():
-                item.blit_item()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()

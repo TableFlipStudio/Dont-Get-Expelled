@@ -29,35 +29,38 @@ class Inventory():
                 slot.content = None
 
     def release_item(self, dogex, mouse_pos):
-        """Upuszczenie przedmiotu z powrotem do slotu"""
+        """Upuszczenie przedmiotu z powrotem do slotu lub wyrzucenie
+        z ekwipunku"""
+        self._lay_item(dogex, mouse_pos)
+        self._put_item_in_slot(dogex, mouse_pos)
+        self._put_item_back(dogex)
 
-        #Wyrzucenie przedmiotu z ekwipunku jesli został wrzucony
-        #do slotu upuszczającego
+    def _lay_item(self, dogex, mouse_pos):
+        """Umieszczenie na mapie przedmiotu, gdy został on umieszczony
+        w slocie upuszczającym"""
         if dogex.drop_slot.rect.collidepoint(mouse_pos):
             item = self.grabbed_item
-            dogex._lay_item(item)
+            item.rect.midleft = dogex.character.rect.midright
+            dogex.items.add(item)
             self.grabbed_item = None
-            return
 
-        #Uruchamiane tylko jeśli przedmiot nie został wyrzucony z ekwipunku
+    def _put_item_in_slot(self, dogex, mouse_pos):
+        """Umieszczenie pochwyconego myszą przedmiotu w slocie,
+        jeśli jest on pusty"""
         for slot in dogex.slots.sprites():
-            self._put_item_in_slot(slot, mouse_pos)
+            if slot.rect.collidepoint(mouse_pos) and slot.content is None:
+                slot.content = self.grabbed_item
+                self.grabbed_item = None
 
-        #Uruchamiane tylko, jeśli nie upuszczono przedmiotu do żadnego slotu
-        #lub slot, do którego go upuszczono był zajęty.
+    def _put_item_back(self, dogex):
+        """Umieszczenie przedmiotu w pierwszym wolnym slocie,
+        gdy nie upuszczono do żadnego slotu, lub slot, do którego go upuszczono
+        był zajęty"""
         for slot in dogex.slots.sprites():
             if slot.content is None:
                 slot.content = self.grabbed_item
                 self.grabbed_item = None
                 break   #Umieść przedmiot tylko raz
-
-    def _put_item_in_slot(self, slot, mouse_pos):
-        """Umieszczenie pochwyconego myszą przedmiotu w slocie,
-        jeśli jest on pusty"""
-        if slot.rect.collidepoint(mouse_pos) and slot.content is None:
-            slot.content = self.grabbed_item
-            self.grabbed_item = None
-            return
 
     def display_grabbed_item(self):
         """Wyświetlenie przedmiotu podniesionego przy użyciu myszy"""
@@ -79,9 +82,10 @@ class Slot(Sprite):
         self.settings = inventory.settings
 
         #Utworzenie slotu i umieszczenie go na ekwipunku
-        self.rect = pygame.Rect(0, 0, 80, 80)
-        self.color = (115, 115, 115)
-        self.rect.left = inventory.rect.centerx - 550
+        self.rect = pygame.Rect(0, 0, self.settings.slot_width,
+            self.settings.slot_height)
+        self.color = self.settings.slot_color
+        self.rect.x = inventory.rect.centerx - 550
         self.rect.y = inventory.rect.centery - 200
 
         #Slot początowo jest pusty

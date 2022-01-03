@@ -9,3 +9,13 @@ class Settings():
 
         #Ustawienia dotyczące postaci głównej
         self.character_speed = 0.2
+        self.character_speed = 1.0
+
+        #Ustawienia dotyczące slotów w ekwipunku
+        self.slot_width = 80
+        self.slot_height = 80
+        self.slot_color = (115, 115, 115)
+
+        #Ustawienia dotyczące NPC
+        self.npc_speed = 0.25
+        self.npc_bounce_at = 20
