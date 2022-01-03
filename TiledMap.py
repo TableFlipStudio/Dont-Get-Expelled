@@ -89,8 +89,8 @@ class Map():
                 if layer.name == "collision":
                     for obj in layer:
                         if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True and obj.name == "walls":
-                            print("collision!!!!")
-                            print("collision!")
+                            #print("collision!!!!")
+                            #print("collision!")
                             continue
                         break
 
