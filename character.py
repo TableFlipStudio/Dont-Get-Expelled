@@ -19,7 +19,7 @@ class MainCharacter():
 
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
-        self.rect.center = self.screen_rect.center
+        self.rect.topleft = self.screen_rect.topleft
 
         #Położenie postaci przechowywane jest w zmienniej zmiennoprzecinkwej
         self.x = float(self.rect.x)

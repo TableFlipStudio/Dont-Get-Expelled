@@ -18,7 +18,7 @@ class Map():
         surface = pygame.Surface( ( width, height ) )
         self.rect = surface.get_rect()
         
-        self.rect.center = self.screen_rect.center
+        self.rect.topleft = self.screen_rect.topleft
 
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
@@ -88,10 +88,13 @@ class Map():
             if isinstance(layer, TiledObjectGroup):
                 if layer.name == "collision":
                     for obj in layer:
-                        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True and obj.name == "walls":
-                            #print("collision!!!!")
-                            #print("collision!")
-                            continue
+                        if obj.name == "walls":
+                            if pygame.Rect(obj.x * tmxdata.tileheight, obj.y * tmxdata.tileheight, 30, 40).colliderect(self.character.rect) == True:
+                                print("collision!!!!")
+                                print("collision!")
+                                continue
+                        else:
+                            print("no collision")
                         break
 
 
