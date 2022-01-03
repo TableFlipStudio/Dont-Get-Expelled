@@ -9,7 +9,6 @@ class Settings():
 
         #Ustawienia dotyczące postaci głównej
         self.character_speed = 0.2
-        self.character_speed = 1.0
 
         #Ustawienia dotyczące slotów w ekwipunku
         self.slot_width = 80
