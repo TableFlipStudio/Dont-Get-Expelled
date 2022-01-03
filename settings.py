@@ -8,6 +8,7 @@ class Settings():
         self.bg_color = (255, 255, 255)
 
         #Ustawienia dotyczące postaci głównej
+        self.character_speed = 0.2
         self.character_speed = 1.0
 
         #Ustawienia dotyczące slotów w ekwipunku
