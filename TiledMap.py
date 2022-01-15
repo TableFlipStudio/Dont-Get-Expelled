@@ -7,7 +7,7 @@ class Map():
         self.settings = dogex.settings
         self.screen  = dogex.screen
         self.character = dogex.character
-        
+
 
         self.screen_rect = self.screen.get_rect()
         self.tmxdata = load_pygame('mapfolder/map.tmx')
@@ -17,7 +17,7 @@ class Map():
 
         surface = pygame.Surface( ( width, height ) )
         self.rect = surface.get_rect()
-        
+
         self.rect.topleft = self.screen_rect.topleft
 
         self.x = float(self.rect.x)
@@ -33,26 +33,26 @@ class Map():
 
     def map_can_move_right(self):
         output = (
-            self.moving_right 
-            and 
+            self.moving_right
+            and
             self.rect.left < self.screen_rect.left
 
         )
         return output
-    
+
     def map_can_move_left(self):
         output = (
-            self.moving_left 
-            and 
+            self.moving_left
+            and
             self.rect.right > self.screen_rect.right
 
         )
         return output
-    
+
     def map_can_move_up(self):
         output = (
-            self.moving_up 
-            and 
+            self.moving_up
+            and
             self.rect.bottom > self.screen_rect.bottom
 
         )
@@ -60,17 +60,17 @@ class Map():
 
     def map_can_move_down(self):
         output = (
-            self.moving_down 
-            and 
+            self.moving_down
+            and
             self.rect.top < self.screen_rect.top
 
         )
         return output
-    
+
     def map_setup(self, tmxdata):
 
         width = tmxdata.width * tmxdata.tilewidth
-        height = tmxdata.height *tmxdata.tileheight
+        height = tmxdata.height * tmxdata.tileheight
 
         surface = pygame.Surface( ( width, height ) )
 

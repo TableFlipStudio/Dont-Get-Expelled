@@ -52,7 +52,7 @@ class DoGeX():
         while True:
             self._check_events()
             self.map.collision(self.map.tmxdata)
-            
+
             if not self.inventory.active:
                 self.character.update()
                 self.map.update()
@@ -93,15 +93,15 @@ class DoGeX():
         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = True
             self.map.moving_right = True
-            
+
         if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = True
             self.map.moving_down = True
-            
+
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = True
             self.map.moving_up = True
-            
+
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
 
