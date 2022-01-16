@@ -88,11 +88,11 @@ class Map():
             if isinstance(layer, TiledObjectGroup):
                 if layer.name == "collision":
                     for obj in layer:
-                        if obj.name == "walls":
-                            if pygame.Rect(obj.x * tmxdata.tileheight, obj.y * tmxdata.tileheight, 30, 40).colliderect(self.character.rect) == True:
-                                print("collision!!!!")
-                                print("collision!")
-                                continue
+                        #if obj.name == "walls":
+                        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
+                            print("collision!!!!")
+                            print("collision!")
+                            continue
                         else:
                             print("no collision")
                         break

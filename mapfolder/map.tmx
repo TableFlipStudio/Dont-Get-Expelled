@@ -210,6 +210,6 @@
 </data>
  </layer>
  <objectgroup id="5" name="collision" offsetx="-9" offsety="-3">
-  <object id="14" name="walls" x="222" y="320" width="930" height="700"/>
+  <object id="14" name="walls" x="228" y="323" width="930" height="700"/>
  </objectgroup>
 </map>
