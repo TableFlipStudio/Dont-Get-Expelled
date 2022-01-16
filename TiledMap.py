@@ -88,14 +88,18 @@ class Map():
             if isinstance(layer, TiledObjectGroup):
                 if layer.name == "collision":
                     for obj in layer:
-                        #if obj.name == "walls":
-                        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
-                            print("collision!!!!")
-                            print("collision!")
+                        if obj.name == "walls":
+                            if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
+                                self.character.image = pygame.image.load('images/test_character_blue.bmp')
+                                continue
+                            #FIXME after setting the "walls" object x and y values manually, 
+                            #   the collision somekind works but in the editor it is really missplaced
+                            else:
+                                self.character.image = pygame.image.load('images/test_character.bmp')
+                            break
+                        elif obj.name == "spawn":
                             continue
-                        else:
-                            print("no collision")
-                        break
+                        #TODO: delete the spawn, it needs to me mannualy set 
 
 
     def update(self):
