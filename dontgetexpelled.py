@@ -5,6 +5,7 @@ from pytmx import load_pygame
 from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
+from dialogues import DialogueWindow
 from item import Item
 from TiledMap import Map
 from npc import NPC
@@ -27,6 +28,7 @@ class DoGeX():
         self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
+        self.window = DialogueWindow(self)
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -106,8 +108,13 @@ class DoGeX():
             self.inventory.active = not self.inventory.active
 
         if event.key == pygame.K_e:
+            npc_collide = self._find_npc_collision()
             if not self.inventory.active:
-                self._pickup_item()
+                if not npc_collide:
+                    self._pickup_item()
+                else:
+                    #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
+                    self.window.active = True
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
@@ -149,6 +156,15 @@ class DoGeX():
                 slot.rect.centerx = self.screen.get_rect().centerx
                 slot.rect.y += slot_height + 2 * slot_height * 2
                 self.drop_slot = slot
+
+    def _find_npc_collision(self):
+        """Sprawdza, czy postać głowna koliduje z którymś NPC,
+        jeśli tak, zwraca go"""
+        for npc in self.npcs.sprites():
+            if self.character.rect.colliderect(npc):
+                return npc
+            else:
+                return None
 
     def _pickup_item(self):
         """Sprawdzenie, czy postać stoi koło przedmiotu
@@ -193,7 +209,7 @@ class DoGeX():
                 item.blit_item()
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
-        if self.inventory.active:
+        if self.inventory.active and not self.window.active:
             self.inventory.display_inventory()
             for slot in self.slots.sprites():
                 slot.draw_slot()
@@ -205,8 +221,13 @@ class DoGeX():
             #Wyświetlenie przedmiotu pochwyconego myszą
             self.inventory.display_grabbed_item()
 
+        #Ekwipunek i okno dialogowe nie mogą występować jednocześnie
+        if not self.inventory.active and self.window.active:
+            self.window.blit_window()
+
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
+
 
 
 

@@ -11,6 +11,7 @@ class NPC(Sprite):
         self.screen = dogex.screen
         self.screen_rect = self.screen.get_rect()
         self.settings = dogex.settings
+        self.character = dogex.character
 
         self.image = pygame.image.load('images/test_npc.bmp')
         self.rect = self.image.get_rect()
@@ -36,8 +37,9 @@ class NPC(Sprite):
 
     def update(self):
         """Przesuwanie postaci dookoła mapy"""
-        self.y += self.settings.npc_speed * self.yDirection
-        self.rect.y = self.y
+        if not self.rect.colliderect(self.character):
+            self.y += self.settings.npc_speed * self.yDirection
+            self.rect.y = self.y
 
     def blit_npc(self):
         """Wyświetlene NPC na ekranie"""

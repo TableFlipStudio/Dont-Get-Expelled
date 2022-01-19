@@ -84,13 +84,9 @@ class MainCharacter():
             self.y += self.settings.character_speed
             self.facing = "down"
 
-
-
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
-
-        print("x: ", self.rect.x, "\ny: ", self.rect.y)
 
     def blitme(self):
         """Wyświetlenie postaci głównej na ekranie"""

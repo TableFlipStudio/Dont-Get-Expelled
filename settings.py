@@ -18,3 +18,6 @@ class Settings():
         #Ustawienia dotyczące NPC
         self.npc_speed = 0.25
         self.npc_bounce_at = 20
+
+        #Ustawienia dotyczące okna dialogowego
+        self.window_color = (128, 141, 146)
