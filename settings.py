@@ -21,3 +21,7 @@ class Settings():
 
         #Ustawienia dotyczące okna dialogowego
         self.window_color = (128, 141, 146)
+        self.tab_Xpos = self.screen_width // 4
+        self.tab_Ypos = self.screen_height // 4
+        self.tab_width = self.screen_width // 2
+        self.tab_height = self.screen_height // 4
