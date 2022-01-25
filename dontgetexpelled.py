@@ -1,7 +1,6 @@
 import sys
 import pygame
 
-from pytmx import load_pygame
 from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
