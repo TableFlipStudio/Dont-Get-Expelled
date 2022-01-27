@@ -179,6 +179,7 @@ class DoGeX():
         """Aktualizacja zawartości ekranu"""
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.map_image, (self.map.x, self.map.y))
+        pygame.draw.rect(self.screen, self.map.debug_color, self.map.debug_rect) #TOBEDELETED 
         self.character.blitme()
 
         #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny

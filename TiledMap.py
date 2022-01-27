@@ -28,8 +28,13 @@ class Map():
         self.moving_up = False
         self.moving_down = False
 
-        self.mapHorizontalMovementSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
+        self.mapHorizontalSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalMovementSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+
+        #Testowy prostokąt do analizy buga przesuwania mapy
+        self.debug_rect = pygame.Rect(self.rect.x, self.rect.y,
+            self.tmxdata.width, self.tmxdata.height)
+        self.debug_color = pygame.Color(0, 255, 0, 128)
 
     def map_can_move_right(self):
         output = (
@@ -92,22 +97,22 @@ class Map():
                             if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
                                 self.character.image = pygame.image.load('images/test_character_blue.bmp')
                                 continue
-                            #FIXME after setting the "walls" object x and y values manually, 
+                            #FIXME after setting the "walls" object x and y values manually,
                             #   the collision somekind works but in the editor it is really missplaced
                             else:
                                 self.character.image = pygame.image.load('images/test_character.bmp')
                             break
                         elif obj.name == "spawn":
                             continue
-                        #TODO: delete the spawn, it needs to me mannualy set 
+                        #TODO: delete the spawn, it needs to me mannualy set
 
 
     def update(self):
         if self.map_can_move_right():
-            self.x += self.mapHorizontalMovementSpeed
+            self.x += self.mapHorizontalSpeed
 
         if self.map_can_move_left():
-            self.x -= self.mapHorizontalMovementSpeed
+            self.x -= self.mapHorizontalSpeed
 
         if self.map_can_move_up():
             self.y -= self.mapVerticalMovementSpeed
@@ -119,3 +124,5 @@ class Map():
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
+        self.debug_rect.x = self.rect.x
+        self.debug_rect.y = self.rect.y
