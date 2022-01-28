@@ -32,9 +32,25 @@ class Map():
         self.mapVerticalMovementSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
         #Testowy prostokąt do analizy buga przesuwania mapy
-        self.debug_rect = pygame.Rect(self.rect.x, self.rect.y,
-            self.tmxdata.width, self.tmxdata.height)
+        obj = self._access_WallObject()
+        self.debug_rect = pygame.Rect(obj.x, obj.y,
+            obj.width, obj.height)
         self.debug_color = pygame.Color(0, 255, 0, 128)
+        #TOBEFINISHED
+
+    def _access_WallObject(self):
+        """Uzyskanie dostępu do obiektu 'wall' warstwy 'collision'
+        i zwrócenie go. (robienie tego przy użyciu pętli bardzo zaśmieca kod)"""
+        for layer in self.tmxdata.visible_layers:
+            if isinstance(layer, TiledObjectGroup):
+                if layer.name == "collision":
+                    for obj in layer:
+                        if obj.name == "walls":
+                            return obj
+                        elif obj.name == "spawn":
+                            continue
+        #TODO: Rework the function so it access any layer in self.tmxdata
+        # provided with JSON-like path ('collision.walls' in this case)
 
     def map_can_move_right(self):
         output = (
@@ -88,23 +104,16 @@ class Map():
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
-    def collision(self, tmxdata):
-        for layer in tmxdata.visible_layers:
-            if isinstance(layer, TiledObjectGroup):
-                if layer.name == "collision":
-                    for obj in layer:
-                        if obj.name == "walls":
-                            if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
-                                self.character.image = pygame.image.load('images/test_character_blue.bmp')
-                                continue
-                            #FIXME after setting the "walls" object x and y values manually,
-                            #   the collision somekind works but in the editor it is really missplaced
-                            else:
-                                self.character.image = pygame.image.load('images/test_character.bmp')
-                            break
-                        elif obj.name == "spawn":
-                            continue
-                        #TODO: delete the spawn, it needs to me mannualy set
+    def collision(self):
+        """Wykrycie kolizji między obiektami na mapie a postacią"""
+        obj = self._access_WallObject()
+        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
+            self.character.image = pygame.image.load('images/test_character_blue.bmp')
+        #FIXME after setting the "walls" object x and y values manually,
+        #   the collision somekind works but in the editor it is really missplaced
+        else:
+            self.character.image = pygame.image.load('images/test_character.bmp')
+        #TODO: delete the spawn, it needs to me mannualy set
 
 
     def update(self):
@@ -124,5 +133,8 @@ class Map():
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
-        self.debug_rect.x = self.rect.x
-        self.debug_rect.y = self.rect.y
+
+        #Aktualizacja prostokąta testowego
+        obj = self._access_WallObject()
+        self.debug_rect.x = obj.x
+        self.debug_rect.y = obj.y
