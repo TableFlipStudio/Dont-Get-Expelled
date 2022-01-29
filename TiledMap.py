@@ -36,7 +36,14 @@ class Map():
         self.debug_rect = pygame.Rect(obj.x, obj.y,
             obj.width, obj.height)
         self.debug_color = pygame.Color(0, 255, 0, 128)
-        #TOBEFINISHED
+
+        test_obj = self._access_Object('collision')
+        test_obj2 = self._access_Object('collision.walls')
+        test_obj3 = self._access_WallObject()
+        print(self.tmxdata.visible_layers)
+        print(test_obj)
+        print(test_obj2)
+        print(test_obj3)
 
     def _access_WallObject(self):
         """Uzyskanie dostępu do obiektu 'wall' warstwy 'collision'
@@ -47,10 +54,28 @@ class Map():
                     for obj in layer:
                         if obj.name == "walls":
                             return obj
-                        elif obj.name == "spawn":
-                            continue
         #TODO: Rework the function so it access any layer in self.tmxdata
         # provided with JSON-like path ('collision.walls' in this case)
+    def _access_Object(self, path):
+        """Uzyskanie dostępu do dowolnego obiektu lub warstwy i zwrócenie go
+        Atrybut path musi być ciągiem tesktowym (string) i wskazywać ścieżkę
+        dostępu do obiektu, rozdzielając segmenty kropkami np.
+        'collision.walls.wall_1'"""
+        path = path.split(sep='.')
+        target = self._go_through_path(path, self.tmxdata.visible_layers)
+        return target
+
+    def _go_through_path(self, path, instance, path_inx=0):
+        for _instance in instance:
+            if _instance.name == path[path_inx]:
+                pathToGo = len(path) - 1 > path_inx
+                if pathToGo:
+                    path_inx += 1
+                    self._go_through_path(path, _instance, path_inx)
+                else:
+                    return _instance
+
+
 
     def map_can_move_right(self):
         output = (
@@ -109,11 +134,8 @@ class Map():
         obj = self._access_WallObject()
         if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
             self.character.image = pygame.image.load('images/test_character_blue.bmp')
-        #FIXME after setting the "walls" object x and y values manually,
-        #   the collision somekind works but in the editor it is really missplaced
         else:
             self.character.image = pygame.image.load('images/test_character.bmp')
-        #TODO: delete the spawn, it needs to me mannualy set
 
 
     def update(self):
