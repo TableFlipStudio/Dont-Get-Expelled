@@ -82,8 +82,7 @@ class Map():
                     return _instance
                 # FIXME: Funkcja poprawnie zwraca grupę collision dla ścieżki
                 # 'collision', ale dla 'collsion.walls' zwraca None (patrz 40-46)
-
-
+                #Możliwy problem: brak testu isinstance()?
 
     def map_can_move_right(self):
         output = (
