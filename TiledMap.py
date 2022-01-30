@@ -45,6 +45,8 @@ class Map():
         print(test_obj2)
         print(test_obj3)
 
+        print(self.tmxdata.visible_layers.properties['collision["walls"]'])
+
     def _access_WallObject(self):
         """Uzyskanie dostępu do obiektu 'wall' warstwy 'collision'
         i zwrócenie go. (robienie tego przy użyciu pętli bardzo zaśmieca kod)"""
@@ -61,11 +63,11 @@ class Map():
         Atrybut path musi być ciągiem tesktowym (string) i wskazywać ścieżkę
         dostępu do obiektu, rozdzielając segmenty kropkami np.
         'collision.walls.wall_1'"""
-        path = path.split(sep='.') #Path Index
+        path = path.split(sep='.')
         target = self._go_through_path(path, self.tmxdata.visible_layers)
         return target
 
-    def _go_through_path(self, path, instance, path_inx=0):
+    def _go_through_path(self, path, instance, path_inx=0):  #Path Index
         """Główna podfunkcja metody _access_Object(). Rekurencyjnie
         przeszukuje self.tmxdata szukając warstw i obiektów podanych
         w ścieżce dostępu"""
@@ -139,7 +141,7 @@ class Map():
     def collision(self):
         """Wykrycie kolizji między obiektami na mapie a postacią"""
         obj = self._access_WallObject()
-        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
+        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
             self.character.image = pygame.image.load('images/test_character_blue.bmp')
         else:
             self.character.image = pygame.image.load('images/test_character.bmp')
