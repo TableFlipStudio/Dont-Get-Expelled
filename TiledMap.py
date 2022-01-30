@@ -37,10 +37,11 @@ class Map():
             obj.width, obj.height)
         self.debug_color = pygame.Color(0, 255, 0, 128)
 
-        test_obj = self._access_Object('collision')
-        test_obj2 = self._access_Object('collision.walls')
+        test_obj = self._access_Object('collision.walls')
         print(test_obj)
-        print(test_obj2)
+
+        test_target = self._go_through_path(['collision', 'walls'], self.tmxdata.visible_layers)
+        print(f'test target: {test_target}')
 
         #print(self.tmxdata.visible_layers.properties)
 
@@ -74,11 +75,16 @@ class Map():
                 #pathToGo sprawdza, czy argument path wskazuje na obecność
                 # dalszych obiektów do znalezienia (czy nal liście path jest
                 #coś jeszcze za obiektem wzkazanym przez path_inx)
+                print(f'instance_{path_inx}: {instance}')
+                print(f'subinstance_{path_inx}: {subinstance}')
                 pathToGo = len(path) - 1 > path_inx
+                print(f'path len:{len(path) - 1}')
+                print(f'pathToGo: {pathToGo}')
                 if pathToGo: #Jeśli tak, odpal algorytm jeszcze raz i szukaj następnego elementu ścieżki
                     path_inx += 1
                     self._go_through_path(path, subinstance, path_inx)
                 else: #Jeśli nie, zwróc aktualnie wskazany obiekt, bo to jego szukamy
+                    print(f'sub to return: {subinstance}')
                     return subinstance
                 # FIXME: Funkcja poprawnie zwraca grupę collision dla ścieżki
                 # 'collision', ale dla 'collsion.walls' zwraca None (patrz 40-46)
