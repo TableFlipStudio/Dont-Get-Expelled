@@ -39,13 +39,10 @@ class Map():
 
         test_obj = self._access_Object('collision')
         test_obj2 = self._access_Object('collision.walls')
-        test_obj3 = self._access_WallObject()
-        print(self.tmxdata.visible_layers)
         print(test_obj)
         print(test_obj2)
-        print(test_obj3)
 
-        print(self.tmxdata.visible_layers.properties['collision["walls"]'])
+        #print(self.tmxdata.visible_layers.properties)
 
     def _access_WallObject(self):
         """Uzyskanie dostępu do obiektu 'wall' warstwy 'collision'
@@ -65,23 +62,24 @@ class Map():
         'collision.walls.wall_1'"""
         path = path.split(sep='.')
         target = self._go_through_path(path, self.tmxdata.visible_layers)
+        print(f'target: {target}')
         return target
 
     def _go_through_path(self, path, instance, path_inx=0):  #Path Index
         """Główna podfunkcja metody _access_Object(). Rekurencyjnie
         przeszukuje self.tmxdata szukając warstw i obiektów podanych
         w ścieżce dostępu"""
-        for _instance in instance:
-            if _instance.name == path[path_inx]:
+        for subinstance in instance:
+            if subinstance.name == path[path_inx]:
                 #pathToGo sprawdza, czy argument path wskazuje na obecność
                 # dalszych obiektów do znalezienia (czy nal liście path jest
                 #coś jeszcze za obiektem wzkazanym przez path_inx)
                 pathToGo = len(path) - 1 > path_inx
                 if pathToGo: #Jeśli tak, odpal algorytm jeszcze raz i szukaj następnego elementu ścieżki
                     path_inx += 1
-                    self._go_through_path(path, _instance, path_inx)
+                    self._go_through_path(path, subinstance, path_inx)
                 else: #Jeśli nie, zwróc aktualnie wskazany obiekt, bo to jego szukamy
-                    return _instance
+                    return subinstance
                 # FIXME: Funkcja poprawnie zwraca grupę collision dla ścieżki
                 # 'collision', ale dla 'collsion.walls' zwraca None (patrz 40-46)
                 #Możliwy problem: brak testu isinstance()?
