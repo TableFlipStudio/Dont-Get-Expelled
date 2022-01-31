@@ -40,11 +40,6 @@ class Map():
         test_obj = self._access_Object('collision.walls')
         print(test_obj)
 
-        test_target = self._go_through_path(['collision', 'walls'], self.tmxdata.visible_layers)
-        print(f'test target: {test_target}')
-
-        #print(self.tmxdata.visible_layers.properties)
-
     def _access_WallObject(self):
         """Uzyskanie dostępu do obiektu 'wall' warstwy 'collision'
         i zwrócenie go. (robienie tego przy użyciu pętli bardzo zaśmieca kod)"""
@@ -63,7 +58,6 @@ class Map():
         'collision.walls.wall_1'"""
         path = path.split(sep='.')
         target = self._go_through_path(path, self.tmxdata.visible_layers)
-        print(f'target: {target}')
         return target
 
     def _go_through_path(self, path, instance, path_inx=0):  #Path Index
@@ -75,20 +69,13 @@ class Map():
                 #pathToGo sprawdza, czy argument path wskazuje na obecność
                 # dalszych obiektów do znalezienia (czy nal liście path jest
                 #coś jeszcze za obiektem wzkazanym przez path_inx)
-                print(f'instance_{path_inx}: {instance}')
-                print(f'subinstance_{path_inx}: {subinstance}')
                 pathToGo = len(path) - 1 > path_inx
-                print(f'path len:{len(path) - 1}')
-                print(f'pathToGo: {pathToGo}')
                 if pathToGo: #Jeśli tak, odpal algorytm jeszcze raz i szukaj następnego elementu ścieżki
                     path_inx += 1
-                    self._go_through_path(path, subinstance, path_inx)
+                    child = self._go_through_path(path, subinstance, path_inx)
+                    return child
                 else: #Jeśli nie, zwróc aktualnie wskazany obiekt, bo to jego szukamy
-                    print(f'sub to return: {subinstance}')
                     return subinstance
-                # FIXME: Funkcja poprawnie zwraca grupę collision dla ścieżki
-                # 'collision', ale dla 'collsion.walls' zwraca None (patrz 40-46)
-                #Możliwy problem: brak testu isinstance()?
 
     def map_can_move_right(self):
         output = (
