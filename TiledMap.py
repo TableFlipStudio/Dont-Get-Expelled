@@ -28,8 +28,54 @@ class Map():
         self.moving_up = False
         self.moving_down = False
 
-        self.mapHorizontalMovementSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
+        self.mapHorizontalSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalMovementSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+
+        #Testowy prostokąt do analizy buga przesuwania mapy
+        obj = self._access_Object('collision.walls')
+        self.debug_rect = pygame.Rect(obj.x, obj.y,
+            obj.width, obj.height)
+        self.debug_color = pygame.Color(0, 255, 0, 128)
+
+        test_obj = self._access_Object('collision.walls')
+        print(test_obj)
+
+    def _access_WallObject(self):
+        """Uzyskanie dostępu do obiektu 'wall' warstwy 'collision'
+        i zwrócenie go. (robienie tego przy użyciu pętli bardzo zaśmieca kod)"""
+        for layer in self.tmxdata.visible_layers:
+            if isinstance(layer, TiledObjectGroup):
+                if layer.name == "collision":
+                    for obj in layer:
+                        if obj.name == "walls":
+                            return obj
+        #TODO: Rework the function so it access any layer in self.tmxdata
+        # provided with JSON-like path ('collision.walls' in this case)
+    def _access_Object(self, path):
+        """Uzyskanie dostępu do dowolnego obiektu lub warstwy i zwrócenie go
+        Atrybut path musi być ciągiem tesktowym (string) i wskazywać ścieżkę
+        dostępu do obiektu, rozdzielając segmenty kropkami np.
+        'collision.walls.wall_1'"""
+        path = path.split(sep='.')
+        target = self._go_through_path(path, self.tmxdata.visible_layers)
+        return target
+
+    def _go_through_path(self, path, instance, path_inx=0):  #Path Index
+        """Główna podfunkcja metody _access_Object(). Rekurencyjnie
+        przeszukuje self.tmxdata szukając warstw i obiektów podanych
+        w ścieżce dostępu"""
+        for subinstance in instance:
+            if subinstance.name == path[path_inx]:
+                #pathToGo sprawdza, czy argument path wskazuje na obecność
+                # dalszych obiektów do znalezienia (czy nal liście path jest
+                #coś jeszcze za obiektem wzkazanym przez path_inx)
+                pathToGo = len(path) - 1 > path_inx
+                if pathToGo: #Jeśli tak, odpal algorytm jeszcze raz i szukaj następnego elementu ścieżki
+                    path_inx += 1
+                    child = self._go_through_path(path, subinstance, path_inx)
+                    return child
+                else: #Jeśli nie, zwróc aktualnie wskazany obiekt, bo to jego szukamy
+                    return subinstance
 
     def map_can_move_right(self):
         output = (
@@ -83,31 +129,21 @@ class Map():
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
-    def collision(self, tmxdata):
-        for layer in tmxdata.visible_layers:
-            if isinstance(layer, TiledObjectGroup):
-                if layer.name == "collision":
-                    for obj in layer:
-                        if obj.name == "walls":
-                            if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect) == True:
-                                self.character.image = pygame.image.load('images/test_character_blue.bmp')
-                                continue
-                            #FIXME after setting the "walls" object x and y values manually, 
-                            #   the collision somekind works but in the editor it is really missplaced
-                            else:
-                                self.character.image = pygame.image.load('images/test_character.bmp')
-                            break
-                        elif obj.name == "spawn":
-                            continue
-                        #TODO: delete the spawn, it needs to me mannualy set 
+    def collision(self):
+        """Wykrycie kolizji między obiektami na mapie a postacią"""
+        obj = self._access_WallObject()
+        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+            self.character.image = pygame.image.load('images/test_character_blue.bmp')
+        else:
+            self.character.image = pygame.image.load('images/test_character.bmp')
 
 
     def update(self):
         if self.map_can_move_right():
-            self.x += self.mapHorizontalMovementSpeed
+            self.x += self.mapHorizontalSpeed
 
         if self.map_can_move_left():
-            self.x -= self.mapHorizontalMovementSpeed
+            self.x -= self.mapHorizontalSpeed
 
         if self.map_can_move_up():
             self.y -= self.mapVerticalMovementSpeed
@@ -119,3 +155,8 @@ class Map():
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
+
+        #Aktualizacja prostokąta testowego
+        obj = self._access_WallObject()
+        self.debug_rect.x = obj.x
+        self.debug_rect.y = obj.y
