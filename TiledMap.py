@@ -32,7 +32,7 @@ class Map():
         self.mapVerticalMovementSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
         #Testowy prostokąt do analizy buga przesuwania mapy
-        obj = self._access_WallObject()
+        obj = self._access_Object('collision.walls')
         self.debug_rect = pygame.Rect(obj.x, obj.y,
             obj.width, obj.height)
         self.debug_color = pygame.Color(0, 255, 0, 128)
