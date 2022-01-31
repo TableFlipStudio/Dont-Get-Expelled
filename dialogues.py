@@ -32,7 +32,6 @@ class DialogueWindow():
         filename = self.dialogues[id]
         with open(filename) as file:
             lines = file.readlines()
-            print(lines)
         self._prep_msg(lines[0].strip())
 
     def _prep_msg(self, msg):
