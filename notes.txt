@@ -6,4 +6,4 @@ map moving speed is = self.settings
 
 notes
 
-nome test notes
+
