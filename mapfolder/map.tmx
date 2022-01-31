@@ -210,7 +210,7 @@
 </data>
  </layer>
  <objectgroup id="5" name="collision" offsetx="-9" offsety="-3">
-  <object id="14" name="walls" x="221.229" y="322.68" width="927.457" height="694.65" rotation="0.0180851"/>
+  <object id="14" name="walls" x="224" y="324" width="928" height="696"/>
  </objectgroup>
  <objectgroup id="6" name="objects">
   <object id="20" name="spawn" x="809.091" y="715.152">
