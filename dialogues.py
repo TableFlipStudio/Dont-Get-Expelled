@@ -38,3 +38,11 @@ class DialogueWindow():
         pygame.draw.rect(self.screen, self.color, self.rect)
         pygame.draw.rect(self.screen, self.tab_color, self.tab_rect)
         self.screen.blit(self.msg_image, self.msg_rect)
+
+class DialogueLoader():
+    """Klasa przechowująca pliki .txt z dialogami i zarządzająca nimi."""
+    def __init__(self):
+        """Inicjalizacja bazy danych"""
+        self.dialogues = {
+            'test_npc': 'Dialogues/test_dialogue1.txt'
+        }

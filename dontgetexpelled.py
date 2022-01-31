@@ -45,7 +45,7 @@ class DoGeX():
         self.items.add(Item(self, 'blue_ball', 1000, 400))
         self.items.add(Item(self, 'green_ball', 500, 650))
 
-        self.npcs.add(NPC(self))
+        self.npcs.add(NPC(self,'test_npc'))
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""

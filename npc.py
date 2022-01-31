@@ -5,7 +5,7 @@ class NPC(Sprite):
     """Klasa do zarządzania postaciami niekierowanymi przez gracza
     (Non-Person Character)"""
 
-    def __init__(self, dogex):
+    def __init__(self, dogex, id):
         """Inicjalizacja NPC"""
         super().__init__()
         self.screen = dogex.screen
@@ -13,7 +13,8 @@ class NPC(Sprite):
         self.settings = dogex.settings
         self.character = dogex.character
 
-        self.image = pygame.image.load('images/test_npc.bmp')
+        image = f'images/{self.settings.npc_images[id]}.bmp'
+        self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
 
         #Postać testowa zaczyna po lewej stronie mapy
