@@ -149,6 +149,7 @@ class Map():
             for object in contents:
                 object.y += self.mapVerticalSpeed
 
+        
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x

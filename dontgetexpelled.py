@@ -88,18 +88,22 @@ class DoGeX():
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = True
             self.map.moving_left = True
+            self.character.facing = "right"
 
         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = True
             self.map.moving_right = True
+            self.character.facing = "left"
 
         if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = True
             self.map.moving_down = True
+            self.character.facing = "up"
 
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = True
             self.map.moving_up = True
+            self.character.facing = "down"
 
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
@@ -117,18 +121,22 @@ class DoGeX():
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = False
             self.map.moving_left = False
+            self.character.facing = "stationary"
 
         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = False
             self.map.moving_right = False
+            self.character.facing = "stationary"
 
         if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = False
             self.map.moving_down = False
+            self.character.facing = "stationary"
 
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = False
             self.map.moving_up = False
+            self.character.facing = "stationary"
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""

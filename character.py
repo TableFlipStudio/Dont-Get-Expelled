@@ -15,7 +15,7 @@ class MainCharacter():
         #Wczytanie obrazu głównej postaci
         self.image = pygame.image.load('images/test_character.bmp')
 
-        self.facing = "up"
+        self.facing = "stationary"
 
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
@@ -71,20 +71,15 @@ class MainCharacter():
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
             self.x += self.settings.character_speed
-            self.facing = "right"
 
         if self.can_move_left():
             self.x -= self.settings.character_speed
-            self.facing = "left"
 
         if self.can_move_up():
             self.y -= self.settings.character_speed
-            self.facing = "up"
 
         if self.can_move_down():
             self.y += self.settings.character_speed
-            self.facing = "down"
-
 
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
