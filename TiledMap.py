@@ -29,28 +29,8 @@ class Map():
         self.moving_down = False
 
         self.mapHorizontalSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
-        self.mapVerticalMovementSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+        self.mapVerticalSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
-        #Testowy prostokąt do analizy buga przesuwania mapy
-        obj = self._access_Object('collision.walls')
-        self.debug_rect = pygame.Rect(obj.x, obj.y,
-            obj.width, obj.height)
-        self.debug_color = pygame.Color(0, 255, 0, 128)
-
-        test_obj = self._access_Object('collision.walls')
-        print(test_obj)
-
-    def _access_WallObject(self):
-        """Uzyskanie dostępu do obiektu 'wall' warstwy 'collision'
-        i zwrócenie go. (robienie tego przy użyciu pętli bardzo zaśmieca kod)"""
-        for layer in self.tmxdata.visible_layers:
-            if isinstance(layer, TiledObjectGroup):
-                if layer.name == "collision":
-                    for obj in layer:
-                        if obj.name == "walls":
-                            return obj
-        #TODO: Rework the function so it access any layer in self.tmxdata
-        # provided with JSON-like path ('collision.walls' in this case)
     def _access_Object(self, path):
         """Uzyskanie dostępu do dowolnego obiektu lub warstwy i zwrócenie go
         Atrybut path musi być ciągiem tesktowym (string) i wskazywać ścieżkę
@@ -131,32 +111,45 @@ class Map():
 
     def collision(self):
         """Wykrycie kolizji między obiektami na mapie a postacią"""
-        obj = self._access_WallObject()
+        obj = self._access_Object('collision.walls')
         if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
             self.character.image = pygame.image.load('images/test_character_blue.bmp')
         else:
             self.character.image = pygame.image.load('images/test_character.bmp')
 
+    def _get_all_contents(self):
+        """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
+        contents = [
+            self._access_Object('collision.walls'),
+            self._access_Object('objects.spawn')
+        ]
+        return contents
 
     def update(self):
+        """Aktualizacja położenia mapy oraz jej zawartości"""
+        contents = self._get_all_contents()
+
         if self.map_can_move_right():
             self.x += self.mapHorizontalSpeed
+            for object in contents:
+                object.x += self.mapHorizontalSpeed
 
         if self.map_can_move_left():
             self.x -= self.mapHorizontalSpeed
+            for object in contents:
+                object.x -= self.mapHorizontalSpeed
 
         if self.map_can_move_up():
-            self.y -= self.mapVerticalMovementSpeed
+            self.y -= self.mapVerticalSpeed
+            for object in contents:
+                object.y -= self.mapVerticalSpeed
 
         if self.map_can_move_down():
-            self.y += self.mapVerticalMovementSpeed
+            self.y += self.mapVerticalSpeed
+            for object in contents:
+                object.y += self.mapVerticalSpeed
 
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
-
-        #Aktualizacja prostokąta testowego
-        obj = self._access_WallObject()
-        self.debug_rect.x = obj.x
-        self.debug_rect.y = obj.y
