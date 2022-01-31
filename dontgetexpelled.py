@@ -114,6 +114,7 @@ class DoGeX():
                 else:
                     #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
                     self.window.active = True
+                    self.window.load_msg_by_id(npc_collide.id)
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()

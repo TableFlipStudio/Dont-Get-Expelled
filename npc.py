@@ -13,6 +13,8 @@ class NPC(Sprite):
         self.settings = dogex.settings
         self.character = dogex.character
 
+        self.id = id
+
         image = f'images/{self.settings.npc_images[id]}.bmp'
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()

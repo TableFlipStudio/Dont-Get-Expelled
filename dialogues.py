@@ -23,7 +23,17 @@ class DialogueWindow():
         self.text_color = (0, 0, 0)
         self.font = pygame.freetype.SysFont(None, 16)
 
-        self._prep_msg('Some text')
+        self.dialogues = {
+            'test_npc': 'Dialogues/test_dialogue1.txt'
+        }
+
+    def load_msg_by_id(self, id):
+        """Wczytanie dialogu z pliku po podanie ID NPC (zwykle jego nazwa)"""
+        filename = self.dialogues[id]
+        with open(filename) as file:
+            lines = file.readlines()
+            print(lines)
+        self._prep_msg(lines[0].strip())
 
     def _prep_msg(self, msg):
         """Utworzenie obrazu tekstu do wyświetlenia"""
@@ -38,11 +48,3 @@ class DialogueWindow():
         pygame.draw.rect(self.screen, self.color, self.rect)
         pygame.draw.rect(self.screen, self.tab_color, self.tab_rect)
         self.screen.blit(self.msg_image, self.msg_rect)
-
-class DialogueLoader():
-    """Klasa przechowująca pliki .txt z dialogami i zarządzająca nimi."""
-    def __init__(self):
-        """Inicjalizacja bazy danych"""
-        self.dialogues = {
-            'test_npc': 'Dialogues/test_dialogue1.txt'
-        }
