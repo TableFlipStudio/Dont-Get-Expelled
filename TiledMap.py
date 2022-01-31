@@ -31,12 +31,6 @@ class Map():
         self.mapHorizontalSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
-        #Testowy prostokąt do analizy buga przesuwania mapy
-        obj = self._access_Object('collision.walls')
-        self.debug_rect = pygame.Rect(obj.x, obj.y,
-            obj.width, obj.height)
-        self.debug_color = pygame.Color(0, 255, 0, 128)
-
     def _access_Object(self, path):
         """Uzyskanie dostępu do dowolnego obiektu lub warstwy i zwrócenie go
         Atrybut path musi być ciągiem tesktowym (string) i wskazywać ścieżkę
@@ -159,8 +153,3 @@ class Map():
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
-
-        #Aktualizacja prostokąta testowego
-        obj = self._access_Object('collision.walls')
-        self.debug_rect.x = obj.x
-        self.debug_rect.y = obj.y
