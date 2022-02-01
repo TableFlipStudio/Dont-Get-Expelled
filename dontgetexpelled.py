@@ -16,6 +16,8 @@ class DoGeX():
         pygame.init()
         self.settings = Settings()
 
+        clock = pygame.time.Clock()
+
         #Wczytanie ekranu i nadanie tytułu
         self.screen = pygame.display.set_mode((self.settings.screen_width,
             self.settings.screen_height))
@@ -23,6 +25,7 @@ class DoGeX():
 
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
+        self.character.facing = "stationary"
         self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
@@ -59,6 +62,7 @@ class DoGeX():
 
 
             self._update_screen()
+            clock.tick(self.settings.fps)
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
@@ -187,6 +191,7 @@ class DoGeX():
         """Aktualizacja zawartości ekranu"""
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.map_image, (self.map.x, self.map.y))
+        pygame.draw.rect(self.screen, self.map.debug_color, self.map.debug_rect) #TOBEDELETED
         self.character.blitme()
 
         #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
