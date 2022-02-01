@@ -8,15 +8,17 @@ class Map():
         self.screen  = dogex.screen
         self.character = dogex.character
 
-
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/map.tmx')
+        self.tmxdata = load_pygame('mapfolder/mapbetter.tmx')
 
         width = self.tmxdata.width * self.tmxdata.tilewidth
         height = self.tmxdata.height * self.tmxdata.tileheight
 
         surface = pygame.Surface( ( width, height ) )
         self.rect = surface.get_rect()
+
+        #self.spawn_obj = self._access_Object('objects.spawn')
+        #self.character.rect.topleft = (self.spawn_obj.x, self.spawn_obj.y)
 
         self.rect.topleft = self.screen_rect.topleft
 
@@ -111,7 +113,7 @@ class Map():
 
     def collision(self):
         """Wykrycie kolizji między obiektami na mapie a postacią"""
-        obj = self._access_Object('collision.walls')
+        obj = self._access_Object('collision_walls.walls1')
         if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
             self.character.image = pygame.image.load('images/test_character_blue.bmp')
         else:
@@ -120,8 +122,9 @@ class Map():
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
         contents = [
-            self._access_Object('collision.walls'),
+            self._access_Object('collision_walls.walls1'),
             #self._access_Object('objects.spawn')
+
         ]
         return contents
 

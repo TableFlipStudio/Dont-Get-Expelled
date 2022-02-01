@@ -213,7 +213,7 @@
   <object id="14" name="walls" x="224" y="324" width="928" height="696"/>
  </objectgroup>
  <objectgroup id="6" name="objects">
-  <object id="20" name="spawn" x="809.091" y="715.152">
+  <object id="20" name="spawn" x="323.091" y="213.152">
    <point/>
   </object>
  </objectgroup>
