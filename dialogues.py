@@ -27,23 +27,30 @@ class DialogueWindow():
             'test_npc': 'Dialogues/test_dialogue1.txt'
         }
 
+        self.messages = []
+
     def load_msg_by_id(self, id):
-        """Wczytanie dialogu z pliku po podanie ID NPC (zwykle jego nazwa)"""
+        """Wczytanie dialogu z pliku po podaniu ID NPC (zwykle jego nazwa)"""
         filename = self.dialogues[id]
         with open(filename) as file:
             lines = file.readlines()
-        self._prep_msg(lines[0].strip())
+        yOffset = 0
+        for line in lines:
+            self._prep_msg(line.strip(), yOffset)
+            yOffset += self.font.get_sized_height()
+            print(yOffset)
 
-    def _prep_msg(self, msg):
+    def _prep_msg(self, msg, yOffset):
         """Utworzenie obrazu tekstu do wyświetlenia"""
-        msg_pos = (self.tab_rect.x, self.tab_rect.y)
-        self.msg_image, self.msg_rect = self.font.render(msg)
-        self.msg_rect.x = self.tab_rect.x
-        self.msg_rect.y = self.tab_rect.y
+        msg_image, msg_rect = self.font.render(msg)
+        msg_rect.x = self.tab_rect.x
+        msg_rect.y = self.tab_rect.y + yOffset
+        self.messages.append((msg_image, msg_rect))
 
     def blit_window(self):
         """Wyświetlenie okna dialogowego, pola tekstowego
         i kwestii na ekranie"""
         pygame.draw.rect(self.screen, self.color, self.rect)
         pygame.draw.rect(self.screen, self.tab_color, self.tab_rect)
-        self.screen.blit(self.msg_image, self.msg_rect)
+        for msg in self.messages:
+            self.screen.blit(msg[0], msg[1])
