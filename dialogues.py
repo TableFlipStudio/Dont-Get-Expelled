@@ -21,12 +21,14 @@ class DialogueWindow():
             self.settings.tab_height)
         self.tab_color = (255, 255, 255)
         self.text_color = (0, 0, 0)
-        self.font = pygame.freetype.SysFont(None, 16)
+        self.font = pygame.freetype.SysFont('monospace', 14)
 
+        #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
             'test_npc': 'Dialogues/test_dialogue1.txt'
         }
 
+        #Pusta lista do przechowywania linijek składających się na kwestię
         self.messages = []
 
     def load_msg_by_id(self, id):
@@ -38,7 +40,6 @@ class DialogueWindow():
         for line in lines:
             self._prep_msg(line.strip(), yOffset)
             yOffset += self.font.get_sized_height()
-            print(yOffset)
 
     def _prep_msg(self, msg, yOffset):
         """Utworzenie obrazu tekstu do wyświetlenia"""

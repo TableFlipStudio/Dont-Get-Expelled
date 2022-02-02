@@ -54,11 +54,10 @@ class DoGeX():
             self._check_events()
             self.map.collision()
 
-            if not self.inventory.active:
+            if not (self.inventory.active or self.window.active):
                 self.character.update()
                 self.map.update()
                 self._update_npcs()
-
 
             self._update_screen()
 
@@ -151,11 +150,21 @@ class DoGeX():
                 slot.rect.x = slot.x
                 slot.rect.y += slot_height + 2 * slot_height * row_number
                 self.slots.add(slot)
+            #Po utworzeniu wszystkich slotów utwórz dodatkowy slot do upuszczania
             else:
                 slot = Slot(self.inventory)
                 slot.rect.centerx = self.screen.get_rect().centerx
                 slot.rect.y += slot_height + 2 * slot_height * 2
                 self.drop_slot = slot
+
+    def rewrite_dialogue_files(): # TOBEFINISHED
+        """Funkcja zczytuje zawartość wszystkich plików a następnie odtwarza
+        ją tak, aby wszystkie linijki mieściły się w polu tekstowym"""
+        for filename in self.window.dialogues.values():
+            with open(filename) as file:
+                lines = file.readlines().strip()
+            words = [word.split(' ') for word in lines]
+            words = words[0] + words[1] #Scal podlisty w jedną listę
 
     def _find_npc_collision(self):
         """Sprawdza, czy postać głowna koliduje z którymś NPC,
