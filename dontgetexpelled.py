@@ -168,30 +168,50 @@ class DoGeX():
         exammple_char = self.window.font.render('x')[0]
         char_width = exammple_char.get_width()
         available_chars = self.settings.tab_width // char_width
+
         for filename in self.window.dialogues.values():
-            with open(filename) as file:
-                lines = file.readlines()
+            lines = self._read_file(filename)
+            words = self._form_wordlist(lines)
+            output = self._form_output(words, available_chars)
+            self._write_output(output, filename)
 
-            lines_with_words = [word.strip().split(' ') for word in lines]
-            words = []
-            for word in lines_with_words: #Scal podlisty w jedną listę
-                words += word
+    def _read_file(self, filename):
+        """Zczytanie zawartości pliku dialogowego"""
+        with open(filename) as file:
+            lines = file.readlines()
+        return lines
 
-            currentLine = ''
-            output = ''
-            #print(available_chars)
-            for word in words:
-                #allen = len(currentLine) + len(f'{word} ')
-                #print(f'{word}: {allen}')
-                if (len(currentLine) + len(f'{word} ')) <= available_chars:
-                    currentLine += f'{word} '
-                else:
-                    output += f'{currentLine}\n'
-                    currentLine = f'{word} '
-            output += f'{currentLine}'
+    def _form_wordlist(self, lines):
+        """Reorganizacja listy z linijkami tak, aby uformować listę wszystkich
+        słów w pliku"""
+        lines_with_words = [word.strip().split(' ') for word in lines]
+        words = []
+        for word in lines_with_words: #Scal podlisty w jedną listę
+            words += word
+        return words
 
-            with open(filename, 'w') as file:
-                file.write(output)
+    def _form_output(self, words, available_chars):
+        """Uformowanie nowych linijek tak, aby mieściły się w polu tekstowym
+        okna dialogowego."""
+        currentLine = ''
+        output = ''
+        #print(available_chars)
+        for word in words:
+            #allen = len(currentLine) + len(f'{word} ')
+            #print(f'{word}: {allen}')
+            if (len(currentLine) + len(f'{word} ')) <= available_chars:
+                currentLine += f'{word} '
+            else:
+                output += f'{currentLine}\n'
+                currentLine = f'{word} '
+        output += f'{currentLine}'
+        return output
+
+    def _write_output(self, output, filename):
+        """Zapisanie zreorganizowanej linii dialogowej w pliku wyjściowym,
+        nadpisując wartość pierwotną"""
+        with open(filename, 'w') as file:
+            file.write(output)
 
     def _find_npc_collision(self):
         """Sprawdza, czy postać głowna koliduje z którymś NPC,
