@@ -21,7 +21,7 @@ class DialogueWindow():
             self.settings.tab_height)
         self.tab_color = (255, 255, 255)
         self.text_color = (0, 0, 0)
-        self.font = pygame.freetype.SysFont('monospace', 14)
+        self.font = pygame.freetype.SysFont('monospace', 16)
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {

@@ -47,6 +47,8 @@ class DoGeX():
 
         self.npcs.add(NPC(self,'test_npc'))
 
+        self.rewrite_dialogue_files()
+
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
 
@@ -157,14 +159,39 @@ class DoGeX():
                 slot.rect.y += slot_height + 2 * slot_height * 2
                 self.drop_slot = slot
 
-    def rewrite_dialogue_files(): # TOBEFINISHED
+    def rewrite_dialogue_files(self): # TOBEFINISHED
         """Funkcja zczytuje zawartość wszystkich plików a następnie odtwarza
-        ją tak, aby wszystkie linijki mieściły się w polu tekstowym"""
+        ją tak, aby wszystkie linijki mieściły się w polu tekstowym. Funkcja
+        powinna być wywoływana tylko przy rozpoczęciu nowej gry, zmianie treści
+        plików z dialogami lub zmianie ustawień wyświetlania (szerokośc ekranu,
+        szerokośc pola tekstowego)"""
+        exammple_char = self.window.font.render('x')[0]
+        char_width = exammple_char.get_width()
+        available_chars = self.settings.tab_width // char_width
         for filename in self.window.dialogues.values():
             with open(filename) as file:
-                lines = file.readlines().strip()
-            words = [word.split(' ') for word in lines]
-            words = words[0] + words[1] #Scal podlisty w jedną listę
+                lines = file.readlines()
+
+            lines_with_words = [word.strip().split(' ') for word in lines]
+            words = []
+            for word in lines_with_words: #Scal podlisty w jedną listę
+                words += word
+
+            currentLine = ''
+            output = ''
+            #print(available_chars)
+            for word in words:
+                #allen = len(currentLine) + len(f'{word} ')
+                #print(f'{word}: {allen}')
+                if (len(currentLine) + len(f'{word} ')) <= available_chars:
+                    currentLine += f'{word} '
+                else:
+                    output += f'{currentLine}\n'
+                    currentLine = f'{word} '
+            output += f'{currentLine}'
+
+            with open(filename, 'w') as file:
+                file.write(output)
 
     def _find_npc_collision(self):
         """Sprawdza, czy postać głowna koliduje z którymś NPC,
