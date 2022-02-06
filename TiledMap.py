@@ -11,10 +11,10 @@ class Map():
         self.screen_rect = self.screen.get_rect()
         self.tmxdata = load_pygame('mapfolder/mapbetter.tmx')
 
-        width = self.tmxdata.width * self.tmxdata.tilewidth
-        height = self.tmxdata.height * self.tmxdata.tileheight
+        self.width = self.tmxdata.width * self.tmxdata.tilewidth
+        self.height = self.tmxdata.height * self.tmxdata.tileheight
 
-        surface = pygame.Surface( ( width, height ) )
+        surface = pygame.Surface( ( self.width, self.height ) )
         self.rect = surface.get_rect()
 
         #self.spawn_obj = self._access_Object('objects.spawn')
@@ -30,8 +30,11 @@ class Map():
         self.moving_up = False
         self.moving_down = False
 
-        self.mapHorizontalSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
-        self.mapVerticalSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+        print(self._access_Object('collision.w20'))
+
+        #self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
+        #self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+
 
     def _access_Object(self, path):
         """Uzyskanie dostępu do dowolnego obiektu lub warstwy i zwrócenie go
@@ -97,10 +100,10 @@ class Map():
 
     def map_setup(self, tmxdata):
 
-        width = tmxdata.width * tmxdata.tilewidth
+        self.width = tmxdata.width * tmxdata.tilewidth
         height = tmxdata.height * tmxdata.tileheight
 
-        surface = pygame.Surface( ( width, height ) )
+        surface = pygame.Surface( ( self.width, self.height ) )
 
         for layer in tmxdata.visible_layers:
             if isinstance(layer, TiledTileLayer):
@@ -111,26 +114,66 @@ class Map():
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
-    def collision(self):
-        """Wykrycie kolizji między obiektami na mapie a postacią"""
-        obj = self._access_Object('collision_walls.walls1')
-        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
-            self.character.image = pygame.image.load('images/test_character_blue.bmp')
-        else:
-            self.character.image = pygame.image.load('images/test_character.bmp')
 
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
         contents = [
-            self._access_Object('collision_walls.walls1'),
+            self._access_Object('collision.w1'),
+            self._access_Object('collision.w2'),
+            self._access_Object('collision.w3'),
+            self._access_Object('collision.w4'),
+            self._access_Object('collision.w5'),
+            self._access_Object('collision.w6'),
+            self._access_Object('collision.w7'),
+            self._access_Object('collision.w8'),
+            self._access_Object('collision.w9'),
+            self._access_Object('collision.w10'),
+            self._access_Object('collision.w11'),
+            self._access_Object('collision.w12'),
+            self._access_Object('collision.w13'),
+            self._access_Object('collision.w14'),
+            self._access_Object('collision.w15'),
+            self._access_Object('collision.w16'),
+            self._access_Object('collision.w17'),
+            self._access_Object('collision.w18'),
+            self._access_Object('collision.w19'),
+            self._access_Object('collision.w20'),
+            self._access_Object('collision.w21'),
+            self._access_Object('collision.w22'),
+            self._access_Object('collision.w23'),
+            self._access_Object('collision.w24'),
+            self._access_Object('collision.w25'),
+            self._access_Object('collision.w26'),
+            self._access_Object('collision.w27'),
+            self._access_Object('collision.w28'),
+            self._access_Object('collision.w29'),
+            self._access_Object('collision.w30'),
+            self._access_Object('collision.w31'),
+            self._access_Object('collision.w32'),
+            self._access_Object('collision.w33')
             #self._access_Object('objects.spawn')
 
         ]
         return contents
 
+    def collision(self):
+        """Wykrycie kolizji między obiektami na mapie a postacią"""
+        contents = self._get_all_contents()
+
+        for j in contents:
+            if pygame.Rect(j.x, j.y, j.width, j.height).colliderect(self.character.rect):
+                self.character.image = pygame.image.load('images/test_character_blue.bmp')
+            else:
+                self.character.image = pygame.image.load('images/test_character.bmp')
+
+
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
         contents = self._get_all_contents()
+
+        self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
+        self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+
 
         if self.map_can_move_right():
             self.x += self.mapHorizontalSpeed
@@ -152,7 +195,6 @@ class Map():
             for object in contents:
                 object.y += self.mapVerticalSpeed
 
-        
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x

@@ -30,6 +30,7 @@ class DoGeX():
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
 
+
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
         self.npcs = pygame.sprite.Group()
@@ -115,6 +116,9 @@ class DoGeX():
         if event.key == pygame.K_e:
             if not self.inventory.active:
                 self._pickup_item()
+        
+        if event.key == pygame.K_LSHIFT:
+            self.settings.character_speed *= 2
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
@@ -141,6 +145,9 @@ class DoGeX():
             self.character.moving_down = False
             self.map.moving_up = False
             self.character.facing = "stationary"
+        
+        if event.key == pygame.K_LSHIFT:
+            self.settings.character_speed /= 2
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
