@@ -117,6 +117,10 @@ class Map():
 
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
+        
+            #FIXME the loop only uses the first item; even after deleting the 'collision.w1'
+            # object, it still displays on the map as the only object.  
+
         contents = [
             self._access_Object('collision.w1'),
             self._access_Object('collision.w2'),
