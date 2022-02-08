@@ -30,11 +30,8 @@ class Map():
         self.moving_up = False
         self.moving_down = False
 
-        print(self._access_Object('collision.w20'))
-
-        #self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
-        #self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
-
+        self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
+        self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
     def _access_Object(self, path):
         """Uzyskanie dostępu do dowolnego obiektu lub warstwy i zwrócenie go
@@ -100,10 +97,10 @@ class Map():
 
     def map_setup(self, tmxdata):
 
-        self.width = tmxdata.width * tmxdata.tilewidth
+        width = tmxdata.width * tmxdata.tilewidth
         height = tmxdata.height * tmxdata.tileheight
 
-        surface = pygame.Surface( ( self.width, self.height ) )
+        surface = pygame.Surface( ( width, height ) )
 
         for layer in tmxdata.visible_layers:
             if isinstance(layer, TiledTileLayer):
@@ -114,6 +111,13 @@ class Map():
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
+    def collision(self):
+        """Wykrycie kolizji między obiektami na mapie a postacią"""
+        obj = self._access_Object('collision_walls.walls1')
+        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+            self.character.image = pygame.image.load('images/test_character_blue.bmp')
+        else:
+            self.character.image = pygame.image.load('images/test_character.bmp')
 
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
@@ -147,13 +151,14 @@ class Map():
                 self.character.image = pygame.image.load('images/test_character.bmp')
 
 
+
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
-        contents = self._get_all_contents()
 
         self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
+        contents = self._get_all_contents()
 
         if self.map_can_move_right():
             self.x += self.mapHorizontalSpeed
@@ -175,6 +180,7 @@ class Map():
             for object in contents:
                 object.y += self.mapVerticalSpeed
 
+        
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
