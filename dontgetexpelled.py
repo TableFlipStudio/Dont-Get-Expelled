@@ -168,6 +168,9 @@ class DoGeX():
         exammple_char = self.window.font.render('x')[0]
         char_width = exammple_char.get_width()
         available_chars = self.settings.tab_width // char_width
+        print("calculated line width: ", char_width * available_chars)
+        print("tab width: ", self.settings.tab_width)
+        print('exammple line width: ', char_width * 62)
 
         for filename in self.window.dialogues.values():
             lines = self._read_file(filename)
@@ -195,15 +198,17 @@ class DoGeX():
         okna dialogowego."""
         currentLine = ''
         output = ''
-        #print(available_chars)
+        print(available_chars)
         for word in words:
-            #allen = len(currentLine) + len(f'{word} ')
-            #print(f'{word}: {allen}')
-            if (len(currentLine) + len(f'{word} ')) <= available_chars:
+            all_len = len(currentLine) + len(f'{word} ')
+            print(f'expected {word}: {all_len}')
+            if all_len <= available_chars:
                 currentLine += f'{word} '
             else:
                 output += f'{currentLine}\n'
                 currentLine = f'{word} '
+            print(f'{word}: {len(currentLine)}')
+            print('')
         output += f'{currentLine}'
         return output
 

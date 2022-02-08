@@ -47,6 +47,7 @@ class DialogueWindow():
         msg_rect.x = self.tab_rect.x
         msg_rect.y = self.tab_rect.y + yOffset
         self.messages.append((msg_image, msg_rect))
+        print("actual line width", msg_image.get_width())
 
     def blit_window(self):
         """Wyświetlenie okna dialogowego, pola tekstowego
