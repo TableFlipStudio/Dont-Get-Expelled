@@ -111,14 +111,6 @@ class Map():
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
-    def collision(self):
-        """Wykrycie kolizji między obiektami na mapie a postacią"""
-        obj = self._access_Object('collision_walls.walls1')
-        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
-            self.character.image = pygame.image.load('images/test_character_blue.bmp')
-        else:
-            self.character.image = pygame.image.load('images/test_character.bmp')
-
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
         
@@ -126,7 +118,7 @@ class Map():
             # object, it still displays on the map as the only object.  
 
         contents = [
-            self._access_Object('collision.w1'),
+            self._access_Object('collision.w11'),
             self._access_Object('collision.w2'),
             self._access_Object('collision.w3'),
             self._access_Object('collision.w4'),
@@ -136,7 +128,7 @@ class Map():
             self._access_Object('collision.w8'),
             self._access_Object('collision.w9'),
             self._access_Object('collision.w10'),
-            self._access_Object('collision.w11')
+            self._access_Object('collision.w1')
         ]
         return contents
 
