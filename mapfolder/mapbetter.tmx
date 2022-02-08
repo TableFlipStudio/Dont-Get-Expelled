@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-up" width="150" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="91">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-up" width="150" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="106">
  <tileset firstgid="1" source="terrain.tsx"/>
  <layer id="5" name="doł" width="150" height="100">
   <data encoding="csv">
@@ -105,7 +105,19 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="9" name="collision"/>
+ <objectgroup id="9" name="collision">
+  <object id="91" name="w1" x="1440" y="2366.67" width="1120" height="33.3333"/>
+  <object id="92" name="w2" x="2336" y="2465.33" width="222.667" height="28"/>
+  <object id="93" name="w3" x="2529.33" y="2493.33" width="32" height="68"/>
+  <object id="97" name="w4" x="2528" y="2561.33" width="1852" height="28"/>
+  <object id="98" name="w5" x="4354.67" y="2526.67" width="28" height="30.6667"/>
+  <object id="99" name="w6" x="4353.33" y="2432" width="192" height="30.6667"/>
+  <object id="100" name="w7" x="4510.67" y="1378.67" width="29.3333" height="1049.33"/>
+  <object id="102" name="w8" x="4196" y="1377.33" width="92" height="30.6667"/>
+  <object id="103" name="w9" x="4321.33" y="1376" width="224" height="34.6667"/>
+  <object id="104" name="w10" x="4194.67" y="1417.33" width="29.3333" height="1012"/>
+  <object id="105" name="w11" x="4130.67" y="2400" width="60" height="29.3333"/>
+ </objectgroup>
  <layer id="8" name="walls" width="150" height="100" offsetx="2" offsety="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

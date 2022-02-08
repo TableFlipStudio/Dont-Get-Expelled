@@ -132,31 +132,7 @@ class Map():
             self._access_Object('collision.w8'),
             self._access_Object('collision.w9'),
             self._access_Object('collision.w10'),
-            self._access_Object('collision.w11'),
-            self._access_Object('collision.w12'),
-            self._access_Object('collision.w13'),
-            self._access_Object('collision.w14'),
-            self._access_Object('collision.w15'),
-            self._access_Object('collision.w16'),
-            self._access_Object('collision.w17'),
-            self._access_Object('collision.w18'),
-            self._access_Object('collision.w19'),
-            self._access_Object('collision.w20'),
-            self._access_Object('collision.w21'),
-            self._access_Object('collision.w22'),
-            self._access_Object('collision.w23'),
-            self._access_Object('collision.w24'),
-            self._access_Object('collision.w25'),
-            self._access_Object('collision.w26'),
-            self._access_Object('collision.w27'),
-            self._access_Object('collision.w28'),
-            self._access_Object('collision.w29'),
-            self._access_Object('collision.w30'),
-            self._access_Object('collision.w31'),
-            self._access_Object('collision.w32'),
-            self._access_Object('collision.w33')
-            #self._access_Object('objects.spawn')
-
+            self._access_Object('collision.w11')
         ]
         return contents
 
@@ -164,8 +140,8 @@ class Map():
         """Wykrycie kolizji między obiektami na mapie a postacią"""
         contents = self._get_all_contents()
 
-        for j in contents:
-            if pygame.Rect(j.x, j.y, j.width, j.height).colliderect(self.character.rect):
+        for obj in contents:
+            if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
                 self.character.image = pygame.image.load('images/test_character_blue.bmp')
             else:
                 self.character.image = pygame.image.load('images/test_character.bmp')
