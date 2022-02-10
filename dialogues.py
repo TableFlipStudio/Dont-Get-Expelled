@@ -19,27 +19,54 @@ class DialogueWindow():
         self.tab_rect = pygame.Rect(self.settings.tab_Xpos,
             self.settings.tab_Ypos, self.settings.tab_width,
             self.settings.tab_height)
-        self.tab_color = (255, 255, 255)
-        self.text_color = (0, 0, 0)
+
+        #Pole tesktowe - odpowiedzi gracza
+        self.answ_tab_rect = pygame.Rect(self.settings.answ_tab_Xpos,
+            self.settings.answ_tab_Ypos, self.settings.tab_width,
+            self.settings.tab_height)
+
+        #Pole tekstowe - ogólne
+        self.tab_color = self.settings.tab_color
+        self.text_color = self.settings.text_color
         self.font = pygame.freetype.SysFont('monospace', 16)
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'test_npc': 'Dialogues/test_dialogue1.txt'
+            'lines': {
+                'test_npc': ['Dialogues/test_dialogue1.txt']
+            },
+            'answers': {
+                'test_npc': None
+            }
         }
 
         #Pusta lista do przechowywania linijek składających się na kwestię
         self.messages = []
 
-    def load_msg_by_id(self, id):
-        """Wczytanie dialogu z pliku po podaniu ID NPC (zwykle jego nazwa)"""
-        filename = self.dialogues[id]
+    def run_dialogue_sequence(self, id):
+        """Uruchomienie serii dialogu NPC-gracz-NPC-gracz itd."""
+        repeat = len(self.dialogues['lines'][id])
+
+        for inx in range(repeat):
+            self._load_msg_by_id(id, inx)
+            self._load_answs_by_id(id, inx)
+
+
+    def _load_msg_by_id(self, id, inx):
+        """Wczytanie kwestii NPC z pliku po podaniu jego ID
+        (zwykle jego nazwa)"""
+        filename = self.dialogues['lines'][id][inx]
         with open(filename) as file:
             lines = file.readlines()
         yOffset = 0
         for line in lines:
             self._prep_msg(line.strip(), yOffset)
             yOffset += self.font.get_sized_height()
+
+    def _load_answs_by_id(self, id, inx):
+        """Wczytanie możliwych odpowiedzi gracza po ID NPC,
+        z którym go prowadzi"""
+        pass
 
     def _prep_msg(self, msg, yOffset):
         """Utworzenie obrazu tekstu do wyświetlenia"""
@@ -53,5 +80,6 @@ class DialogueWindow():
         i kwestii na ekranie"""
         pygame.draw.rect(self.screen, self.color, self.rect)
         pygame.draw.rect(self.screen, self.tab_color, self.tab_rect)
+        pygame.draw.rect(self.screen, self.tab_color, self.answ_tab_rect)
         for msg in self.messages:
             self.screen.blit(msg[0], msg[1])
