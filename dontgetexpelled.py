@@ -47,8 +47,6 @@ class DoGeX():
 
         self.npcs.add(NPC(self,'test_npc'))
 
-        self.rewrite_dialogue_files()
-
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
 
