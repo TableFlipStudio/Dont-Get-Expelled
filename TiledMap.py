@@ -118,7 +118,7 @@ class Map():
             # object, it still displays on the map as the only object.  
 
         contents = [
-            self._access_Object('collision.w11'),
+            self._access_Object('collision.w1'),
             self._access_Object('collision.w2'),
             self._access_Object('collision.w3'),
             self._access_Object('collision.w4'),
@@ -128,7 +128,7 @@ class Map():
             self._access_Object('collision.w8'),
             self._access_Object('collision.w9'),
             self._access_Object('collision.w10'),
-            self._access_Object('collision.w1')
+            self._access_Object('collision.w11')
         ]
         return contents
 
@@ -138,6 +138,7 @@ class Map():
 
         for obj in contents:
             if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                print(obj)
                 self.character.image = pygame.image.load('images/test_character_blue.bmp')
             else:
                 self.character.image = pygame.image.load('images/test_character.bmp')
