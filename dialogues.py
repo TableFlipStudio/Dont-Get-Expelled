@@ -36,7 +36,7 @@ class DialogueWindow():
                 'test_npc': ['Dialogues/test_dialogue1.txt']
             },
             'answers': {
-                'test_npc': None
+                'test_npc': ['Dialogues/test_dialogue2.txt']
             }
         }
 

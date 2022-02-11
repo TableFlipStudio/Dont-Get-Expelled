@@ -167,11 +167,13 @@ class DoGeX():
         char_width = exammple_char.get_width()
         available_chars = self.settings.tab_width // char_width
 
-        for filename in self.window.dialogues.values():
-            lines = self._read_file(filename)
-            words = self._form_wordlist(lines)
-            output = self._form_output(words, available_chars)
-            self._write_output(output, filename)
+        for dialogue_type in self.window.dialogues.values():
+            for files in dialogue_type.values():
+                for filename in files:
+                    lines = self._read_file(filename)
+                    words = self._form_wordlist(lines)
+                    output = self._form_output(words, available_chars)
+                    self._write_output(output, filename)
 
     def _read_file(self, filename):
         """Zczytanie zawartości pliku dialogowego"""
