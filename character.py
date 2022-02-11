@@ -14,7 +14,7 @@ class MainCharacter():
 
         #Wczytanie obrazu głównej postaci
         self.image = pygame.image.load('images/test_character.bmp')
-
+        
         self.facing = "stationary"
 
         #Wczytanie prostokąta postaci i wycentrowanie go

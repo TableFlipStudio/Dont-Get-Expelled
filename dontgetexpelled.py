@@ -54,7 +54,7 @@ class DoGeX():
 
         while True:
             self._check_events()
-            self.map.collision()
+            #self.map.collision()
 
             if not self.inventory.active:
                 self.character.update()

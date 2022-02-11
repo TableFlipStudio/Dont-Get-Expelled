@@ -6,7 +6,8 @@ class Map():
 
         self.settings = dogex.settings
         self.screen  = dogex.screen
-        self.character = dogex.character
+        
+        self.character = dogex.character    
 
         self.screen_rect = self.screen.get_rect()
         self.tmxdata = load_pygame('mapfolder/mapbetter.tmx')
@@ -137,12 +138,25 @@ class Map():
         contents = self._get_all_contents()
 
         for obj in contents:
-            if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
-                print(obj)
-                self.character.image = pygame.image.load('images/test_character_blue.bmp')
-            else:
-                self.character.image = pygame.image.load('images/test_character.bmp')
+            if self.character.facing == "up":           
+                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                    self.character.moving_up = False
+                    self.moving_down = False
 
+            if self.character.facing == "down":   
+                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                    self.character.moving_down = False
+                    self.moving_up = False
+
+            if self.character.facing == "left":           
+                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                    self.character.moving_left = False
+                    self.moving_right = False
+
+            if self.character.facing == "right":           
+                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                    self.character.moving_right = False
+                    self.moving_left = False
 
 
     def update(self):
