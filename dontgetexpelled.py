@@ -54,7 +54,7 @@ class DoGeX():
 
         while True:
             self._check_events()
-            #self.map.collision()
+            self.map.collision()
 
             if not self.inventory.active:
                 self.character.update()
@@ -122,6 +122,9 @@ class DoGeX():
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
+
+        #TODO need to add a up-left, down-right... movement
+        #and implement it in collision types!!
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""

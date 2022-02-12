@@ -133,32 +133,78 @@ class Map():
         ]
         return contents
 
-    def collision(self):
-        """Wykrycie kolizji między obiektami na mapie a postacią"""
+    def _collision_bottom(self):
+        if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing == "down":
+            return True
+        #if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.facing == "down": 
+        #    return True
+        #if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing == "down":
+        #    return True
+
+    def _collision_top(self):
+
+        if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.facing == "up":
+            return True
+        #if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.facing == "up":
+        #    return True
+        #if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing == "up":
+        #    return True
+
+    def _collision_left(self):
+
+        if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.facing == "left":
+            return True
+        #if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.facing == "left":
+        #    return True
+        #if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing == "left":
+        #    return True
+    
+    def _collision_right(self):
+    
+        if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing == "right":
+            return True
+        #if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.facing == "right":
+        #    return True
+        #if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing == "right":
+        #    return True
+
+    def _collision_type(self):
+        """Wykrycie typu kolizj między obiektami na mapie a postacią"""
         contents = self._get_all_contents()
 
         for obj in contents:
-            if self.character.facing == "up":           
-                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
-                    self.character.moving_up = False
-                    self.moving_down = False
+            self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
 
-            if self.character.facing == "down":   
-                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
-                    self.character.moving_down = False
-                    self.moving_up = False
+            if (self.coll_rect).colliderect(self.character.rect):
 
-            if self.character.facing == "left":           
-                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
-                    self.character.moving_left = False
-                    self.moving_right = False
+                if self._collision_top():
+                    return "top"
+                if self._collision_bottom():
+                    return "bottom"
+                if self._collision_left():
+                    return "left"
+                if self._collision_right():
+                    return "right"
 
-            if self.character.facing == "right":           
-                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
-                    self.character.moving_right = False
-                    self.moving_left = False
+    def collision(self):
+        """Wykrycie kolizji między obiektami na mapie a postacią"""
 
+        if self._collision_type() == "top":
+            self.character.moving_up = False
+            self.moving_down = False
+        
+        if self._collision_type() == "bottom":
+            self.character.moving_down = False
+            self.moving_up = False
 
+        if self._collision_type() == "left":
+            self.character.moving_left = False
+            self.moving_right = False
+
+        if self._collision_type() == "right":
+            self.character.moving_right = False
+            self.moving_left = False
+            
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
 

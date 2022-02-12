@@ -13,8 +13,9 @@ class MainCharacter():
         self.settings = dogex.settings
 
         #Wczytanie obrazu głównej postaci
-        self.image = pygame.image.load('images/test_character.bmp')
-        
+        self.original_image = pygame.image.load('images/test_character.bmp')
+        self.image = pygame.transform.scale(self.original_image, (40, 34))
+
         self.facing = "stationary"
 
         #Wczytanie prostokąta postaci i wycentrowanie go
