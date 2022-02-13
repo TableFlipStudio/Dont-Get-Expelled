@@ -157,7 +157,7 @@ class DoGeX():
                 slot.rect.y += slot_height + 2 * slot_height * 2
                 self.drop_slot = slot
 
-    def rewrite_dialogue_files(self): # TOBEFINISHED
+    def rewrite_dialogue_files(self):
         """Funkcja zczytuje zawartość wszystkich plików a następnie odtwarza
         ją tak, aby wszystkie linijki mieściły się w polu tekstowym. Funkcja
         powinna być wywoływana tylko przy rozpoczęciu nowej gry, zmianie treści
@@ -167,13 +167,21 @@ class DoGeX():
         char_width = exammple_char.get_width()
         available_chars = self.settings.tab_width // char_width
 
-        for dialogue_type in self.window.dialogues.values():
-            for files in dialogue_type.values():
-                for filename in files:
-                    lines = self._read_file(filename)
-                    words = self._form_wordlist(lines)
-                    output = self._form_output(words, available_chars)
-                    self._write_output(output, filename)
+        self._rewrite_lines_files(available_chars)
+        self._rewrite_answer_files() #This virtually does not exist yet
+
+    def _rewrite_lines_files(self, available_chars):
+        """Odtworzenie plików z kwestiami NPC"""
+        for files in self.window.dialogues['lines'].values():
+            for filename in files:
+                lines = self._read_file(filename)
+                words = self._form_wordlist(lines)
+                output = self._form_output(words, available_chars)
+                self._write_output(output, filename)
+
+    def _rewrite_answer_files(self):
+        """Odtworzenie plików z odpowidziami gracza"""
+        pass
 
     def _read_file(self, filename):
         """Zczytanie zawartości pliku dialogowego"""
