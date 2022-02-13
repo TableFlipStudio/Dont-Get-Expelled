@@ -36,21 +36,17 @@ class DialogueWindow():
                 'test_npc': ['Dialogues/test_dialogue1.txt']
             },
             'answers': {
-                'test_npc': ['Dialogues/test_dialogue2.txt']
+                'test_npc': ['Dialogues/test_answer1.txt']
             }
         }
 
         #Pusta lista do przechowywania linijek składających się na kwestię
         self.messages = []
 
-    def run_dialogue_sequence(self, id):
+    def run_dialogue_sequence(self, id, inx = 0):
         """Uruchomienie serii dialogu NPC-gracz-NPC-gracz itd."""
-        repeat = len(self.dialogues['lines'][id])
-
-        for inx in range(repeat):
-            self._load_msg_by_id(id, inx)
-            self._load_answs_by_id(id, inx)
-
+        self._load_msg_by_id(id, inx)
+        self._load_answs_by_id(id, inx)
 
     def _load_msg_by_id(self, id, inx):
         """Wczytanie kwestii NPC z pliku po podaniu jego ID
@@ -58,21 +54,33 @@ class DialogueWindow():
         filename = self.dialogues['lines'][id][inx]
         with open(filename) as file:
             lines = file.readlines()
-        yOffset = 0
+
+        yPos = self.tab_rect.y
         for line in lines:
-            self._prep_msg(line.strip(), yOffset)
-            yOffset += self.font.get_sized_height()
+            self._prep_msg(line.strip(), yPos)
+            yPos += self.font.get_sized_height()
 
     def _load_answs_by_id(self, id, inx):
         """Wczytanie możliwych odpowiedzi gracza po ID NPC,
         z którym go prowadzi"""
-        pass
+        filename  = self.dialogues['answers'][id][inx]
+        with open(filename) as file:
+            lines = file.readlines()
 
-    def _prep_msg(self, msg, yOffset):
+        yPos = self.answ_tab_rect.y
+        for line in lines:
+            if "<SPLIT HERE>" in line:
+                yPos += self.font.get_sized_height()
+                continue
+
+            self._prep_msg(line.strip(), yPos)
+            yPos += self.font.get_sized_height()
+
+    def _prep_msg(self, msg, yPos):
         """Utworzenie obrazu tekstu do wyświetlenia"""
         msg_image, msg_rect = self.font.render(msg)
         msg_rect.x = self.tab_rect.x
-        msg_rect.y = self.tab_rect.y + yOffset
+        msg_rect.y = yPos
         self.messages.append((msg_image, msg_rect))
 
     def blit_window(self):
