@@ -25,6 +25,7 @@ powinno wystarczyć tyle
 def _get_all_contents():
     layer = _access_Object('collision')
     contents = [obj for obj in layer]
+    return contents
 
 Nwm, czy znasz listy składane, jak coś to masz to w podręczniku w rozdziale 4
 na stronie 103. Wartością zwrotną będzie lista wszystkich obiektów w grupie
@@ -35,3 +36,6 @@ wyglada jak stary dobry numer z błędem przesuwania prostokątów.
 Wysoce zalecane jest zrobienie kolorowych prostokątów testowych, które
 będą śledziły nasze hitboxy ścian (tak jak to było na mapie testowej,
 dzięki czemu znaleźliśmy ten błąd)
+
+4. Czy FIXME w metodzie _get_all_contents() jest jeszcze aktualne?
+Jak nie, to usuń bo jest trochę confusing.
