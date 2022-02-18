@@ -1,3 +1,9 @@
+#POSSIBLYTODO: Currently the way how messages work is a parody of OOP (atributes etc.)
+# We may want to actually make it OOP - make a Message() class, and so on.
+# This would probably make things a lit simpler but
+# currently I'm quite unmotivated to do it, so, Igor, tell me what do you think
+# about it
+
 import pygame
 import pygame.freetype
 
@@ -30,6 +36,10 @@ class DialogueWindow():
         self.text_color = self.settings.text_color
         self.font = pygame.freetype.SysFont('monospace', 16)
 
+        #Strzałka wzkazująca wybraną odpowiedź
+        self.pointer_image = pygame.image.load('images/answer_pointer.bmp')
+        self.pointer_rect = self.pointer_image.get_rect()
+
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
             'lines': {
@@ -47,6 +57,9 @@ class DialogueWindow():
         """Uruchomienie serii dialogu NPC-gracz-NPC-gracz itd."""
         self._load_msg_by_id(id, inx)
         self._load_answs_by_id(id, inx)
+        for msg in self.messages:
+            if msg['id'] == 0:
+                self.pointer_rect.midright = msg['rect'].midleft
 
     def _load_msg_by_id(self, id, inx):
         """Wczytanie kwestii NPC z pliku po podaniu jego ID
@@ -67,21 +80,24 @@ class DialogueWindow():
         with open(filename) as file:
             lines = file.readlines()
 
-        yPos = self.answ_tab_rect.y
-        for line in lines:
+        enumerated_lines = list(enumerate(lines)) #Potrzebne jako ID do
+        yPos = self.answ_tab_rect.y               #się do danej odpowiedzi
+        for msgid, line in enumerated_lines:
+
+            #Pusta linijka oddzielająca poszczególne odpowiedzi
             if "<SPLIT HERE>" in line:
                 yPos += self.font.get_sized_height()
                 continue
 
-            self._prep_msg(line.strip(), yPos)
+            self._prep_msg(line.strip(), yPos, msgid)
             yPos += self.font.get_sized_height()
 
-    def _prep_msg(self, msg, yPos):
+    def _prep_msg(self, msg, yPos, id=None):
         """Utworzenie obrazu tekstu do wyświetlenia"""
-        msg_image, msg_rect = self.font.render(msg)
-        msg_rect.x = self.tab_rect.x
-        msg_rect.y = yPos
-        self.messages.append((msg_image, msg_rect))
+        image, rect = self.font.render(msg)
+        rect.x = self.tab_rect.x
+        rect.y = yPos
+        self.messages.append({'image': image, 'rect': rect, 'id': id})
 
     def blit_window(self):
         """Wyświetlenie okna dialogowego, pola tekstowego
@@ -89,5 +105,6 @@ class DialogueWindow():
         pygame.draw.rect(self.screen, self.color, self.rect)
         pygame.draw.rect(self.screen, self.tab_color, self.tab_rect)
         pygame.draw.rect(self.screen, self.tab_color, self.answ_tab_rect)
+        self.screen.blit(self.pointer_image, self.pointer_rect)
         for msg in self.messages:
-            self.screen.blit(msg[0], msg[1])
+            self.screen.blit(msg['image'], msg['rect'])
