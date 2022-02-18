@@ -86,24 +86,34 @@ class DoGeX():
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
 
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+        if event.key == pygame.K_RIGHT:
             self.character.moving_right = True
             self.map.moving_left = True
 
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.key == pygame.K_LEFT:
             self.character.moving_left = True
             self.map.moving_right = True
 
-        if event.key == pygame.K_UP or event.key == pygame.K_w:
-            self.character.moving_up = True
-            self.map.moving_down = True
+        if event.key == pygame.K_UP:
+            if self.window.active:
+                self._change_selection(-1)
+            else:
+                self.character.moving_up = True
+                self.map.moving_down = True
 
-        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-            self.character.moving_down = True
-            self.map.moving_up = True
+        if event.key == pygame.K_DOWN:
+            if self.window.active:
+                self._change_selection(1)
+            else:
+                self.character.moving_down = True
+                self.map.moving_up = True
 
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
+
+        if event.key == pygame.K_RETURN:
+            if self.window.active:
+                pass
 
         if event.key == pygame.K_e:
             npc_collide = self._find_npc_collision()
@@ -118,22 +128,29 @@ class DoGeX():
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
 
+    def _change_selection(self, UpOrDown: "1 or -1"):
+        """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym"""
+        self.window.selectedID += 1 * UpOrDown
+        if self.window.selectedID > self.window.msgs[-1]['id']:
+            self.window.selectedID -= 1 * UpOrDown
+        self.window._update_pointer()
+
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
 
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+        if event.key == pygame.K_RIGHT:
             self.character.moving_right = False
             self.map.moving_left = False
 
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.key == pygame.K_LEFT:
             self.character.moving_left = False
             self.map.moving_right = False
 
-        if event.key == pygame.K_UP or event.key == pygame.K_w:
+        if event.key == pygame.K_UP:
             self.character.moving_up = False
             self.map.moving_down = False
 
-        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+        if event.key == pygame.K_DOWN:
             self.character.moving_down = False
             self.map.moving_up = False
 

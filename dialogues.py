@@ -1,4 +1,4 @@
-#POSSIBLYTODO: Currently the way how messages work is a parody of OOP (atributes etc.)
+#POSSIBLYTODO: Currently the way how msgs work is a parody of OOP (atributes etc.)
 # We may want to actually make it OOP - make a Message() class, and so on.
 # This would probably make things a lit simpler but
 # currently I'm quite unmotivated to do it, so, Igor, tell me what do you think
@@ -39,6 +39,7 @@ class DialogueWindow():
         #Strzałka wzkazująca wybraną odpowiedź
         self.pointer_image = pygame.image.load('images/answer_pointer.bmp')
         self.pointer_rect = self.pointer_image.get_rect()
+        self.selectedID = 0 # Decyduje, która odpowiedź ma być wskazana przez strzałkę
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
@@ -50,16 +51,15 @@ class DialogueWindow():
             }
         }
 
-        #Pusta lista do przechowywania linijek składających się na kwestię
-        self.messages = []
+        #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
+        self.msgs = []
 
     def run_dialogue_sequence(self, id, inx = 0):
-        """Uruchomienie serii dialogu NPC-gracz-NPC-gracz itd."""
+        """Uruchomienie serii dialogu NPC-gracz-0NPC-gracz itd."""
+        self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
         self._load_msg_by_id(id, inx)
         self._load_answs_by_id(id, inx)
-        for msg in self.messages:
-            if msg['id'] == 0:
-                self.pointer_rect.midright = msg['rect'].midleft
+        self._update_pointer()
 
     def _load_msg_by_id(self, id, inx):
         """Wczytanie kwestii NPC z pliku po podaniu jego ID
@@ -80,24 +80,30 @@ class DialogueWindow():
         with open(filename) as file:
             lines = file.readlines()
 
-        enumerated_lines = list(enumerate(lines)) #Potrzebne jako ID do
+        enumerated_lines = list(enumerate(lines)) #Potrzebne jako ID do odnoszenia
         yPos = self.answ_tab_rect.y               #się do danej odpowiedzi
         for msgid, line in enumerated_lines:
 
             #Pusta linijka oddzielająca poszczególne odpowiedzi
-            if "<SPLIT HERE>" in line:
+            if line[0] == ">":
                 yPos += self.font.get_sized_height()
-                continue
 
             self._prep_msg(line.strip(), yPos, msgid)
             yPos += self.font.get_sized_height()
+
+    def _update_pointer(self):
+        """Umieszczenie strzałki wskazującej przy aktualnie wybranej
+        odpowiedzi"""
+        for msg in self.msgs:
+            if msg['id'] == self.selectedID:
+                self.pointer_rect.midright = msg['rect'].midleft
 
     def _prep_msg(self, msg, yPos, id=None):
         """Utworzenie obrazu tekstu do wyświetlenia"""
         image, rect = self.font.render(msg)
         rect.x = self.tab_rect.x
         rect.y = yPos
-        self.messages.append({'image': image, 'rect': rect, 'id': id})
+        self.msgs.append({'image': image, 'rect': rect, 'id': id})
 
     def blit_window(self):
         """Wyświetlenie okna dialogowego, pola tekstowego
@@ -106,5 +112,5 @@ class DialogueWindow():
         pygame.draw.rect(self.screen, self.tab_color, self.tab_rect)
         pygame.draw.rect(self.screen, self.tab_color, self.answ_tab_rect)
         self.screen.blit(self.pointer_image, self.pointer_rect)
-        for msg in self.messages:
+        for msg in self.msgs:
             self.screen.blit(msg['image'], msg['rect'])
