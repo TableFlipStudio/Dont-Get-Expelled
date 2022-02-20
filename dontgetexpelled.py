@@ -117,19 +117,20 @@ class DoGeX():
 
         if event.key == pygame.K_e:
             npc_collide = self._find_npc_collision()
-            if not self.inventory.active:
-                if not npc_collide:
+            if not (self.inventory.active or self.window.active):
+                if npc_collide is None:
                     self._pickup_item()
                 else:
                     #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
                     self.window.active = True
-                    self.window.run_dialogue_sequence(npc_collide.id)
+                    self.window.load_dialogue(npc_collide.id)
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
 
-    def _change_selection(self, UpOrDown: "1 or -1"):
-        """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym"""
+    def _change_selection(self, UpOrDown: "-1 or 1 (int)"):
+        """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym
+        (przesuwa strzałkę)"""
         self.window.selectedID += 1 * UpOrDown
         if self.window.selectedID > self.window.msgs[-1]['id']:
             self.window.selectedID -= 1 * UpOrDown

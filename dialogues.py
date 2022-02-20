@@ -54,8 +54,8 @@ class DialogueWindow():
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
         self.msgs = []
 
-    def run_dialogue_sequence(self, id, inx = 0):
-        """Uruchomienie serii dialogu NPC-gracz-0NPC-gracz itd."""
+    def load_dialogue(self, id, inx = 0):
+        """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
         self._load_msg_by_id(id, inx)
         self._load_answs_by_id(id, inx)
