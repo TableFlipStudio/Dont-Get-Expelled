@@ -190,7 +190,7 @@ class DoGeX():
 
     def _rewrite_lines_files(self, available_chars):
         """Odtworzenie plików z kwestiami NPC"""
-        for files in self.window.dialogues['lines'].values():
+        for files in self.window.dialogues.values():
             for filename in files:
                 lines = self._read_file(filename)
                 words = self._form_wordlist(lines)
@@ -205,6 +205,13 @@ class DoGeX():
         """Zczytanie zawartości pliku dialogowego"""
         with open(filename) as file:
             lines = file.readlines()
+            worklines = lines[:] # Kopia listy bo nie należy usuwać elementów
+            # listy podczas iteracji przez nią.
+
+            # Usuń wszystko co jest odpowiedzią
+            for line in worklines:
+                if line[0] == ">":
+                    lines.remove(line)
         return lines
 
     def _form_wordlist(self, lines):

@@ -43,12 +43,7 @@ class DialogueWindow():
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'lines': {
-                'test_npc': ['Dialogues/test_dialogue1.txt']
-            },
-            'answers': {
-                'test_npc': ['Dialogues/test_answer1.txt']
-            }
+            'test_npc': ['Dialogues/test_dialogue1.txt']
         }
 
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
@@ -64,32 +59,47 @@ class DialogueWindow():
     def _load_msg_by_id(self, id, inx):
         """Wczytanie kwestii NPC z pliku po podaniu jego ID
         (zwykle jego nazwa)"""
-        filename = self.dialogues['lines'][id][inx]
+        filename = self.dialogues[id][inx]
         with open(filename) as file:
             lines = file.readlines()
 
         yPos = self.tab_rect.y
         for line in lines:
+            if line[0] == ">":
+                return # Początek części z odpowiedziami, zatrzymaj wczytywanie kwestii
             self._prep_msg(line.strip(), yPos)
             yPos += self.font.get_sized_height()
 
     def _load_answs_by_id(self, id, inx):
+        # WARNING: Function crashes on multi-line answers. To be fixed later
         """Wczytanie możliwych odpowiedzi gracza po ID NPC,
         z którym go prowadzi"""
-        filename  = self.dialogues['answers'][id][inx]
-        with open(filename) as file:
-            lines = file.readlines()
+        filename  = self.dialogues[id][inx]
+        lines = self._prepare_anwsers(filename)
 
         enumerated_lines = list(enumerate(lines)) #Potrzebne jako ID do odnoszenia
         yPos = self.answ_tab_rect.y               #się do danej odpowiedzi
         for msgid, line in enumerated_lines:
-
             #Pusta linijka oddzielająca poszczególne odpowiedzi
             if line[0] == ">":
                 yPos += self.font.get_sized_height()
 
             self._prep_msg(line.strip(), yPos, msgid)
             yPos += self.font.get_sized_height()
+
+    def _prepare_anwsers(self, filename):
+        """Wczytanie pliku dialogowego i usunięcie (lokalne) całej zawartości
+        nie będącej listą odpowiedzi"""
+        with open(filename) as file:
+            lines = file.readlines()
+            worklines = lines[:] # Kopia listy bo nie należy usuwać elementów
+            # listy podczas iteracji przez nią.
+
+            # Usuń wszystko co nie jest odpowiedzią
+            for line in worklines:
+                if line[0] != ">":
+                    lines.remove(line)
+        return lines
 
     def _update_pointer(self):
         """Umieszczenie strzałki wskazującej przy aktualnie wybranej
