@@ -43,7 +43,7 @@ class DialogueWindow():
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'test_npc': ['Dialogues/test_dialogue1.txt']
+            'test_npc': self.build_dialogue_tree()
         }
 
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
@@ -52,14 +52,14 @@ class DialogueWindow():
     def build_dialogue_tree(self):
         """Utworzenie drzewa dialogowego"""
         dp = "Dialogues/" # Directory Prefix
-        root = DialogueTreeNode(dp+"test_dialogue1.txt")
+        root = DialogueTreeNode('root', dp+"test_dialogue1.txt")
 
-        after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-        after1 = DialogueTreeNode("QUIT")
+        after0 = DialogueTreeNode('after0', dp+"test_dialogue2.txt")
+        after1 = DialogueTreeNode('after1', "QUIT")
 
         root.add_child(after0, 0)
         root.add_child(after1, 1)
-        
+
         return root
 
     def load_dialogue(self, id, inx = 0):
@@ -72,7 +72,7 @@ class DialogueWindow():
     def _load_msg_by_id(self, id, inx):
         """Wczytanie kwestii NPC z pliku po podaniu jego ID
         (zwykle jego nazwa)"""
-        filename = self.dialogues[id][inx]
+        filename = self.dialogues[id].data
         with open(filename) as file:
             lines = file.readlines()
 
@@ -87,7 +87,7 @@ class DialogueWindow():
         # WARNING: Function crashes on multi-line answers. To be fixed later
         """Wczytanie możliwych odpowiedzi gracza po ID NPC,
         z którym go prowadzi"""
-        filename  = self.dialogues[id][inx]
+        filename  = self.dialogues[id].data
         lines = self._prepare_anwsers(filename)
 
         enumerated_lines = list(enumerate(lines)) #Potrzebne jako ID do odnoszenia
@@ -145,13 +145,14 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data):
+    def __init__(self, name, data):
         """Inicjalizacja węzła"""
+        self.name = name
         self.data = data
         self.children = []
         self.parent = None
 
-    def add_child(self, child: DialogueTreeNode(), index: 0 - 3):
+    def add_child(self, child, index: 0 - 3):
         """Dodanie potomka do drzewa. index to indeks odpowiedzi, po której
         powinien nastąpić ten dialog"""
         child.parent = self
