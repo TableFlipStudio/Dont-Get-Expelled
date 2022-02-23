@@ -133,7 +133,7 @@ class Map():
         ]
         return contents
 
-    def _collision_type(self):
+    def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
         contents = self._get_all_contents()
 
@@ -157,6 +157,10 @@ class Map():
                 if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing_h == "right":
                     self.character.moving_right = False
                     self.moving_left = False
+
+
+    # TODO the player even when the collison has ended still cant move in the "locked" direction 
+    # a need to get RID OF THAT
 
     
     def update(self):
