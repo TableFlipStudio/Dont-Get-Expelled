@@ -112,8 +112,7 @@ class DoGeX():
             self.inventory.active = not self.inventory.active
 
         if event.key == pygame.K_RETURN:
-            if self.window.active:
-                pass
+            self._choose_answer()
 
         if event.key == pygame.K_e:
             npc_collide = self._find_npc_collision()
@@ -123,6 +122,7 @@ class DoGeX():
                 else:
                     #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
                     self.window.active = True
+                    self.window.node = self.window.dialogues[npc_collide.id]
                     self.window.load_dialogue(npc_collide.id)
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
@@ -132,9 +132,20 @@ class DoGeX():
         """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym
         (przesuwa strzałkę)"""
         self.window.selectedID += 1 * UpOrDown
-        if self.window.selectedID > self.window.msgs[-1]['id']:
+        id = self.window.selectedID
+        id_limit = self.window.msgs[-1]['id']
+        if id < 0 or id > id_limit:
             self.window.selectedID -= 1 * UpOrDown
         self.window._update_pointer()
+
+    def _choose_answer(self):
+        """Zatwierdzenia wskazanej odpowiedzi i wczytanie ciągu dalszego
+        dialogu"""
+        if self.window.active:
+            msgid = str(self.window.selectedID)
+            npcid = self._find_npc_collision().id
+            self.window.node = self.window.node.children[msgid]
+            self.window.load_dialogue(npcid)
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""

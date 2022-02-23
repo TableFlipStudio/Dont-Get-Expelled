@@ -50,29 +50,39 @@ class DialogueWindow():
         self.msgs = []
 
     def build_dialogue_tree(self):
-        """Utworzenie drzewa dialogowego"""
+        """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
+        węzłowi następującemu po odpowiedzi, która kończy dialog"""
         dp = "Dialogues/" # Directory Prefix
-        root = DialogueTreeNode('root', dp+"test_dialogue1.txt")
+        root = DialogueTreeNode(dp+"test_dialogue1.txt")
 
-        after0 = DialogueTreeNode('after0', dp+"test_dialogue2.txt")
-        after1 = DialogueTreeNode('after1', "QUIT")
+        #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
+        # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
+        # to zmienna dotyczące pytania 4 będzie się nazywać after010
+        after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+        after00 = DialogueTreeNode("QUIT")
+        after0.add_child(after00, "0")
 
-        root.add_child(after0, 0)
-        root.add_child(after1, 1)
+        after1 = DialogueTreeNode("QUIT")
+
+        root.add_child(after0, "0")
+        root.add_child(after1, "1")
 
         return root
 
-    def load_dialogue(self, id, inx = 0):
+    def load_dialogue(self, id):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
-        self._load_msg_by_id(id, inx)
-        self._load_answs_by_id(id, inx)
-        self._update_pointer()
+        if self.node.data == "QUIT": # See: build_dialogue_tree()
+            self.active = False
+        else:
+            self._load_msg_by_id(id)
+            self._load_answs_by_id(id)
+            self._update_pointer()
 
-    def _load_msg_by_id(self, id, inx):
+    def _load_msg_by_id(self, id):
         """Wczytanie kwestii NPC z pliku po podaniu jego ID
         (zwykle jego nazwa)"""
-        filename = self.dialogues[id].data
+        filename = self.node.data
         with open(filename) as file:
             lines = file.readlines()
 
@@ -83,11 +93,11 @@ class DialogueWindow():
             self._prep_msg(line.strip(), yPos)
             yPos += self.font.get_sized_height()
 
-    def _load_answs_by_id(self, id, inx):
+    def _load_answs_by_id(self, id):
         # WARNING: Function crashes on multi-line answers. To be fixed later
         """Wczytanie możliwych odpowiedzi gracza po ID NPC,
         z którym go prowadzi"""
-        filename  = self.dialogues[id].data
+        filename  = self.node.data
         lines = self._prepare_anwsers(filename)
 
         enumerated_lines = list(enumerate(lines)) #Potrzebne jako ID do odnoszenia
@@ -145,15 +155,14 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, name, data):
+    def __init__(self, data):
         """Inicjalizacja węzła"""
-        self.name = name
         self.data = data
-        self.children = []
+        self.children = {}
         self.parent = None
 
-    def add_child(self, child, index: 0 - 3):
+    def add_child(self, child, index: str()):
         """Dodanie potomka do drzewa. index to indeks odpowiedzi, po której
-        powinien nastąpić ten dialog"""
+        powinien nastąpić ten dialog (od 0 do 3)"""
         child.parent = self
-        self.children.append((index, child))
+        self.children[index] = child
