@@ -16,7 +16,10 @@ class MainCharacter():
         self.original_image = pygame.image.load('images/test_character.bmp')
         self.image = pygame.transform.scale(self.original_image, (40, 34))
 
-        self.facing = "stationary"
+        self.facing_h = "stationary"
+        self.facing_v = "stationary"
+        self.last_x = 0
+        self.last_y = 0
 
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
@@ -66,8 +69,30 @@ class MainCharacter():
         )
         return output
 
+    def player_facing(self):
+
+        if self.last_x > self.x:
+            self.facing_h = "left"
+        
+        if self.last_x < self.x:
+            self.facing_h = "right"
+        
+        if self.last_y > self.y:
+            self.facing_v = "up"
+
+        if self.last_y < self.y:
+            self.facing_v = "down"
+
+
+
     def update(self):
-        """Aktualizacja położenia postaci"""
+        """Aktualizacja położenia postaci i jej kierunku"""
+
+        self.player_facing()
+
+        #zapis popszedniej wartości x and y
+        self.last_x = self.x
+        self.last_y = self.y
 
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
@@ -82,6 +107,7 @@ class MainCharacter():
         if self.can_move_down():
             self.y += self.settings.character_speed
 
+        print(self.facing)
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
