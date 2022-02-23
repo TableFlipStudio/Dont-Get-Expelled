@@ -49,6 +49,19 @@ class DialogueWindow():
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
         self.msgs = []
 
+    def build_dialogue_tree(self):
+        """Utworzenie drzewa dialogowego"""
+        dp = "Dialogues/" # Directory Prefix
+        root = DialogueTreeNode(dp+"test_dialogue1.txt")
+
+        after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+        after1 = DialogueTreeNode("QUIT")
+
+        root.add_child(after0, 0)
+        root.add_child(after1, 1)
+        
+        return root
+
     def load_dialogue(self, id, inx = 0):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
@@ -124,3 +137,22 @@ class DialogueWindow():
         self.screen.blit(self.pointer_image, self.pointer_rect)
         for msg in self.msgs:
             self.screen.blit(msg['image'], msg['rect'])
+
+
+
+# Based on https://www.youtube.com/watch?v=4r_XR9fUPhQ
+class DialogueTreeNode():
+    """Drzewo przechowujące pliki z dialogami wraz z informacją
+    o kolejności, jaki dialog po jakiej odpowiedzi itd."""
+
+    def __init__(self, data):
+        """Inicjalizacja węzła"""
+        self.data = data
+        self.children = []
+        self.parent = None
+
+    def add_child(self, child: DialogueTreeNode(), index: 0 - 3):
+        """Dodanie potomka do drzewa. index to indeks odpowiedzi, po której
+        powinien nastąpić ten dialog"""
+        child.parent = self
+        self.children.append((index, child))
