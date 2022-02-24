@@ -64,6 +64,7 @@ class DoGeX():
 
             self._update_screen()
             self.clock.tick(self.settings.fps)
+            #print(self.character.animation_loop())
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""

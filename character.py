@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 
 class MainCharacter():
     """Klasa do zarządzania postacią główną"""
@@ -12,9 +12,37 @@ class MainCharacter():
 
         self.settings = dogex.settings
 
+        self.l = 0
+
         #Wczytanie obrazu głównej postaci
-        self.original_image = pygame.image.load('images/test_character.bmp')
-        self.image = pygame.transform.scale(self.original_image, (40, 34))
+        self.original_image = [
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+        ]
+        self.image = (self.original_image[0])
 
         self.facing_h = ""
         self.facing_v = ""
@@ -35,6 +63,8 @@ class MainCharacter():
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
+
+    
 
     def can_move_right(self):
         output = (
@@ -83,11 +113,19 @@ class MainCharacter():
         if self.last_y < self.y:
             self.facing_v = "down"
         
+    def animation_loop(self):
+        if self.l > 23:
+            self.l = 0
 
+        self.l +=1
+        #time.sleep(0.5)
+        return self.l
 
 
     def update(self):
         """Aktualizacja położenia postaci i jej kierunku"""
+
+        self.image = self.original_image[self.animation_loop()]
 
         self.player_facing()
 
