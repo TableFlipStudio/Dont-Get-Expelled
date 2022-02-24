@@ -114,7 +114,7 @@ class MainCharacter():
             self.facing_v = "down"
         
     def animation_loop(self):
-        if self.l > 23:
+        if self.l == len(self.original_image)-1:
             self.l = 0
 
         self.l +=1
