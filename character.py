@@ -16,7 +16,6 @@ class MainCharacter():
         self.original_image = pygame.image.load('images/test_character.bmp')
         self.image = pygame.transform.scale(self.original_image, (40, 34))
 
-        self.facing = "stationary"
         self.facing_h = ""
         self.facing_v = ""
         self.last_x = 0
@@ -74,19 +73,15 @@ class MainCharacter():
 
         if self.last_x > self.x:
             self.facing_h = "left"
-            self.facing = "left"
         
         if self.last_x < self.x:
             self.facing_h = "right"
-            self.facing = "right"
         
         if self.last_y > self.y:
             self.facing_v = "up"
-            self.facing= "up"
 
         if self.last_y < self.y:
             self.facing_v = "down"
-            self.facing = "down"
         
 
 
