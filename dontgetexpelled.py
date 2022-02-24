@@ -53,8 +53,8 @@ class DoGeX():
         """Uruchomienie pętli głównej gry"""
 
         while True:
-            self._check_events()
             self.map.collision()
+            self._check_events()
 
             if not self.inventory.active:
                 self.character.update()

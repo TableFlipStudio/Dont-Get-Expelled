@@ -15,37 +15,10 @@ class MainCharacter():
         self.l = 0
 
         #Wczytanie obrazu głównej postaci
-        self.original_image = [
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-        ]
-        self.image = (self.original_image[0])
+        self.image = pygame.image.load('images/test_character.bmp') 
 
-        self.facing_h = ""
-        self.facing_v = ""
+        self.facing_h = "stationary"
+        self.facing_v = "stationary"
         self.last_x = 0
         self.last_y = 0
 
@@ -113,21 +86,68 @@ class MainCharacter():
         if self.last_y < self.y:
             self.facing_v = "down"
         
+        if self.last_x == self.x and self.last_y == self.y:
+            self.facing_v, self.facing_h = "stationary", "stationary"
+        
+    def animation_list(self):
+        moving_list =  [
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            ]
+
+        stationary_list = [
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            ]
+            
+        if self.facing_h == "left" or self.facing_h == "right" or self.facing_v == "up" or self.facing_v == "down":
+            return moving_list[self.animation_loop()]
+
+        elif self.facing_h == "stationary" or self.facing_v == "stationary":
+            return stationary_list[self.animation_loop()]
+    
+    
     def animation_loop(self):
-        if self.l == len(self.original_image)-1:
+        if self.l >= 14:
             self.l = 0
 
-        self.l +=1
-        #time.sleep(0.5)
+        #time.sleep(0.1)
+        self.l += 1
         return self.l
 
 
     def update(self):
         """Aktualizacja położenia postaci i jej kierunku"""
-
-        self.image = self.original_image[self.animation_loop()]
-
         self.player_facing()
+
+        print(self.animation_loop())
+        self.image = self.animation_list()
 
         #zapis popszedniej wartości x and y
         self.last_x = self.x
