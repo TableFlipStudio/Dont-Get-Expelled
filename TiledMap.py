@@ -114,23 +114,8 @@ class Map():
 
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
-        
-            #FIXME the loop only uses the first item; even after deleting the 'collision.w1'
-            # object, it still displays on the map as the only object.  
-
-        contents = [
-            self._access_Object('collision.w1'),
-            self._access_Object('collision.w2'),
-            self._access_Object('collision.w3'),
-            self._access_Object('collision.w4'),
-            self._access_Object('collision.w5'),
-            self._access_Object('collision.w6'),
-            self._access_Object('collision.w7'),
-            self._access_Object('collision.w8'),
-            self._access_Object('collision.w9'),
-            self._access_Object('collision.w10'),
-            self._access_Object('collision.w11')
-        ]
+        layer = self._access_Object('collision')
+        contents = [obj for obj in layer]
         return contents
 
     def collision(self):
@@ -140,26 +125,56 @@ class Map():
         for obj in contents:
             self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
 
-            if (self.coll_rect).colliderect(self.character.rect):
+            if (self.coll_rect).colliderect(self.character.rect) and self.character.facing_v == "down":
 
-                if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.facing_v == "up":
-                    self.character.moving_up = False
-                    self.moving_down = False
-                
-                if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing_v == "down":
+                if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance:
                     self.character.moving_down = False
                     self.moving_up = False
+
+            if (self.coll_rect).colliderect(self.character.rect) and self.character.facing_v == "up":
+
+                if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance:
+                    self.character.moving_up = False
+                    self.moving_down = False
+            
+            if (self.coll_rect).colliderect(self.character.rect) and self.character.facing_h == "left":
+
                 
-                if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.facing_h == "left":
+                if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance:
                     self.character.moving_left = False
-                    self.moving_right = False                
+                    self.moving_right = False             
+
+            if (self.coll_rect).colliderect(self.character.rect) and self.character.facing_h == "right":
+   
                 
-                if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing_h == "right":
+                if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance:
                     self.character.moving_right = False
                     self.moving_left = False
 
+        #for obj in contents:
+        #    self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
+        #
+        #    if (self.coll_rect).colliderect(self.character.rect):
+        #
+        #        if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.facing_v == "up":
+        #            self.character.moving_up = False
+        #            self.moving_down = False
+        #        
+        #        if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing_v == "down":
+        #            self.character.moving_down = False
+        #            self.moving_up = False
+        #        
+        #        if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.facing_h == "left":
+        #            self.character.moving_left = False
+        #            self.moving_right = False                
+        #        
+        #        if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing_h == "right":
+        #            self.character.moving_right = False
+        #            self.moving_left = False
+        #
 
-    # TODO the player even when the collison has ended still cant move in the "locked" direction 
+
+    # TODO the player even when the collison has ended still cant move in the "locked" direction !!! until represing the direction button
     # a need to get RID OF THAT
 
     

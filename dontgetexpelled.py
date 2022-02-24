@@ -64,7 +64,6 @@ class DoGeX():
 
             self._update_screen()
             self.clock.tick(self.settings.fps)
-            #print(self.character.animation_loop())
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
@@ -80,7 +79,7 @@ class DoGeX():
 
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
-                self.character.facing = "stationary"
+                
 
             if (event.type == pygame.MOUSEBUTTONDOWN and
             self.inventory.grabbed_item is None and self.inventory.active):

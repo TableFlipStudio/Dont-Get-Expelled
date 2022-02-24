@@ -146,7 +146,6 @@ class MainCharacter():
         """Aktualizacja położenia postaci i jej kierunku"""
         self.player_facing()
 
-        print(self.animation_loop())
         self.image = self.animation_list()
 
         #zapis popszedniej wartości x and y
