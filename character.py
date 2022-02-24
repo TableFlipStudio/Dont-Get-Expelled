@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 
 class MainCharacter():
     """Klasa do zarządzania postacią główną"""
@@ -12,11 +12,42 @@ class MainCharacter():
 
         self.settings = dogex.settings
 
-        #Wczytanie obrazu głównej postaci
-        self.original_image = pygame.image.load('images/test_character.bmp')
-        self.image = pygame.transform.scale(self.original_image, (40, 34))
+        self.l = 0
 
-        self.facing = "stationary"
+        #Wczytanie obrazu głównej postaci
+        self.original_image = [
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+            pygame.image.load('images/test_character_blue.bmp'),
+        ]
+        self.image = (self.original_image[0])
+
+        self.facing_h = ""
+        self.facing_v = ""
+        self.last_x = 0
+        self.last_y = 0
 
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
@@ -32,6 +63,8 @@ class MainCharacter():
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
+
+    
 
     def can_move_right(self):
         output = (
@@ -66,8 +99,39 @@ class MainCharacter():
         )
         return output
 
+    def player_facing(self):
+
+        if self.last_x > self.x:
+            self.facing_h = "left"
+        
+        if self.last_x < self.x:
+            self.facing_h = "right"
+        
+        if self.last_y > self.y:
+            self.facing_v = "up"
+
+        if self.last_y < self.y:
+            self.facing_v = "down"
+        
+    def animation_loop(self):
+        if self.l == len(self.original_image)-1:
+            self.l = 0
+
+        self.l +=1
+        #time.sleep(0.5)
+        return self.l
+
+
     def update(self):
-        """Aktualizacja położenia postaci"""
+        """Aktualizacja położenia postaci i jej kierunku"""
+
+        self.image = self.original_image[self.animation_loop()]
+
+        self.player_facing()
+
+        #zapis popszedniej wartości x and y
+        self.last_x = self.x
+        self.last_y = self.y
 
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
@@ -82,6 +146,7 @@ class MainCharacter():
         if self.can_move_down():
             self.y += self.settings.character_speed
 
+        #print(self.facing)
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x

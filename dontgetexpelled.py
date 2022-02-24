@@ -64,19 +64,23 @@ class DoGeX():
 
             self._update_screen()
             self.clock.tick(self.settings.fps)
+            #print(self.character.animation_loop())
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
 
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 sys.exit()
 
             elif event.type == pygame.KEYDOWN:
+                #self.character.player_facing(event)
                 self._check_keydown_events(event)
 
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+                self.character.facing = "stationary"
 
             if (event.type == pygame.MOUSEBUTTONDOWN and
             self.inventory.grabbed_item is None and self.inventory.active):
@@ -93,22 +97,18 @@ class DoGeX():
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = True
             self.map.moving_left = True
-            self.character.facing = "right"
 
         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = True
             self.map.moving_right = True
-            self.character.facing = "left"
 
         if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = True
             self.map.moving_down = True
-            self.character.facing = "up"
 
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = True
             self.map.moving_up = True
-            self.character.facing = "down"
 
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
@@ -123,31 +123,24 @@ class DoGeX():
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
 
-        #TODO need to add a up-left, down-right... movement
-        #and implement it in collision types!!
-
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
 
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
             self.character.moving_right = False
             self.map.moving_left = False
-            self.character.facing = "stationary"
 
         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
             self.character.moving_left = False
             self.map.moving_right = False
-            self.character.facing = "stationary"
 
         if event.key == pygame.K_UP or event.key == pygame.K_w:
             self.character.moving_up = False
             self.map.moving_down = False
-            self.character.facing = "stationary"
 
         if event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.character.moving_down = False
             self.map.moving_up = False
-            self.character.facing = "stationary"
         
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed /= 2
