@@ -8,6 +8,7 @@ from dialogues import DialogueWindow
 from item import Item
 from TiledMap import Map
 from npc import NPC
+from save import Save, SaveMenu
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -31,7 +32,7 @@ class DoGeX():
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
         self.window = DialogueWindow(self)
-
+        self.menu = SaveMenu(self)
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -44,12 +45,44 @@ class DoGeX():
         #Utworzenie slotów
         self._create_slots()
 
+        # Utworzenie zapisu i menu jego obsługi
+        self.save = Save()
+
         #Testowe rozmieszczenie przedmiotów i NPC
         self.items.add(Item(self, 'red_ball', 100, 100))
         self.items.add(Item(self, 'blue_ball', 1000, 400))
         self.items.add(Item(self, 'green_ball', 500, 650))
 
         self.npcs.add(NPC(self,'test_npc'))
+
+    def interface_active(self, exclude=None):
+        """Zwraca True, jeśli którykolwiek z interfejsów
+        (ekranów wyświetlanych zamiast głównego widoku gry i blokujących
+        bieg gry), za wyjątkiem wskazanego przez argument exclude,
+        jest aktywny"""
+
+        if exclude is None:
+            detected = (
+                self.inventory.active or
+                self.window.active or
+                self.menu.active
+                )
+        elif exclude == "inventory":
+            detected = (
+                self.window.active or
+                self.menu.active
+                )
+        elif exclude == "window":
+            detected = (
+                self.inventory.active or
+                self.menu.active
+                )
+        elif exclude == "menu":
+            detected = (
+                self.inventory.active or
+                self.window.active
+                )
+        return detected
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -58,7 +91,7 @@ class DoGeX():
             self._check_events()
             #self.map.collision()
 
-            if not (self.inventory.active or self.window.active):
+            if not self.interface_active():
                 self.character.update()
                 self.map.update()
                 self._update_npcs()
@@ -116,14 +149,19 @@ class DoGeX():
                 self.map.moving_up = True
 
         if event.key == pygame.K_i:
-            self.inventory.active = not self.inventory.active
+            if not self.interface_active("inventory"):
+                self.inventory.active = not self.inventory.active
 
         if event.key == pygame.K_RETURN:
             self._choose_answer()
 
+        if event.key == pygame.K_KP_ENTER:
+            if not self.interface_active("menu"):
+                self.menu.active = not self.menu.active
+
         if event.key == pygame.K_e:
             npc_collide = self._find_npc_collision()
-            if not (self.inventory.active or self.window.active):
+            if not self.interface_active():
                 if npc_collide is None:
                     self._pickup_item()
                 else:
@@ -355,6 +393,9 @@ class DoGeX():
         #Ekwipunek i okno dialogowe nie mogą występować jednocześnie
         if not self.inventory.active and self.window.active:
             self.window.blit_window()
+
+        if self.menu.active:
+            self.menu.blit_menu()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()

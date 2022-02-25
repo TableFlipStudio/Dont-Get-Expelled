@@ -34,3 +34,7 @@ class Settings():
         self.tab_Ypos = self.screen_height // 4
         self.answ_tab_Xpos = self.tab_Xpos
         self.answ_tab_Ypos = self.screen_height * 0.6
+
+        # Ustawienia dotyczące przycisków zapisu i resetu
+        self.button_size = (self.screen_width / 4, self.slot_height)
+        self.button_color = (0, 255, 0)
