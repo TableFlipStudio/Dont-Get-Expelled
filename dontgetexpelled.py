@@ -25,7 +25,6 @@ class DoGeX():
 
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
-        self.character.facing = "stationary"
         self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
