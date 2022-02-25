@@ -5,14 +5,18 @@ class NPC(Sprite):
     """Klasa do zarządzania postaciami niekierowanymi przez gracza
     (Non-Person Character)"""
 
-    def __init__(self, dogex):
+    def __init__(self, dogex, id):
         """Inicjalizacja NPC"""
         super().__init__()
         self.screen = dogex.screen
         self.screen_rect = self.screen.get_rect()
         self.settings = dogex.settings
+        self.character = dogex.character
 
-        self.image = pygame.image.load('images/test_npc.bmp')
+        self.id = id
+
+        image = f'images/{self.settings.npc_images[id]}.bmp'
+        self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
 
         #Postać testowa zaczyna po lewej stronie mapy
@@ -36,8 +40,9 @@ class NPC(Sprite):
 
     def update(self):
         """Przesuwanie postaci dookoła mapy"""
-        self.y += self.settings.npc_speed * self.yDirection
-        self.rect.y = self.y
+        if not self.rect.colliderect(self.character):
+            self.y += self.settings.npc_speed * self.yDirection
+            self.rect.y = self.y
 
     def blit_npc(self):
         """Wyświetlene NPC na ekranie"""

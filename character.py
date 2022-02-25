@@ -14,7 +14,7 @@ class MainCharacter():
 
         #Wczytanie obrazu głównej postaci
         self.image = pygame.image.load('images/test_character.bmp')
-        
+
         self.facing = "stationary"
 
         #Wczytanie prostokąta postaci i wycentrowanie go
@@ -81,11 +81,9 @@ class MainCharacter():
         if self.can_move_down():
             self.y += self.settings.character_speed
 
-
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
-
 
     def blitme(self):
         """Wyświetlenie postaci głównej na ekranie"""

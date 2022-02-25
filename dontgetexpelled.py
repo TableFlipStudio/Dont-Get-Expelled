@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
+from dialogues import DialogueWindow
 from item import Item
 from TiledMap import Map
 from npc import NPC
@@ -29,6 +30,7 @@ class DoGeX():
         self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
+        self.window = DialogueWindow(self)
 
 
         self.slots = pygame.sprite.Group()
@@ -47,7 +49,7 @@ class DoGeX():
         self.items.add(Item(self, 'blue_ball', 1000, 400))
         self.items.add(Item(self, 'green_ball', 500, 650))
 
-        self.npcs.add(NPC(self))
+        self.npcs.add(NPC(self,'test_npc'))
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -56,11 +58,10 @@ class DoGeX():
             self._check_events()
             #self.map.collision()
 
-            if not self.inventory.active:
+            if not (self.inventory.active or self.window.active):
                 self.character.update()
                 self.map.update()
                 self._update_npcs()
-
 
             self._update_screen()
             self.clock.tick(self.settings.fps)
@@ -90,62 +91,95 @@ class DoGeX():
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
 
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+        if event.key == pygame.K_RIGHT:
             self.character.moving_right = True
             self.map.moving_left = True
             self.character.facing = "right"
 
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.key == pygame.K_LEFT:
             self.character.moving_left = True
             self.map.moving_right = True
             self.character.facing = "left"
 
-        if event.key == pygame.K_UP or event.key == pygame.K_w:
-            self.character.moving_up = True
-            self.map.moving_down = True
-            self.character.facing = "up"
+        if event.key == pygame.K_UP:
+            if self.window.active:
+                self._change_selection(-1)
+            else:
+                self.character.moving_up = True
+                self.map.moving_down = True
 
-        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-            self.character.moving_down = True
-            self.map.moving_up = True
-            self.character.facing = "down"
+        if event.key == pygame.K_DOWN:
+            if self.window.active:
+                self._change_selection(1)
+            else:
+                self.character.moving_down = True
+                self.map.moving_up = True
 
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
 
+        if event.key == pygame.K_RETURN:
+            self._choose_answer()
+
         if event.key == pygame.K_e:
-            if not self.inventory.active:
-                self._pickup_item()
-        
+            npc_collide = self._find_npc_collision()
+            if not (self.inventory.active or self.window.active):
+                if npc_collide is None:
+                    self._pickup_item()
+                else:
+                    #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
+                    self.window.active = True
+                    self.window.node = self.window.dialogues[npc_collide.id]
+                    self.window.load_dialogue(npc_collide.id)
+
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
 
+    def _change_selection(self, UpOrDown: "-1 or 1 (int)"):
+        """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym
+        (przesuwa strzałkę)"""
+        self.window.selectedID += 1 * UpOrDown
+        id = self.window.selectedID
+        id_limit = self.window.msgs[-1]['id']
+        if id < 0 or id > id_limit:
+            self.window.selectedID -= 1 * UpOrDown
+        self.window._update_pointer()
+
+    def _choose_answer(self):
+        """Zatwierdzenia wskazanej odpowiedzi i wczytanie ciągu dalszego
+        dialogu"""
+        if self.window.active:
+            msgid = str(self.window.selectedID)
+            npcid = self._find_npc_collision().id
+            self.window.node = self.window.node.children[msgid]
+            self.window.load_dialogue(npcid)
+
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
 
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+        if event.key == pygame.K_RIGHT:
             self.character.moving_right = False
             self.map.moving_left = False
             self.character.facing = "stationary"
 
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.key == pygame.K_LEFT:
             self.character.moving_left = False
             self.map.moving_right = False
             self.character.facing = "stationary"
 
-        if event.key == pygame.K_UP or event.key == pygame.K_w:
+        if event.key == pygame.K_UP:
             self.character.moving_up = False
             self.map.moving_down = False
             self.character.facing = "stationary"
 
-        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+        if event.key == pygame.K_DOWN:
             self.character.moving_down = False
             self.map.moving_up = False
             self.character.facing = "stationary"
-        
+
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed /= 2
 
@@ -162,11 +196,105 @@ class DoGeX():
                 slot.rect.x = slot.x
                 slot.rect.y += slot_height + 2 * slot_height * row_number
                 self.slots.add(slot)
+            #Po utworzeniu wszystkich slotów utwórz dodatkowy slot do upuszczania
             else:
                 slot = Slot(self.inventory)
                 slot.rect.centerx = self.screen.get_rect().centerx
                 slot.rect.y += slot_height + 2 * slot_height * 2
                 self.drop_slot = slot
+
+    def rewrite_dialogue_files(self):
+        """Funkcja zczytuje zawartość wszystkich plików a następnie odtwarza
+        ją tak, aby wszystkie linijki mieściły się w polu tekstowym. Funkcja
+        powinna być wywoływana tylko przy rozpoczęciu nowej gry, zmianie treści
+        plików z dialogami lub zmianie ustawień wyświetlania (szerokośc ekranu,
+        szerokośc pola tekstowego)"""
+        exammple_char = self.window.font.render('x')[0]
+        char_width = exammple_char.get_width()
+        available_chars = self.settings.tab_width // char_width
+        for tree in self.window.dialogues.values():
+            self._rewriteNodeAndGO(tree, available_chars)
+
+    def _rewriteNodeAndGO(self, node, available_chars):
+        """Rekurencyjnie odtwrzarza wszystkie pliki drzewa dialogowego"""
+        if node.data == "QUIT":
+            return
+
+        self._rewrite_lines(available_chars, node.data)
+        self._rewrite_answers() #This virtually does not exist yet
+
+        for child in node.children.values():
+            self._rewriteNodeAndGO(child, available_chars)
+
+    def _rewrite_lines(self, available_chars, filename):
+        """Odtworzenie pliku z kwestiami NPC"""
+        lines, answs = self._read_file(filename)
+        words = self._form_wordlist(lines)
+        output = self._form_output(words, available_chars)
+        self._write_output(output, answs, filename)
+
+    def _rewrite_answers(self):
+        """Odtworzenie plików z odpowidziami gracza"""
+        pass
+
+    def _read_file(self, filename):
+        """Zczytanie zawartości pliku dialogowego"""
+        with open(filename) as file:
+            lines = file.readlines()
+            answs = [] # Lista do przechowywanie odpowiedzi na czas przepisywania kwestii
+            worklines = lines[:] # Kopia listy bo nie należy usuwać elementów
+            # listy podczas iteracji przez nią.
+
+            # Usuń wszystko co jest odpowiedzią
+            for line in worklines:
+                if line[0] == ">":
+                    answs.append(line)
+                    lines.remove(line)
+        return lines, answs
+
+    def _form_wordlist(self, lines):
+        """Reorganizacja listy z linijkami tak, aby uformować listę wszystkich
+        słów w pliku"""
+        lines_with_words = [word.strip().split(' ') for word in lines]
+        words = []
+        for word in lines_with_words: #Scal podlisty w jedną listę
+            words += word
+        return words
+
+    def _form_output(self, words, available_chars):
+        """Uformowanie nowych linijek tak, aby mieściły się w polu tekstowym
+        okna dialogowego."""
+        currentLine = ''
+        output = ''
+        for word in words:
+            all_len = len(currentLine) + len(f'{word} ') + 5
+            if all_len <= available_chars:
+                currentLine += f'{word} '
+            else:
+                output += f'{currentLine}\n'
+                currentLine = f'{word} '
+        output += f'{currentLine}'
+        return output
+
+    def _write_output(self, output, answs, filename):
+        """Zapisanie zreorganizowanej linii dialogowej w pliku wyjściowym,
+        nadpisując wartość pierwotną"""
+        with open(filename, 'w') as file:
+            file.write(output)
+
+            # Dodaj odpowiedzi usunięte na początku
+            file.write(f'\n')
+            for answ in answs:
+                file.write(answ)
+
+    def _find_npc_collision(self):
+        """Sprawdza, czy postać głowna koliduje z którymś NPC,
+        jeśli tak, zwraca go"""
+        for npc in self.npcs.sprites():
+            if self.character.rect.colliderect(npc):
+                return npc
+            else:
+                return None
 
     def _pickup_item(self):
         """Sprawdzenie, czy postać stoi koło przedmiotu
@@ -212,7 +340,7 @@ class DoGeX():
                 item.blit_item()
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
-        if self.inventory.active:
+        if self.inventory.active and not self.window.active:
             self.inventory.display_inventory()
             for slot in self.slots.sprites():
                 slot.draw_slot()
@@ -224,8 +352,13 @@ class DoGeX():
             #Wyświetlenie przedmiotu pochwyconego myszą
             self.inventory.display_grabbed_item()
 
+        #Ekwipunek i okno dialogowe nie mogą występować jednocześnie
+        if not self.inventory.active and self.window.active:
+            self.window.blit_window()
+
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
+
 
 
 
