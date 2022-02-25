@@ -49,6 +49,12 @@ class DialogueWindow():
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
         self.msgs = []
 
+        # Węzeł drzewa dialogowego, na którym aktualnie się znajdujemy i operujemy,
+        # czyli po prostu aktualnie wyświetlany dialog
+        # Deklaracja atrybutu jest absulutnie zbędna i jest tu tylko dla
+        # przejrzystości kodu
+        self.node = None
+
     def build_dialogue_tree(self):
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""

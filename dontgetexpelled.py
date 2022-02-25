@@ -195,20 +195,28 @@ class DoGeX():
         exammple_char = self.window.font.render('x')[0]
         char_width = exammple_char.get_width()
         available_chars = self.settings.tab_width // char_width
+        for tree in self.window.dialogues.values():
+            self._rewriteNodeAndGO(tree, available_chars)
 
-        self._rewrite_lines_files(available_chars)
-        self._rewrite_answer_files() #This virtually does not exist yet
+    def _rewriteNodeAndGO(self, node, available_chars):
+        """Rekurencyjnie odtwrzarza wszystkie pliki drzewa dialogowego"""
+        if node.data == "QUIT":
+            return
 
-    def _rewrite_lines_files(self, available_chars):
-        """Odtworzenie plików z kwestiami NPC"""
-        for files in self.window.dialogues.values():
-            for filename in files:
-                lines = self._read_file(filename)
-                words = self._form_wordlist(lines)
-                output = self._form_output(words, available_chars)
-                self._write_output(output, filename)
+        self._rewrite_lines(available_chars, node.data)
+        self._rewrite_answers() #This virtually does not exist yet
 
-    def _rewrite_answer_files(self):
+        for child in node.children.values():
+            self._rewriteNodeAndGO(child, available_chars)
+
+    def _rewrite_lines(self, available_chars, filename):
+        """Odtworzenie pliku z kwestiami NPC"""
+        lines, answs = self._read_file(filename)
+        words = self._form_wordlist(lines)
+        output = self._form_output(words, available_chars)
+        self._write_output(output, answs, filename)
+
+    def _rewrite_answers(self):
         """Odtworzenie plików z odpowidziami gracza"""
         pass
 
@@ -216,14 +224,16 @@ class DoGeX():
         """Zczytanie zawartości pliku dialogowego"""
         with open(filename) as file:
             lines = file.readlines()
+            answs = [] # Lista do przechowywanie odpowiedzi na czas przepisywania kwestii
             worklines = lines[:] # Kopia listy bo nie należy usuwać elementów
             # listy podczas iteracji przez nią.
 
             # Usuń wszystko co jest odpowiedzią
             for line in worklines:
                 if line[0] == ">":
+                    answs.append(line)
                     lines.remove(line)
-        return lines
+        return lines, answs
 
     def _form_wordlist(self, lines):
         """Reorganizacja listy z linijkami tak, aby uformować listę wszystkich
@@ -249,11 +259,16 @@ class DoGeX():
         output += f'{currentLine}'
         return output
 
-    def _write_output(self, output, filename):
+    def _write_output(self, output, answs, filename):
         """Zapisanie zreorganizowanej linii dialogowej w pliku wyjściowym,
         nadpisując wartość pierwotną"""
         with open(filename, 'w') as file:
             file.write(output)
+
+            # Dodaj odpowiedzi usunięte na początku
+            file.write(f'\n')
+            for answ in answs:
+                file.write(answ)
 
     def _find_npc_collision(self):
         """Sprawdza, czy postać głowna koliduje z którymś NPC,
