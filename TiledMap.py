@@ -31,9 +31,6 @@ class Map():
         self.moving_up = False
         self.moving_down = False
 
-        self.down_col = 0
-        self.up_col = 0
-
         self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
@@ -124,69 +121,32 @@ class Map():
     def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
         contents = self._get_all_contents()
+        
 
         for obj in contents:
             self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
 
-            if self.character.facing_v == "up" and (self.coll_rect).colliderect(self.character.rect):  
-                if self.up_col == 1:
+            if (self.coll_rect).colliderect(self.character.rect):
+            
+                if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.facing_v == "up":
                     self.character.moving_up = False
                     self.moving_down = False
-                    self.character.y += self.settings.character_speed
-                    self.y -= self.settings.character_speed
-                else:
-                    if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance:
-                        self.character.moving_up = False
-                        self.moving_down = False
-                        self.up_col = 1
-                    elif (self.coll_rect).colliderect(self.character.rect) == False and self.character.facing_v != "up":
-                        self.character.moving_up = True
-                        self.moving_down = True
-                        self.up_col = 0
-                        print("yay")
-                   
-            if self.character.facing_v == "down" and (self.coll_rect).colliderect(self.character.rect):
-       
-                if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance:
+                
+                if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing_v == "down":
                     self.character.moving_down = False
                     self.moving_up = False
                 
-            if self.character.facing_h == "left" and (self.coll_rect).colliderect(self.character.rect):
-
-                if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance:
+                if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.facing_h == "left":
                     self.character.moving_left = False
-                    self.moving_right = False             
-
-            if self.character.facing_h == "right" and (self.coll_rect).colliderect(self.character.rect):
-
-                if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance:
+                    self.moving_right = False                
+                
+                if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing_h == "right":
                     self.character.moving_right = False
                     self.moving_left = False
-#            
-#            if (self.coll_rect).colliderect(self.character.rect):
-#            
-#                if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.facing_v == "up":
-#                    self.character.moving_up = False
-#                    self.moving_down = False
-#                
-#                if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing_v == "down":
-#                    self.character.moving_down = False
-#                    self.moving_up = False
-#                
-#                if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.facing_h == "left":
-#                    self.character.moving_left = False
-#                    self.moving_right = False                
-#                
-#                if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing_h == "right":
-#                    self.character.moving_right = False
-#                    self.moving_left = False
-#            
-
-
+            
     # TODO the player even when the collison has ended still cant move in the "locked" direction !!! until represing the direction button
     # a need to get RID OF THAT
 
-    
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
 

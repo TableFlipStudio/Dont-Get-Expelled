@@ -78,26 +78,39 @@ class MainCharacter():
 
     def player_facing(self):
 
-        if self.last_x > self.x:
-            self.facing_h = "left"
-            self.facing = "left"
+        if self.last_x > self.x and self.last_y > self.y:
+            self.facing = "top-left"
         
-        if self.last_x < self.x:
-            self.facing_h = "right"
-            self.facing = "right"
-        
-        if self.last_y > self.y:
-            self.facing_v = "up"
-            self.facing = "up"
+        elif self.last_x < self.x and self.last_y > self.y:
+            self.facing = "top-right"
 
-        if self.last_y < self.y:
-            self.facing_v = "down"
-            self.facing = "down"
+        elif self.last_x > self.x and self.last_y < self.y:
+            self.facing = "down-left"
+
+        elif self.last_x < self.x and self.last_y < self.y:
+            self.facing = "down-right"
         
-        if self.last_x == self.x and self.last_y == self.y:
-            self.facing_v, self.facing_h = "stationary", "stationary"
-            self.facing = "stationary"
-        
+        else:
+            if self.last_x > self.x:
+                self.facing_h = "left"
+                self.facing = "left"
+            
+            elif self.last_x < self.x:
+                self.facing_h = "right"
+                self.facing = "right"
+            
+            if self.last_y > self.y:
+                self.facing_v = "up"
+                self.facing = "up"
+
+            elif self.last_y < self.y:
+                self.facing_v = "down"
+                self.facing = "down"
+            
+            if self.last_x == self.x and self.last_y == self.y:
+                self.facing_v, self.facing_h = "stationary", "stationary"
+                self.facing = "stationary"
+            
     def animation_list(self):
         down_list =  [
             pygame.image.load('images/blue_ball.bmp'),
@@ -188,16 +201,18 @@ class MainCharacter():
 
         elif self.facing == "stationary":
             return stationary_image
-    
+        
+        else:
+            return stationary_image
     
     def animation_loop(self, len):
+        
         if self.l >= len:
             self.l = 0
 
         #time.sleep(0.1)
         self.l += 1
         return self.l
-
 
     def update(self):
         """Aktualizacja położenia postaci i jej kierunku"""
@@ -222,7 +237,7 @@ class MainCharacter():
         if self.can_move_down():
             self.y += self.settings.character_speed
 
-        #print(self.facing)
+        print(self.facing)
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x

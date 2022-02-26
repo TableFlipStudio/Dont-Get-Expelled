@@ -11,7 +11,7 @@ class Settings():
         self.character_speed = 1
         self.fps = 60
 
-        self.collision_tollerance = 60
+        self.collision_tollerance = 32
 
         #Ustawienia dotyczące slotów w ekwipunku
         self.slot_width = 80
