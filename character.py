@@ -68,6 +68,9 @@ class MainCharacter():
     def update(self):
         """Aktualizacja położenia postaci"""
 
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
+
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
             self.x += self.settings.character_speed

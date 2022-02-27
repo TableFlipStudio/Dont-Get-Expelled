@@ -1,5 +1,6 @@
 import sys
 import pygame
+import json
 
 from settings import Settings
 from character import MainCharacter
@@ -63,6 +64,8 @@ class DoGeX():
 
         self.npcs.add(NPC(self,'test_npc'))
 
+        self._load_save()
+
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
         for row_number in range(2): #Dwa rzędy slotów
@@ -92,6 +95,25 @@ class DoGeX():
         reset_pos = (self.screen_rect.centerx,
             self.screen_rect.centery + self.settings.slot_height)
         self.resetbutton = Button(self, reset_pos, "Reset all data")
+
+    def _load_save(self):
+        """Wczytanie zapisu i ustawienie odpowiednich parametrów gry"""
+        with open("jsondata/character_pos.json") as file:
+            chpos = json.load(file)
+
+        with open("jsondata/map_pos.json") as file:
+            mpos = json.load(file)
+
+        with open("jsondata/inventory.json") as file:
+            inv_content = json.load(file)
+
+        self.character.rect.topleft = chpos
+        self.map.rect.topleft = mpos
+        for slot in self.slots.sprites():
+            try:
+                slot.content = inv_content.pop()
+            except IndexError:
+                slot.content = None
 
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
