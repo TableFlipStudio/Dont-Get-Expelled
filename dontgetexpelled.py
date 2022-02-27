@@ -8,7 +8,7 @@ from dialogues import DialogueWindow
 from item import Item
 from TiledMap import Map
 from npc import NPC
-from save import Save, SaveMenu
+from save import Save, SaveMenu, Button
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -23,6 +23,7 @@ class DoGeX():
         #Wczytanie ekranu i nadanie tytułu
         self.screen = pygame.display.set_mode((self.settings.screen_width,
             self.settings.screen_height))
+        self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption("Don't Get Expelled! The Batory Game")
 
         #Wczytanie zasobów z pliku
@@ -45,7 +46,14 @@ class DoGeX():
         #Utworzenie slotów
         self._create_slots()
 
-        # Utworzenie zapisu i menu jego obsługi
+        # Te przyciski jeszcze nie istnieją, atrybuty dla przejrzystości
+        self.savebutton = None
+        self.resetbutton = None
+
+        # Utworzenie przycisków menu zapisu
+        self._create_smenu_buttons()
+
+        # Utworzenie zapisu
         self.save = Save()
 
         #Testowe rozmieszczenie przedmiotów i NPC
@@ -54,6 +62,36 @@ class DoGeX():
         self.items.add(Item(self, 'green_ball', 500, 650))
 
         self.npcs.add(NPC(self,'test_npc'))
+
+    def _create_slots(self):
+        """Utworzenie wszystkich slotów ekwipunku"""
+        for row_number in range(2): #Dwa rzędy slotów
+            for slot_number in range(8): #Po 8 slotów każdy
+                slot = Slot(self.inventory)
+                slot_width  = slot.rect.width
+                slot_height = slot.rect.height
+
+                slot.x = (slot.rect.x + slot_width +
+                    1.5 * slot_width * slot_number)
+                slot.rect.x = slot.x
+                slot.rect.y += slot_height + 2 * slot_height * row_number
+                self.slots.add(slot)
+            #Po utworzeniu wszystkich slotów utwórz dodatkowy slot do upuszczania
+            else:
+                slot = Slot(self.inventory)
+                slot.rect.centerx = self.screen.get_rect().centerx
+                slot.rect.y += slot_height + 2 * slot_height * 2
+                self.drop_slot = slot
+
+    def _create_smenu_buttons(self):
+        """Utworzenie przycisków menu zapisu"""
+        save_pos = (self.screen_rect.centerx,
+            self.screen_rect.centery - self.settings.slot_height)
+        self.savebutton = Button(self, save_pos, "Save")
+
+        reset_pos = (self.screen_rect.centerx,
+            self.screen_rect.centery + self.settings.slot_height)
+        self.resetbutton = Button(self, reset_pos, "Reset all data")
 
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
@@ -221,26 +259,6 @@ class DoGeX():
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed /= 2
 
-    def _create_slots(self):
-        """Utworzenie wszystkich slotów ekwipunku"""
-        for row_number in range(2): #Dwa rzędy slotów
-            for slot_number in range(8): #Po 8 slotów każdy
-                slot = Slot(self.inventory)
-                slot_width  = slot.rect.width
-                slot_height = slot.rect.height
-
-                slot.x = (slot.rect.x + slot_width +
-                    1.5 * slot_width * slot_number)
-                slot.rect.x = slot.x
-                slot.rect.y += slot_height + 2 * slot_height * row_number
-                self.slots.add(slot)
-            #Po utworzeniu wszystkich slotów utwórz dodatkowy slot do upuszczania
-            else:
-                slot = Slot(self.inventory)
-                slot.rect.centerx = self.screen.get_rect().centerx
-                slot.rect.y += slot_height + 2 * slot_height * 2
-                self.drop_slot = slot
-
     def rewrite_dialogue_files(self):
         """Funkcja zczytuje zawartość wszystkich plików a następnie odtwarza
         ją tak, aby wszystkie linijki mieściły się w polu tekstowym. Funkcja
@@ -394,8 +412,11 @@ class DoGeX():
         if not self.inventory.active and self.window.active:
             self.window.blit_window()
 
+        # Menu zapisu
         if self.menu.active:
             self.menu.blit_menu()
+            self.savebutton.blit_button()
+            self.resetbutton.blit_button()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()

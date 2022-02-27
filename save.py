@@ -1,15 +1,17 @@
 import pygame
+import pygame.font
 
 class Save():
     """Klasa przechowująca informacje o zapisie gry"""
 
     def __init__(self):
-        self.character_pos = 0
+        self.character_pos = (0, 0)
+        self.map_pos = (0, 0)
         self.npc_pos = 0
-        self.inventory_content = 0
+        self.inventory_content = []
 
 class SaveMenu():
-    """Menu zapisywanie i resetowania"""
+    """Menu zapisywania i resetowania"""
 
     def __init__(self, dogex):
         self.screen = dogex.screen
@@ -20,13 +22,33 @@ class SaveMenu():
             self.screen_rect.height)
         self.color = pygame.Color(128, 141, 146, 50)
 
-        self.savebutton_rect = pygame.Rect((0, 0), self.settings.button_size)
-        self.savebutton_rect.center = self.screen_rect.center
-        self.savebutton_rect.y -= self.settings.slot_height
-        self.button_color =  self.settings.button_color
-
         self.active = False
 
     def blit_menu(self):
         pygame.draw.rect(self.screen, self.color, self.rect)
-        pygame.draw.rect(self.screen, self.button_color, self.savebutton_rect)
+
+class Button():
+    """Przyciski do interakcji z menu"""
+
+    def __init__(self, save, centerpos, msg):
+        self.screen = save.screen
+        self.screen_rect = save.screen_rect
+        self.settings = save.settings
+
+        self.rect = pygame.Rect((0, 0), self.settings.button_size)
+        self.rect.center = centerpos
+        self.rect.y -= self.settings.slot_height
+        self.color =  self.settings.button_color
+        self.font = pygame.font.SysFont(None, 48)
+
+        self._prep_msg(msg)
+
+    def _prep_msg(self, msg):
+        """Przygotowanie treści przycisku"""
+        self.msg_image = self.font.render(msg, True, (255, 255, 255))
+        self.msg_rect = self.msg_image.get_rect()
+        self.msg_rect.center = self.rect.center
+
+    def blit_button(self):
+        pygame.draw.rect(self.screen, self.color, self.rect)
+        self.screen.blit(self.msg_image, self.msg_rect)
