@@ -10,7 +10,7 @@ class Map():
         self.character = dogex.character    
 
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/mapbetter.tmx')
+        self.tmxdata = load_pygame('mapfolder/Mapa.tmx')
 
         self.width = self.tmxdata.width * self.tmxdata.tilewidth
         self.height = self.tmxdata.height * self.tmxdata.tileheight
@@ -127,22 +127,26 @@ class Map():
             self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
 
             if (self.coll_rect).colliderect(self.character.rect):
-            
+                
                 if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.facing_v == "up":
                     self.character.moving_up = False
                     self.moving_down = False
-                
+                    col_detection = True
+
                 if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing_v == "down":
                     self.character.moving_down = False
                     self.moving_up = False
+                    col_detection = True
                 
                 if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.facing_h == "left":
                     self.character.moving_left = False
-                    self.moving_right = False                
+                    self.moving_right = False
+                    col_detection = True
                 
                 if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing_h == "right":
                     self.character.moving_right = False
                     self.moving_left = False
+                    col_detection = True
             
     # TODO the player even when the collison has ended still cant move in the "locked" direction !!! until represing the direction button
     # a need to get RID OF THAT

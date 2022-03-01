@@ -237,7 +237,7 @@ class MainCharacter():
         if self.can_move_down():
             self.y += self.settings.character_speed
 
-        print(self.facing)
+        #print(self.facing)
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x

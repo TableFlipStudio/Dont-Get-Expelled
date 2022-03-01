@@ -1,5 +1,7 @@
 import sys
 import pygame
+#from pyvidplayer import Video
+
 
 from settings import Settings
 from character import MainCharacter
@@ -7,6 +9,7 @@ from inventory import Inventory, Slot
 from item import Item
 from TiledMap import Map
 from npc import NPC
+
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -52,8 +55,8 @@ class DoGeX():
         """Uruchomienie pętli głównej gry"""
 
         while True:
-            self.map.collision()
             self._check_events()
+            self.map.collision()
 
             if not self.inventory.active:
                 self.character.update()
