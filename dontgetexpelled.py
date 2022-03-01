@@ -268,7 +268,7 @@ class DoGeX():
         if event.key == pygame.K_RETURN:
             self._choose_answer()
 
-        if event.key == pygame.K_KP_ENTER:
+        if event.key == pygame.K_q:
             if not self.interface_active("menu"):
                 self.menu.active = not self.menu.active
 
@@ -286,7 +286,7 @@ class DoGeX():
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
 
-        elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
+        elif event.key == pygame.K_ESCAPE:
             sys.exit()
 
     def _change_selection(self, UpOrDown: "-1 or 1 (int)"):
