@@ -92,12 +92,11 @@ class DoGeX():
             self.screen_rect.centery - self.settings.slot_height)
         self.savebutton = Button(self, save_pos, "Save")
 
-        reset_pos = (self.screen_rect.centerx,
-            self.screen_rect.centery + self.settings.slot_height)
+        reset_pos = (save_pos[0], save_pos[1] + 2 * self.settings.slot_height)
         self.resetbutton = Button(self, reset_pos, "Reset all data")
 
     def _load_save(self):
-        """Wczytanie zapisu i ustawienie odpowiednich parametrów gry"""
+        """Wczytanie zapisu i odpowiednie ustawienie parametrów gry"""
         with open("jsondata/character_pos.json") as file:
             chpos = json.load(file)
 
@@ -111,9 +110,45 @@ class DoGeX():
         self.map.rect.topleft = mpos
         for slot in self.slots.sprites():
             try:
-                slot.content = inv_content.pop()
+                itemid = inv_content.pop()
             except IndexError:
                 slot.content = None
+            else:
+                slot.content = Item(self, itemid, 0, 0)
+
+    def _write_save(self):
+        """Zapisanie postępu w grze"""
+        chpos = self.character.rect.topleft
+        mpos = self.map.rect.topleft
+        invcnt = []
+
+        for slot in self.slots.sprites():
+            if slot.content is not None:
+                invcnt.append(slot.content.id)
+
+        with open("jsondata/character_pos.json", 'w') as file:
+            json.dump(chpos, file)
+
+        with open("jsondata/map_pos.json", 'w') as file:
+            json.dump(mpos, file)
+
+        with open("jsondata/inventory.json", 'w') as file:
+            json.dump(invcnt, file)
+
+    def _reset_save(self):
+        """Zresetowanie postępu w grze"""
+        chpos = (0, 0)
+        mpos = (0, 0)
+        invcnt = []
+
+        with open("jsondata/character_pos.json", 'w') as file:
+            json.dump(chpos, file)
+
+        with open("jsondata/map_pos.json", 'w') as file:
+            json.dump(mpos, file)
+
+        with open("jsondata/inventory.json", 'w') as file:
+            json.dump(invcnt, file)
 
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
@@ -172,10 +207,18 @@ class DoGeX():
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
-            if (event.type == pygame.MOUSEBUTTONDOWN and
-            self.inventory.grabbed_item is None and self.inventory.active):
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
-                self.inventory.grab_item(self, mouse_pos)
+
+                if (self.inventory.grabbed_item is None and
+                self.inventory.active):
+                    self.inventory.grab_item(self, mouse_pos)
+
+                elif self.menu.active:
+                    if self.savebutton.rect.collidepoint(mouse_pos):
+                        self._write_save()
+                    elif self.resetbutton.rect.collidepoint(mouse_pos):
+                        self._reset_save()
 
             elif event.type == pygame.MOUSEBUTTONUP and self.inventory.active:
                 mouse_pos = pygame.mouse.get_pos()
