@@ -1,15 +1,6 @@
 import pygame
 import pygame.font
 
-class Save():
-    """Klasa przechowująca informacje o zapisie gry"""
-
-    def __init__(self):
-        self.character_pos = (0, 0)
-        self.map_pos = (0, 0)
-        self.npc_pos = 0
-        self.inventory_content = []
-
 class SaveMenu():
     """Menu zapisywania i resetowania"""
 
@@ -39,7 +30,7 @@ class Button():
         self.rect.center = centerpos
         self.rect.y -= self.settings.slot_height
         self.color =  self.settings.button_color
-        self.font = pygame.font.SysFont(None, 48)
+        self.font = pygame.font.SysFont(None, 44)
 
         self._prep_msg(msg)
 

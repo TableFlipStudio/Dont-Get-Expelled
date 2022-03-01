@@ -9,7 +9,7 @@ from dialogues import DialogueWindow
 from item import Item
 from TiledMap import Map
 from npc import NPC
-from save import Save, SaveMenu, Button
+from save import SaveMenu, Button
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -50,12 +50,11 @@ class DoGeX():
         # Te przyciski jeszcze nie istnieją, atrybuty dla przejrzystości
         self.savebutton = None
         self.resetbutton = None
+        self.snquitbutton = None
+        self.quitbutton = None
 
         # Utworzenie przycisków menu zapisu
         self._create_smenu_buttons()
-
-        # Utworzenie zapisu
-        self.save = Save()
 
         #Testowe rozmieszczenie przedmiotów i NPC
         self.items.add(Item(self, 'red_ball', 100, 100))
@@ -92,8 +91,14 @@ class DoGeX():
             self.screen_rect.centery - self.settings.slot_height)
         self.savebutton = Button(self, save_pos, "Save")
 
-        reset_pos = (save_pos[0], save_pos[1] + 2 * self.settings.slot_height)
+        snquit_pos = (save_pos[0], save_pos[1] + self.settings.button_space)
+        self.snquitbutton = Button(self, snquit_pos, "Save and quit")
+
+        reset_pos = (snquit_pos[0], snquit_pos[1] + self.settings.button_space)
         self.resetbutton = Button(self, reset_pos, "Reset all data")
+
+        quit_pos = (reset_pos[0], reset_pos[1] + self.settings.button_space)
+        self.quitbutton = Button(self, quit_pos, "Quit without saving")
 
     def _load_save(self):
         """Wczytanie zapisu i odpowiednie ustawienie parametrów gry"""
@@ -219,6 +224,11 @@ class DoGeX():
                         self._write_save()
                     elif self.resetbutton.rect.collidepoint(mouse_pos):
                         self._reset_save()
+                    elif self.snquitbutton.rect.collidepoint(mouse_pos):
+                        self._write_save()
+                        sys.exit()
+                    elif self.quitbutton.rect.collidepoint(mouse_pos):
+                        sys.exit()
 
             elif event.type == pygame.MOUSEBUTTONUP and self.inventory.active:
                 mouse_pos = pygame.mouse.get_pos()
@@ -482,6 +492,8 @@ class DoGeX():
             self.menu.blit_menu()
             self.savebutton.blit_button()
             self.resetbutton.blit_button()
+            self.snquitbutton.blit_button()
+            self.quitbutton.blit_button()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
