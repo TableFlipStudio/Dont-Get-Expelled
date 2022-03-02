@@ -1,9 +1,3 @@
-# PRZETESTOWAĆ:
-# wczytywanie zapisu (nie wczytują się przedmioty)
-# zapisywanie
-
-
-
 import sys
 import pygame
 import json
@@ -122,14 +116,23 @@ class DoGeX():
 
         self.character.rect.topleft = chpos
         self.map.rect.topleft = mpos
+        self._set_loaded_inv_content(inv_content)
+        self._place_loaded_items(items)
+
+    def _set_loaded_inv_content(self, inv_content):
+        """Załadowanie do ekwipunku przedmiotów wczytanych z inventory.json"""
         for slot in self.slots.sprites():
             try:
                 itemid = inv_content.pop()
+            # Jeśli lista jest już pusta, slot też ma być pusty
             except IndexError:
                 slot.content = None
             else:
                 slot.content = Item(self, itemid, (0, 0))
 
+    def _place_loaded_items(self, items):
+        """Umieszczenie przedmiotów wczytanych z items.json z powrotem
+        w self.items (a więc na mapie)"""
         self.items.empty() # Tworzymy tę grupę od nowa
         for itemdata in items:
             item = Item(self, itemdata[0], itemdata[1])
