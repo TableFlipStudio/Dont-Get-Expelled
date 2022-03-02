@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 class Item(Sprite):
     """Klasa zarządzająca przedmiotami w grze"""
 
-    def __init__(self, dogex, item_type, xPos, yPos):
+    def __init__(self, dogex, item_type, pos):
         """Inicjalizacja przedmiotu"""
         super().__init__()
         self.screen = dogex.screen
@@ -20,7 +20,7 @@ class Item(Sprite):
         self.rect =  self.image.get_rect()
 
         #Położenie zależy od atrybutu xyPos (krotka)
-        self.rect.x, self.rect.y = xPos, yPos
+        self.rect.x, self.rect.y = pos
 
         self.id = item_type
 

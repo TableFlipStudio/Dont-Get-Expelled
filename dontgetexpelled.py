@@ -1,3 +1,9 @@
+# PRZETESTOWAĆ:
+# wczytywanie zapisu (nie wczytują się przedmioty)
+# zapisywanie
+
+
+
 import sys
 import pygame
 import json
@@ -57,9 +63,9 @@ class DoGeX():
         self._create_smenu_buttons()
 
         #Testowe rozmieszczenie przedmiotów i NPC
-        self.items.add(Item(self, 'red_ball', 100, 100))
-        self.items.add(Item(self, 'blue_ball', 1000, 400))
-        self.items.add(Item(self, 'green_ball', 500, 650))
+        self.items.add(Item(self, 'red_ball', (100, 100)))
+        self.items.add(Item(self, 'blue_ball', (1000, 400)))
+        self.items.add(Item(self, 'green_ball', (500, 650)))
 
         self.npcs.add(NPC(self,'test_npc'))
 
@@ -111,6 +117,9 @@ class DoGeX():
         with open("jsondata/inventory.json") as file:
             inv_content = json.load(file)
 
+        with open("jsondata/items.json") as file:
+            items = json.load(file)
+
         self.character.rect.topleft = chpos
         self.map.rect.topleft = mpos
         for slot in self.slots.sprites():
@@ -119,13 +128,26 @@ class DoGeX():
             except IndexError:
                 slot.content = None
             else:
-                slot.content = Item(self, itemid, 0, 0)
+                slot.content = Item(self, itemid, (0, 0))
+
+        self.items.empty() # Tworzymy tę grupę od nowa
+        for itemdata in items:
+            item = Item(self, itemdata[0], itemdata[1])
+            self.items.add(item)
+
+    def _list_to_group(self, myList):
+        """Utworzenie grupy sprite'ów na podstawie listy ich ID,
+        wczytanej przez moduł JSON"""
+        group = pygame.sprite.Group()
+        for spriteid in myList:
+            pass
 
     def _write_save(self):
         """Zapisanie postępu w grze"""
         chpos = self.character.rect.topleft
         mpos = self.map.rect.topleft
         invcnt = []
+        items = self._group_to_list(self.items)
 
         for slot in self.slots.sprites():
             if slot.content is not None:
@@ -140,11 +162,30 @@ class DoGeX():
         with open("jsondata/inventory.json", 'w') as file:
             json.dump(invcnt, file)
 
+        with open("jsondata/items.json", 'w') as file:
+            json.dump(items, file)
+
+    def _group_to_list(self, group):
+        """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
+        Potrzebne do zapisywania, ponieważ moduł JSON nie obsługuje
+        niewbudowanych struktur danych"""
+        myList = [] # nazwa dziwna bo 'list' jest zajęte przez built-in func.
+        for sprite in group.sprites():
+            spritedata = (sprite.id, sprite.rect.topleft)
+            myList.append(spritedata)
+        return myList
+
     def _reset_save(self):
         """Zresetowanie postępu w grze"""
         chpos = (0, 0)
         mpos = (0, 0)
         invcnt = []
+        items = [
+            Item(self, 'red_ball', (100, 100)),
+            Item(self, 'blue_ball', (1000, 400)),
+            Item(self, 'green_ball', (500, 650))
+            ]
+        items = [(item.id, item.rect.topleft) for item in items]
 
         with open("jsondata/character_pos.json", 'w') as file:
             json.dump(chpos, file)
@@ -154,6 +195,9 @@ class DoGeX():
 
         with open("jsondata/inventory.json", 'w') as file:
             json.dump(invcnt, file)
+
+        with open("jsondata/items.json", 'w') as file:
+            json.dump(items, file)
 
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
