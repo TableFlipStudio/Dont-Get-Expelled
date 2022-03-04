@@ -51,7 +51,6 @@ class DoGeX():
 
         # Te przyciski jeszcze nie istnieją, atrybuty dla przejrzystości
         self.savebutton = None
-        self.resetbutton = None
         self.snquitbutton = None
         self.quitbutton = None
 
@@ -64,8 +63,6 @@ class DoGeX():
         self.items.add(Item(self, 'green_ball', (500, 650)))
 
         self.npcs.add(NPC(self,'test_npc'))
-
-        self._load_save()
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
@@ -96,10 +93,7 @@ class DoGeX():
         snquit_pos = (save_pos[0], save_pos[1] + self.settings.button_space)
         self.snquitbutton = Button(self, snquit_pos, "Save and quit")
 
-        reset_pos = (snquit_pos[0], snquit_pos[1] + self.settings.button_space)
-        self.resetbutton = Button(self, reset_pos, "Reset all data")
-
-        quit_pos = (reset_pos[0], reset_pos[1] + self.settings.button_space)
+        quit_pos = (snquit_pos[0], snquit_pos[1] + self.settings.button_space)
         self.quitbutton = Button(self, quit_pos, "Quit without saving")
 
     def _load_save(self):
@@ -271,8 +265,6 @@ class DoGeX():
                 elif self.menu.active:
                     if self.savebutton.rect.collidepoint(mouse_pos):
                         self._write_save()
-                    elif self.resetbutton.rect.collidepoint(mouse_pos):
-                        self._reset_save()
                     elif self.snquitbutton.rect.collidepoint(mouse_pos):
                         self._write_save()
                         sys.exit()
@@ -540,19 +532,46 @@ class DoGeX():
         if self.menu.active:
             self.menu.blit_menu()
             self.savebutton.blit_button()
-            self.resetbutton.blit_button()
             self.snquitbutton.blit_button()
             self.quitbutton.blit_button()
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
 
-    
+def prelaunch_check_events(dogex, menu):
+    """Metoda identyczna jak _check_events() classy DoGeX(), służy
+    jednak ona do detekcji zdarzeń na etapie menu głównego, czyli przed
+    uruchomieniem gry jako takiej."""
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+
+            if menu.newgamebutton.rect.collidepoint(mouse_pos):
+                dogex._reset_save()
+                return True
+
+            elif menu.loadgamebutton.rect.collidepoint(mouse_pos):
+                dogex._load_save()
+                return True
+
+            elif menu.quitbutton.rect.collidepoint(mouse_pos):
+                sys.exit()
 
 if __name__ == '__main__':
     dogex = DoGeX()
     menu = MainMenu(dogex)
+
     menu.blitme()
     pygame.display.flip()
-    sleep(5)
+
+    while True:
+        # Jeśli kliknięto Load game albo New game, przerwij działanie menu
+        # i uruchom grę
+        run_detected = prelaunch_check_events(dogex, menu)
+        if run_detected:
+            break
     dogex.run_game()
