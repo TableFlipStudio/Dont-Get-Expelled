@@ -1,6 +1,7 @@
 import sys
 import pygame
 import json
+from time import sleep
 
 from settings import Settings
 from character import MainCharacter
@@ -10,6 +11,7 @@ from item import Item
 from TiledMap import Map
 from npc import NPC
 from save import SaveMenu, Button
+from mainmenu import MainMenu
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -550,4 +552,8 @@ class DoGeX():
 
 if __name__ == '__main__':
     dogex = DoGeX()
+    menu = MainMenu(dogex)
+    menu.blitme()
+    pygame.display.flip()
+    sleep(5)
     dogex.run_game()
