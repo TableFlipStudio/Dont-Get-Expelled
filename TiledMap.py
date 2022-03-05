@@ -132,7 +132,7 @@ class Map():
                     self.character.moving_up = False
                     self.moving_down = False
                     col_detection = True
-
+                
                 if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.facing_v == "down":
                     self.character.moving_down = False
                     self.moving_up = False
@@ -142,14 +142,13 @@ class Map():
                     self.character.moving_left = False
                     self.moving_right = False
                     col_detection = True
-                
+
                 if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.facing_h == "right":
                     self.character.moving_right = False
                     self.moving_left = False
                     col_detection = True
             
-    # TODO the player even when the collison has ended still cant move in the "locked" direction !!! until represing the direction button
-    # a need to get RID OF THAT
+    # TODO not work
 
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
@@ -180,7 +179,6 @@ class Map():
                 object.y += self.mapVerticalSpeed
 
         
-
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y

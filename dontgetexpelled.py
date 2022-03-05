@@ -1,7 +1,5 @@
 import sys
 import pygame
-#from pyvidplayer import Video
-
 
 from settings import Settings
 from character import MainCharacter
@@ -63,7 +61,6 @@ class DoGeX():
                 self.map.update()
                 self._update_npcs()
 
-
             self._update_screen()
             self.clock.tick(self.settings.fps)
 
@@ -76,13 +73,11 @@ class DoGeX():
                 sys.exit()
 
             elif event.type == pygame.KEYDOWN:
-                #self.character.player_facing(event)
                 self._check_keydown_events(event)
 
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
                 
-
             if (event.type == pygame.MOUSEBUTTONDOWN and
             self.inventory.grabbed_item is None and self.inventory.active):
                 mouse_pos = pygame.mouse.get_pos()

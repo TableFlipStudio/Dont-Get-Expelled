@@ -76,7 +76,7 @@ class MainCharacter():
         )
         return output
 
-    def player_facing(self):
+    def player_animation_facing(self):
 
         if self.last_x > self.x and self.last_y > self.y:
             self.facing = "top-left"
@@ -92,24 +92,44 @@ class MainCharacter():
         
         else:
             if self.last_x > self.x:
-                self.facing_h = "left"
+                #self.facing_h = "left"
                 self.facing = "left"
             
             elif self.last_x < self.x:
-                self.facing_h = "right"
+                #self.facing_h = "right"
                 self.facing = "right"
             
             if self.last_y > self.y:
-                self.facing_v = "up"
+                #self.facing_v = "up"
                 self.facing = "up"
 
             elif self.last_y < self.y:
-                self.facing_v = "down"
+                #self.facing_v = "down"
                 self.facing = "down"
             
-            if self.last_x == self.x and self.last_y == self.y:
-                self.facing_v, self.facing_h = "stationary", "stationary"
+            elif self.last_x == self.x and self.last_y == self.y:
+                #self.facing_v, self.facing_h = "stationary", "stationary"
                 self.facing = "stationary"
+    
+    def player_h_facing(self):
+        if self.last_x > self.x:
+            self.facing_h = "left"
+        
+        elif self.last_x < self.x:
+            self.facing_h = "right"
+
+        else:
+            self.facing = "stationary"
+
+    def player_v_facing(self):
+        if self.last_y > self.y:
+            self.facing_v = "up"
+        
+        elif self.last_y < self.y:
+            self.facing_v = "down"
+        
+        else:
+            self.facing_v = "stationary"
             
     def animation_list(self):
         down_list =  [
@@ -216,7 +236,9 @@ class MainCharacter():
 
     def update(self):
         """Aktualizacja położenia postaci i jej kierunku"""
-        self.player_facing()
+        self.player_animation_facing()
+        self.player_h_facing()
+        self.player_v_facing()
 
         self.image = self.animation_list()
 
