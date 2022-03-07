@@ -10,16 +10,13 @@ class Map():
         self.character = dogex.character    
 
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/Mapa.tmx')
+        self.tmxdata = load_pygame('mapfolder/testmap.tmx')
 
         self.width = self.tmxdata.width * self.tmxdata.tilewidth
         self.height = self.tmxdata.height * self.tmxdata.tileheight
 
         surface = pygame.Surface( ( self.width, self.height ) )
         self.rect = surface.get_rect()
-
-        #self.spawn_obj = self._access_Object('objects.spawn')
-        #self.character.rect.topleft = (self.spawn_obj.x, self.spawn_obj.y)
 
         self.rect.topleft = self.screen_rect.topleft
 

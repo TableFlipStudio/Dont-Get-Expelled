@@ -1,5 +1,9 @@
 import pygame, time
 
+#TODO images need to be resized to 40,100
+# and a new map needs to be created
+# no other errors for now
+
 class MainCharacter():
     """Klasa do zarządzania postacią główną"""
 
@@ -69,91 +73,72 @@ class MainCharacter():
             
     def animation_list(self):
         down_list =  [
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
-            pygame.image.load('images/blue_ball.bmp'),
+            pygame.image.load('animation/down/fwrd0.png'),
+            pygame.image.load('animation/down/fwrd1.png'),
+            pygame.image.load('animation/down/fwrd2.png'),
+            pygame.image.load('animation/down/fwrd3.png'),
+            pygame.image.load('animation/down/fwrd4.png'),
+            pygame.image.load('animation/down/fwrd5.png'),
+            pygame.image.load('animation/down/fwrd6.png'),
+            pygame.image.load('animation/down/fwrd7.png'),
+            pygame.image.load('animation/down/fwrd8.png'),
+            pygame.image.load('animation/down/fwrd9.png'),
+            pygame.image.load('animation/down/fwrd10.png'),
             ]
         
         left_list = [
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
-            pygame.image.load('images/green_ball.bmp'),
+            pygame.image.load('animation/left/East1.png'),
+            pygame.image.load('animation/left/East2.png'),
+            pygame.image.load('animation/left/East3.png'),
+            pygame.image.load('animation/left/East4.png'),
+            pygame.image.load('animation/left/East5.png'),
+            pygame.image.load('animation/left/East6.png'),
+            pygame.image.load('animation/left/East7.png'),
+            pygame.image.load('animation/left/East8.png'),
+            pygame.image.load('animation/left/East9.png'),
+            pygame.image.load('animation/left/East10.png'),
             ]
 
         right_list = [
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
-            pygame.image.load('images/red_ball.bmp'),
+            pygame.image.load('animation/right/East1.png'),
+            pygame.image.load('animation/right/East2.png'),
+            pygame.image.load('animation/right/East3.png'),
+            pygame.image.load('animation/right/East4.png'),
+            pygame.image.load('animation/right/East5.png'),
+            pygame.image.load('animation/right/East6.png'),
+            pygame.image.load('animation/right/East7.png'),
+            pygame.image.load('animation/right/East8.png'),
+            pygame.image.load('animation/right/East9.png'),
+            pygame.image.load('animation/right/East10.png'),
             ]
 
         up_list = [
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character_blue.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
-            pygame.image.load('images/test_character.bmp'),
+            pygame.image.load('animation/up/BCWRD1.png'),
+            pygame.image.load('animation/up/BCWRD2.png'),
+            pygame.image.load('animation/up/BCWRD3.png'),
+            pygame.image.load('animation/up/BCWRD4.png'),
+            pygame.image.load('animation/up/BCWRD5.png'),
+            pygame.image.load('animation/up/BCWRD6.png'),
+            pygame.image.load('animation/up/BCWRD7.png'),
+            pygame.image.load('animation/up/BCWRD8.png'),
+            pygame.image.load('animation/up/BCWRD9.png'),
+            pygame.image.load('animation/up/BCWRD10.png'),
             ]
 
         stationary_image = pygame.image.load('images/test_character.bmp')
 
             
         if self.moving_down:
-            return left_list[self.animation_loop(14)]
+            return down_list[self.animation_loop(9)]
 
         elif self.moving_up:
-            return up_list[self.animation_loop(14)]
+            return up_list[self.animation_loop(9)]
 
         elif self.moving_right:
-            return right_list[self.animation_loop(14)]
+            return right_list[self.animation_loop(9)]
             
         elif self.moving_left:
-            return left_list[self.animation_loop(14)]
+            return left_list[self.animation_loop(9)]
 
         else:
             return stationary_image
@@ -170,8 +155,9 @@ class MainCharacter():
     def update(self):
         """Aktualizacja położenia postaci i jej kierunku"""
 
-        self.image = self.animation_list()
-        #self.rect = self.image.get_rect()
+        #image = pygame.transform.scale(self.animation_list(), (40,100))
+        self.image = self.animation_list()#image
+        self.rect = self.image.get_rect()
 
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
