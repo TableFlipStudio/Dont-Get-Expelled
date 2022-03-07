@@ -131,24 +131,20 @@ class Map():
                 if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.moving_up:
                     self.character.moving_up = False
                     self.moving_down = False
-                    col_detection = True
                 
                 if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.moving_down:
                     self.character.moving_down = False
                     self.moving_up = False
-                    col_detection = True
                 
                 if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.moving_left:
                     self.character.moving_left = False
                     self.moving_right = False
-                    col_detection = True
 
                 if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.moving_right:
                     self.character.moving_right = False
                     self.moving_left = False
-                    col_detection = True
             
-            
+
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
 
