@@ -10,7 +10,6 @@ class MainCharacter():
         self.screen_height = self.screen_rect.height
         self.screen_width = self.screen_rect.width
 
-
         self.settings = dogex.settings
 
         #var for animation loop
@@ -18,13 +17,6 @@ class MainCharacter():
 
         #Wczytanie obrazu głównej postaci
         self.image = pygame.image.load('images/test_character.bmp') 
-
-        #all variables for main character facing
-        self.animation_facing = "stationary"
-        self.facing_h = "stationary"
-        self.facing_v = "stationary"
-        self.last_x = 0
-        self.last_y = 0
 
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
@@ -41,7 +33,6 @@ class MainCharacter():
         self.moving_up = False
         self.moving_down = False
 
-    
 
     def can_move_right(self):
         output = (
@@ -75,61 +66,6 @@ class MainCharacter():
             self.rect.bottom < self.screen_height
         )
         return output
-
-    def player_animation_facing(self):
-
-        if self.last_x > self.x and self.last_y > self.y:
-            self.facing = "top-left"
-        
-        elif self.last_x < self.x and self.last_y > self.y:
-            self.facing = "top-right"
-
-        elif self.last_x > self.x and self.last_y < self.y:
-            self.facing = "down-left"
-
-        elif self.last_x < self.x and self.last_y < self.y:
-            self.facing = "down-right"
-        
-        else:
-            if self.last_x > self.x:
-                #self.facing_h = "left"
-                self.facing = "left"
-            
-            elif self.last_x < self.x:
-                #self.facing_h = "right"
-                self.facing = "right"
-            
-            if self.last_y > self.y:
-                #self.facing_v = "up"
-                self.facing = "up"
-
-            elif self.last_y < self.y:
-                #self.facing_v = "down"
-                self.facing = "down"
-            
-            elif self.last_x == self.x and self.last_y == self.y:
-                #self.facing_v, self.facing_h = "stationary", "stationary"
-                self.facing = "stationary"
-    
-    def player_h_facing(self):
-        if self.last_x > self.x:
-            self.facing_h = "left"
-        
-        elif self.last_x < self.x:
-            self.facing_h = "right"
-
-        else:
-            self.facing = "stationary"
-
-    def player_v_facing(self):
-        if self.last_y > self.y:
-            self.facing_v = "up"
-        
-        elif self.last_y < self.y:
-            self.facing_v = "down"
-        
-        else:
-            self.facing_v = "stationary"
             
     def animation_list(self):
         down_list =  [
@@ -207,21 +143,18 @@ class MainCharacter():
         stationary_image = pygame.image.load('images/test_character.bmp')
 
             
-        if self.facing == "left":
+        if self.moving_down:
             return left_list[self.animation_loop(14)]
 
-        if self.facing == "right":
-            return right_list[self.animation_loop(14)]
-
-        if self.facing == "down":
-            return down_list[self.animation_loop(14)]
-
-        if self.facing == "up":
+        elif self.moving_up:
             return up_list[self.animation_loop(14)]
 
-        elif self.facing == "stationary":
-            return stationary_image
-        
+        elif self.moving_right:
+            return right_list[self.animation_loop(14)]
+            
+        elif self.moving_left:
+            return left_list[self.animation_loop(14)]
+
         else:
             return stationary_image
     
@@ -236,15 +169,9 @@ class MainCharacter():
 
     def update(self):
         """Aktualizacja położenia postaci i jej kierunku"""
-        self.player_animation_facing()
-        self.player_h_facing()
-        self.player_v_facing()
 
         self.image = self.animation_list()
-
-        #zapis popszedniej wartości x and y
-        self.last_x = self.x
-        self.last_y = self.y
+        #self.rect = self.image.get_rect()
 
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():

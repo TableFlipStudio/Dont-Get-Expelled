@@ -71,12 +71,14 @@ class DoGeX():
 
             if event.type == pygame.QUIT:
                 sys.exit()
-
+            
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
 
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+
+            self.check_moving_keys()
                 
             if (event.type == pygame.MOUSEBUTTONDOWN and
             self.inventory.grabbed_item is None and self.inventory.active):
@@ -90,22 +92,6 @@ class DoGeX():
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
 
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-            self.character.moving_right = True
-            self.map.moving_left = True
-
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-            self.character.moving_left = True
-            self.map.moving_right = True
-
-        if event.key == pygame.K_UP or event.key == pygame.K_w:
-            self.character.moving_up = True
-            self.map.moving_down = True
-
-        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-            self.character.moving_down = True
-            self.map.moving_up = True
-
         if event.key == pygame.K_i:
             self.inventory.active = not self.inventory.active
 
@@ -118,6 +104,25 @@ class DoGeX():
 
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
+
+    def check_moving_keys(self):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_RIGHT]:
+            self.character.moving_right = True
+            self.map.moving_left = True
+
+        if keys[pygame.K_LEFT]:
+            self.character.moving_left = True
+            self.map.moving_right = True
+
+        if keys[pygame.K_UP]:
+            self.character.moving_up = True
+            self.map.moving_down = True
+
+        if keys[pygame.K_DOWN]:
+            self.character.moving_down = True
+            self.map.moving_up = True
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
@@ -218,7 +223,6 @@ class DoGeX():
 
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
-
 
 
 if __name__ == '__main__':
