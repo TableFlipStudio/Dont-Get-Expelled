@@ -10,16 +10,13 @@ class Map():
         self.character = dogex.character
 
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/mapbetter.tmx')
+        self.tmxdata = load_pygame('mapfolder/testmapa2better.tmx')
 
         self.width = self.tmxdata.width * self.tmxdata.tilewidth
         self.height = self.tmxdata.height * self.tmxdata.tileheight
 
         surface = pygame.Surface( ( self.width, self.height ) )
         self.rect = surface.get_rect()
-
-        #self.spawn_obj = self._access_Object('objects.spawn')
-        #self.character.rect.topleft = (self.spawn_obj.x, self.spawn_obj.y)
 
         self.rect.topleft = self.screen_rect.topleft
 
@@ -114,50 +111,40 @@ class Map():
 
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
+        
+        layer = self._access_Object('collision')
+        contents = [obj for obj in layer]
 
-            #FIXME the loop only uses the first item; even after deleting the 'collision.w1'
-            # object, it still displays on the map as the only object.
-
-        contents = [
-            self._access_Object('collision.w1'),
-            self._access_Object('collision.w2'),
-            self._access_Object('collision.w3'),
-            self._access_Object('collision.w4'),
-            self._access_Object('collision.w5'),
-            self._access_Object('collision.w6'),
-            self._access_Object('collision.w7'),
-            self._access_Object('collision.w8'),
-            self._access_Object('collision.w9'),
-            self._access_Object('collision.w10'),
-            self._access_Object('collision.w11')
-        ]
         return contents
 
+      
     def collision(self):
-        """Wykrycie kolizji między obiektami na mapie a postacią"""
+        """Wykrycie typu kolizj między obiektami na mapie a postacią"""
         contents = self._get_all_contents()
+        
 
         for obj in contents:
-            if self.character.facing == "up":
-                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+
+            self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
+
+            if (self.coll_rect).colliderect(self.character.rect):
+                
+                if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.moving_up:
                     self.character.moving_up = False
                     self.moving_down = False
-
-            if self.character.facing == "down":
-                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                
+                if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.moving_down:
                     self.character.moving_down = False
                     self.moving_up = False
-
-            if self.character.facing == "left":
-                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                
+                if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.moving_left:
                     self.character.moving_left = False
                     self.moving_right = False
 
-            if self.character.facing == "right":
-                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.moving_right:
                     self.character.moving_right = False
                     self.moving_left = False
-
+            
 
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
@@ -190,8 +177,7 @@ class Map():
             for object in contents:
                 object.y += self.mapVerticalSpeed
 
-
-
+                
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y

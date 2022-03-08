@@ -13,6 +13,7 @@ from npc import NPC
 from save import SaveMenu, Button
 from mainmenu import MainMenu
 
+
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
 
@@ -31,7 +32,6 @@ class DoGeX():
 
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
-        self.character.facing = "stationary"
         self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
@@ -232,7 +232,7 @@ class DoGeX():
 
         while True:
             self._check_events()
-            #self.map.collision()
+            self.map.collision()
 
             if not self.interface_active():
                 self.character.update()
@@ -246,16 +246,20 @@ class DoGeX():
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
 
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 sys.exit()
-
+            
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
 
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
+            self.check_moving_keys()
+                
             if event.type == pygame.MOUSEBUTTONDOWN:
+              
                 mouse_pos = pygame.mouse.get_pos()
 
                 if (self.inventory.grabbed_item is None and
@@ -278,30 +282,14 @@ class DoGeX():
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
 
-        if event.key == pygame.K_RIGHT:
-            self.character.moving_right = True
-            self.map.moving_left = True
-            self.character.facing = "right"
-
-        if event.key == pygame.K_LEFT:
-            self.character.moving_left = True
-            self.map.moving_right = True
-            self.character.facing = "left"
-
         if event.key == pygame.K_UP:
-            if self.window.active:
+            self.window.active:
                 self._change_selection(-1)
-            else:
-                self.character.moving_up = True
-                self.map.moving_down = True
 
         if event.key == pygame.K_DOWN:
-            if self.window.active:
+            self.window.active:
                 self._change_selection(1)
-            else:
-                self.character.moving_down = True
-                self.map.moving_up = True
-
+                
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
@@ -330,6 +318,25 @@ class DoGeX():
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
 
+    def check_moving_keys(self):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_RIGHT]:
+            self.character.moving_right = True
+            self.map.moving_left = True
+
+        if keys[pygame.K_LEFT]:
+            self.character.moving_left = True
+            self.map.moving_right = True
+
+        if keys[pygame.K_UP]:
+            self.character.moving_up = True
+            self.map.moving_down = True
+
+        if keys[pygame.K_DOWN]:
+            self.character.moving_down = True
+            self.map.moving_up = True
+            
     def _change_selection(self, UpOrDown: "-1 or 1 (int)"):
         """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym
         (przesuwa strzałkę)"""
@@ -355,22 +362,18 @@ class DoGeX():
         if event.key == pygame.K_RIGHT:
             self.character.moving_right = False
             self.map.moving_left = False
-            self.character.facing = "stationary"
 
         if event.key == pygame.K_LEFT:
             self.character.moving_left = False
             self.map.moving_right = False
-            self.character.facing = "stationary"
 
         if event.key == pygame.K_UP:
             self.character.moving_up = False
             self.map.moving_down = False
-            self.character.facing = "stationary"
 
         if event.key == pygame.K_DOWN:
             self.character.moving_down = False
             self.map.moving_up = False
-            self.character.facing = "stationary"
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed /= 2
@@ -498,7 +501,7 @@ class DoGeX():
         """Aktualizacja zawartości ekranu"""
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.map_image, (self.map.x, self.map.y))
-        #pygame.draw.rect(self.screen, self.map.debug_color, self.map.debug_rect) #TOBEDELETED
+        #pygame.draw.rect(self.screen, ((0,255,0)), self.map.rect) #TOBEDELETED
         self.character.blitme()
 
         #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
@@ -543,6 +546,7 @@ def prelaunch_check_events(dogex, menu):
     jednak ona do detekcji zdarzeń na etapie menu głównego, czyli przed
     uruchomieniem gry jako takiej."""
 
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
