@@ -6,8 +6,8 @@ class Map():
 
         self.settings = dogex.settings
         self.screen  = dogex.screen
-        
-        self.character = dogex.character    
+
+        self.character = dogex.character
 
         self.screen_rect = self.screen.get_rect()
         self.tmxdata = load_pygame('mapfolder/testmapa2better.tmx')
@@ -111,16 +111,20 @@ class Map():
 
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
+        
         layer = self._access_Object('collision')
         contents = [obj for obj in layer]
+
         return contents
 
+      
     def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
         contents = self._get_all_contents()
         
 
         for obj in contents:
+
             self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
 
             if (self.coll_rect).colliderect(self.character.rect):
@@ -144,6 +148,9 @@ class Map():
 
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
+
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
 
         self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
@@ -170,7 +177,7 @@ class Map():
             for object in contents:
                 object.y += self.mapVerticalSpeed
 
-        
+                
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y

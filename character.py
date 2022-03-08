@@ -249,6 +249,9 @@ class MainCharacter():
         self.image = self.animation_list()#image
         self.rect = self.image.get_rect()
 
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
+
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
             self.x += self.settings.character_speed
@@ -262,12 +265,9 @@ class MainCharacter():
         if self.can_move_down():
             self.y += self.settings.character_speed
 
-        #print(self.facing)
-
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
-
 
     def blitme(self):
         """Wyświetlenie postaci głównej na ekranie"""
