@@ -8,7 +8,7 @@ class Settings():
         self.bg_color = (0, 0, 0)
 
         #Ustawienia dotyczące postaci głównej
-        self.character_speed = 1
+        self.character_speed = 2
         self.fps = 60
 
         self.collision_tollerance = 32

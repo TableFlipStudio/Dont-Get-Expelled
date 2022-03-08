@@ -246,10 +246,9 @@ class DoGeX():
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
 
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 sys.exit()
-            
+
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
 
@@ -258,6 +257,7 @@ class DoGeX():
 
             self.check_moving_keys()
                 
+
             if event.type == pygame.MOUSEBUTTONDOWN:
               
                 mouse_pos = pygame.mouse.get_pos()
@@ -281,15 +281,15 @@ class DoGeX():
 
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
-
+        '''
         if event.key == pygame.K_UP:
-            self.window.active:
+            if self.window.active:
                 self._change_selection(-1)
 
         if event.key == pygame.K_DOWN:
-            self.window.active:
+            if self.window.active:
                 self._change_selection(1)
-                
+        '''                
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
@@ -297,7 +297,7 @@ class DoGeX():
         if event.key == pygame.K_RETURN:
             self._choose_answer()
 
-        if event.key == pygame.K_q:
+        if event.key == pygame.K_ESCAPE:
             if not self.interface_active("menu"):
                 self.menu.active = not self.menu.active
 
@@ -315,28 +315,36 @@ class DoGeX():
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
 
-        elif event.key == pygame.K_ESCAPE:
+        elif event.key == pygame.K_q:
             sys.exit()
 
     def check_moving_keys(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
+            #self.character.x += self.settings.character_speed
+            #self.map.x -= self.map.mapHorizontalSpeed
             self.character.moving_right = True
             self.map.moving_left = True
 
         if keys[pygame.K_LEFT]:
+            #self.character.x -= self.settings.character_speed
+            #self.map.x += self.map.mapHorizontalSpeed
             self.character.moving_left = True
             self.map.moving_right = True
 
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP]: #and self.character.rect.top > self.screen_rect.top:
+            #self.character.y += self.settings.character_speed
+            #self.map.y -= self.map.mapVerticalSpeed
             self.character.moving_up = True
             self.map.moving_down = True
 
         if keys[pygame.K_DOWN]:
+            #self.character.y -= self.settings.character_speed
+            #self.map.y += self.map.mapHorizontalSpeed
             self.character.moving_down = True
             self.map.moving_up = True
-            
+
     def _change_selection(self, UpOrDown: "-1 or 1 (int)"):
         """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym
         (przesuwa strzałkę)"""

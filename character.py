@@ -245,7 +245,6 @@ class MainCharacter():
     def update(self):
         """Aktualizacja położenia postaci i jej kierunku"""
 
-        #image = pygame.transform.scale(self.animation_list(), (40,100))
         self.image = self.animation_list()#image
         self.rect = self.image.get_rect()
 
@@ -255,13 +254,13 @@ class MainCharacter():
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
             self.x += self.settings.character_speed
-
+        
         if self.can_move_left():
             self.x -= self.settings.character_speed
-
+        
         if self.can_move_up():
             self.y -= self.settings.character_speed
-
+        
         if self.can_move_down():
             self.y += self.settings.character_speed
 

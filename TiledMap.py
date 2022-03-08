@@ -10,7 +10,7 @@ class Map():
         self.character = dogex.character
 
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/testmapa2better.tmx')
+        self.tmxdata = load_pygame('mapfolder/map_good.tmx')
 
         self.width = self.tmxdata.width * self.tmxdata.tilewidth
         self.height = self.tmxdata.height * self.tmxdata.tileheight
@@ -122,7 +122,6 @@ class Map():
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
         contents = self._get_all_contents()
         
-
         for obj in contents:
 
             self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
@@ -149,8 +148,8 @@ class Map():
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
 
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
+        #self.x = float(self.rect.x)
+        #self.y = float(self.rect.y)
 
         self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
