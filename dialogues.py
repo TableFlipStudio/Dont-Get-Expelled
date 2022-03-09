@@ -13,6 +13,7 @@ class DialogueWindow():
         """Inicjalizacja okna dialogowego"""
         self.screen = dogex.screen
         self.settings  = dogex.settings
+        self.expelling = dogex.expelling
 
         self.rect = pygame.Rect(0, 0, self.settings.screen_width,
             self.settings.screen_height)
@@ -65,7 +66,7 @@ class DialogueWindow():
         # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
         # to zmienna dotyczące pytania 4 będzie się nazywać after010
         after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-        after00 = DialogueTreeNode("QUIT")
+        after00 = DialogueTreeNode("QUIT", isFault=True)
         after0.add_child(after00, "0")
 
         after1 = DialogueTreeNode("QUIT")
@@ -78,6 +79,10 @@ class DialogueWindow():
     def load_dialogue(self, id):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
+
+        if self.node.isFault:
+            self.expelling.faults.append('fault')
+
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False
         else:
@@ -161,10 +166,11 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data):
+    def __init__(self, data, isFault=False):
         """Inicjalizacja węzła"""
         self.data = data
-        self.children = {}
+        self.isFault = isFault      # Choosing Fault answer makes you closer
+        self.children = {}          # to being expelled
         self.parent = None
 
     def add_child(self, child, index: str()):

@@ -30,8 +30,8 @@ class DoGeX():
         self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
-        self.window = DialogueWindow(self)
         self.expelling = Expelling(self)
+        self.window = DialogueWindow(self)
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -56,6 +56,7 @@ class DoGeX():
 
         while True:
             self._check_events()
+            self.expelling.check_fault_committed()
             self.map.collision()
 
             if not (self.inventory.active or self.window.active):
@@ -64,6 +65,10 @@ class DoGeX():
                 self._update_npcs()
 
             self._update_screen()
+
+            # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
+            #if self.expelling.check_expelled():
+                #break
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
