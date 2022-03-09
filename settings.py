@@ -33,3 +33,5 @@ class Settings():
         self.tab_Ypos = self.screen_height // 4
         self.answ_tab_Xpos = self.tab_Xpos
         self.answ_tab_Ypos = self.screen_height * 0.6
+
+        self.faults_to_be_expelled = 2

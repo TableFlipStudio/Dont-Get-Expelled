@@ -1,10 +1,12 @@
 import sys
 import pygame
+import pygame.font
 
 from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
 from dialogues import DialogueWindow
+from expelling import Expelling
 from item import Item
 from TiledMap import Map
 from npc import NPC
@@ -20,6 +22,7 @@ class DoGeX():
         #Wczytanie ekranu i nadanie tytułu
         self.screen = pygame.display.set_mode((self.settings.screen_width,
             self.settings.screen_height))
+        self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption("Don't Get Expelled! The Batory Game")
 
         #Wczytanie zasobów z pliku
@@ -28,6 +31,7 @@ class DoGeX():
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
         self.window = DialogueWindow(self)
+        self.expelling = Expelling(self)
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -310,6 +314,7 @@ class DoGeX():
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.map_image, (self.map.x, self.map.y))
         self.character.blitme()
+        self.expelling.blitmsg()
 
         #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
         if not self.inventory.active:
