@@ -17,7 +17,8 @@ class Expelling():
         self.fault_counter = self.settings.faults_to_be_expelled
 
         # Lista przewinień - każde popełnione przewinienie jest dodawane
-        # do tej listy, zaś lista jest opróżniana przez check_fault_committed
+        # do tej listy (wartość numeryczna oznaczająca powagę przewinienia),
+        # zaś lista jest opróżniana przez check_fault_committed
         self.faults = []
 
         self._update_msg()
@@ -35,7 +36,7 @@ class Expelling():
         """Sprawdza, czy zostało popełnione jakieś przewinienie, jeśli tak,
         uaktualnia licznik"""
         for fault in self.faults[:]:
-            self.fault_counter -= 1
+            self.fault_counter -= fault
             self.faults.remove(fault)
         self._update_msg()
 
