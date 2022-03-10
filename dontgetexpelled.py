@@ -67,8 +67,8 @@ class DoGeX():
             self._update_screen()
 
             # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
-            #if self.expelling.check_expelled():
-                #break
+            if self.expelling.check_expelled():
+                break
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
