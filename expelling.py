@@ -35,7 +35,7 @@ class Expelling():
         """Sprawdza, czy zostało popełnione jakieś przewinienie, jeśli tak,
         uaktualnia licznik"""
         for fault in self.faults[:]:
-            self.fault_counter -= 1
+            self.fault_counter -= fault
             self.faults.remove(fault)
         self._update_msg()
 

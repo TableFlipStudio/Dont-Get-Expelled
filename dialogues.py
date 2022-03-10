@@ -66,7 +66,7 @@ class DialogueWindow():
         # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
         # to zmienna dotyczące pytania 4 będzie się nazywać after010
         after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-        after00 = DialogueTreeNode("QUIT", isFault=True)
+        after00 = DialogueTreeNode("QUIT", faultValue=1)
         after0.add_child(after00, "0")
 
         after1 = DialogueTreeNode("QUIT")
@@ -80,8 +80,9 @@ class DialogueWindow():
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
 
-        if self.node.isFault:
-            self.expelling.faults.append('fault')
+        # How bad is this answer?
+        if self.node.faultValue > 0:
+            self.expelling.faults.append(self.node.faultValue)
 
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False
@@ -166,12 +167,12 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, isFault=False):
+    def __init__(self, data, faultValue=0):
         """Inicjalizacja węzła"""
         self.data = data
-        self.isFault = isFault      # Choosing Fault answer makes you closer
-        self.children = {}          # to being expelled
-        self.parent = None
+        self.faultValue = faultValue     # The bigger the fault value, the more
+        self.children = {}               # severe the fault is and makes you
+        self.parent = None               # closer to being expelled
 
     def add_child(self, child, index: str()):
         """Dodanie potomka do drzewa. index to indeks odpowiedzi, po której
