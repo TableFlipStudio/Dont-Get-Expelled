@@ -14,6 +14,7 @@ from TiledMap import Map
 from npc import NPC
 from save import SaveMenu, Button
 from mainmenu import MainMenu
+from gameoverscreen import GameOverScreen
 
 class DoGeX():
     """Ogólna klasa zarządzająca grą i jej zasobami"""
@@ -547,40 +548,30 @@ class DoGeX():
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
 
-def prelaunch_check_events(dogex, menu):
-    """Metoda identyczna jak _check_events() classy DoGeX(), służy
-    jednak ona do detekcji zdarzeń na etapie menu głównego, czyli przed
-    uruchomieniem gry jako takiej."""
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_pos = pygame.mouse.get_pos()
-
-            if menu.newgamebutton.rect.collidepoint(mouse_pos):
-                dogex._reset_save()
-                return True
-
-            elif menu.loadgamebutton.rect.collidepoint(mouse_pos):
-                dogex._load_save()
-                return True
-
-            elif menu.quitbutton.rect.collidepoint(mouse_pos):
-                sys.exit()
 
 if __name__ == '__main__':
-    dogex = DoGeX()
-    menu = MainMenu(dogex)
-
-    menu.blitme()
-    pygame.display.flip()
-
     while True:
-        # Jeśli kliknięto Load game albo New game, przerwij działanie menu
-        # i uruchom grę
-        run_detected = prelaunch_check_events(dogex, menu)
-        if run_detected:
-            break
-    dogex.run_game()
+        dogex = DoGeX()
+        menu = MainMenu(dogex)
+
+        menu.blitme()
+        pygame.display.flip()
+
+        while True:
+            # Jeśli kliknięto Load game albo New game, przerwij działanie menu
+            # i uruchom grę
+            run_detected = menu.check_events(dogex)
+            if run_detected:
+                break
+        dogex.run_game()
+
+        # Po zakończeniu działania gry (wyrzucenie ze szkoły)
+        gmovr = GameOverScreen(dogex)
+        gmovr.blitme()
+        pygame.display.flip()
+
+        while True:
+            relaunch = gmovr.check_events(dogex)
+            if relaunch:
+                break

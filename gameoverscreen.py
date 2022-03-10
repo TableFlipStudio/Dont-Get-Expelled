@@ -3,26 +3,23 @@ import sys
 
 from save import Button
 
-class MainMenu():
-    """Menu główne, wczytywane przed uruchomieniem run_game()"""
+class GameOverScreen():
+    """Ekran do wyświetlania po przegranej"""
 
     def __init__(self, dogex):
         self.settings = dogex.settings
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
 
-        self.image = pygame.image.load("images/mainmenu.bmp")
+        self.image = pygame.image.load("images/gameover.bmp")
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
 
-        ngpos = (self.settings.screen_width / 5,
+        mmpos = (self.settings.screen_width / 5,
             self.settings.screen_height / 2.5)
-        self.newgamebutton = Button(self, ngpos, "New game")
+        self.mainmenubutton = Button(self, mmpos, "Main menu")
 
-        lgpos = (ngpos[0], ngpos[1] + self.settings.button_space)
-        self.loadgamebutton = Button(self, lgpos, "Load game")
-
-        qpos = (lgpos[0], lgpos[1] + self.settings.button_space)
+        qpos = (mmpos[0], mmpos[1] + self.settings.button_space)
         self.quitbutton = Button(self, qpos, "Quit")
 
     def check_events(self, dogex):
@@ -37,12 +34,8 @@ class MainMenu():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
 
-                if self.newgamebutton.rect.collidepoint(mouse_pos):
+                if self.mainmenubutton.rect.collidepoint(mouse_pos):
                     dogex._reset_save()
-                    return True
-
-                elif self.loadgamebutton.rect.collidepoint(mouse_pos):
-                    dogex._load_save()
                     return True
 
                 elif self.quitbutton.rect.collidepoint(mouse_pos):
@@ -50,6 +43,5 @@ class MainMenu():
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
-        self.newgamebutton.blit_button()
-        self.loadgamebutton.blit_button()
+        self.mainmenubutton.blit_button()
         self.quitbutton.blit_button()
