@@ -549,29 +549,35 @@ class DoGeX():
         pygame.display.flip()
 
 
+def _run_main_menu(dogex):
+    """Uruchomienie menu głównego - wykrywanie zdarzeń itd."""
+    menu.blitme()
+    pygame.display.flip()
+
+    while True:
+        # Jeśli kliknięto Load game albo New game, przerwij działanie menu
+        # i uruchom grę
+        run_detected = menu.check_events(dogex)
+        if run_detected:
+            break
+
+def _run_game_over(dogex):
+    """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
+    gmovr = GameOverScreen(dogex)
+    gmovr.blitme()
+    pygame.display.flip()
+
+    while True:
+        # Patrz: _run_main_menu()
+        relaunch = gmovr.check_events(dogex)
+        if relaunch:
+            break
 
 if __name__ == '__main__':
     while True:
         dogex = DoGeX()
         menu = MainMenu(dogex)
 
-        menu.blitme()
-        pygame.display.flip()
-
-        while True:
-            # Jeśli kliknięto Load game albo New game, przerwij działanie menu
-            # i uruchom grę
-            run_detected = menu.check_events(dogex)
-            if run_detected:
-                break
+        _run_main_menu(dogex)
         dogex.run_game()
-
-        # Po zakończeniu działania gry (wyrzucenie ze szkoły)
-        gmovr = GameOverScreen(dogex)
-        gmovr.blitme()
-        pygame.display.flip()
-
-        while True:
-            relaunch = gmovr.check_events(dogex)
-            if relaunch:
-                break
+        _run_game_over(dogex)
