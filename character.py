@@ -15,12 +15,12 @@ class MainCharacter():
         #Wczytanie obrazu głównej postaci
         self.image = pygame.image.load('images/test_character.bmp')
 
-        self.facing = "up"
+        self.facing = "stationary"
 
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
         #self.rect.topleft = self.screen_rect.topleft
-        self.rect.center = (809, 715)
+        #self.rect.center = (809, 715)
 
         #Położenie postaci przechowywane jest w zmienniej zmiennoprzecinkwej
         self.x = float(self.rect.x)
@@ -68,22 +68,21 @@ class MainCharacter():
     def update(self):
         """Aktualizacja położenia postaci"""
 
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
+
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
             self.x += self.settings.character_speed
-            self.facing = "right"
 
         if self.can_move_left():
             self.x -= self.settings.character_speed
-            self.facing = "left"
 
         if self.can_move_up():
             self.y -= self.settings.character_speed
-            self.facing = "up"
 
         if self.can_move_down():
             self.y += self.settings.character_speed
-            self.facing = "down"
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x

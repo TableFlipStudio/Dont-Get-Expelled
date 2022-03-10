@@ -5,10 +5,11 @@ class Settings():
         #Ustawienia dotyczące ekranu
         self.screen_width = 1200
         self.screen_height = 750
-        self.bg_color = (255, 255, 255)
+        self.bg_color = (0, 0, 0)
 
         #Ustawienia dotyczące postaci głównej
-        self.character_speed = 0.5
+        self.character_speed = 2
+        self.fps = 60
 
         #Ustawienia dotyczące slotów w ekwipunku
         self.slot_width = 80
@@ -16,7 +17,7 @@ class Settings():
         self.slot_color = (115, 115, 115)
 
         #Ustawienia dotyczące NPC
-        self.npc_speed = 0.25
+        self.npc_speed = 1
         self.npc_bounce_at = 20
         self.npc_images = {
             'test_npc': 'test_npc'
@@ -35,3 +36,8 @@ class Settings():
         self.answ_tab_Ypos = self.screen_height * 0.6
 
         self.faults_to_be_expelled = 2
+
+        # Ustawienia dotyczące przycisków zapisu i resetu
+        self.button_size = (self.screen_width / 4, self.slot_height)
+        self.button_color = (0, 255, 0)
+        self.button_space = 1.5 * self.slot_height # Pusta przestrzeń między przyciskami

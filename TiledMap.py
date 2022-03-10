@@ -6,17 +6,20 @@ class Map():
 
         self.settings = dogex.settings
         self.screen  = dogex.screen
+
         self.character = dogex.character
 
-
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/map.tmx')
+        self.tmxdata = load_pygame('mapfolder/mapbetter.tmx')
 
-        width = self.tmxdata.width * self.tmxdata.tilewidth
-        height = self.tmxdata.height * self.tmxdata.tileheight
+        self.width = self.tmxdata.width * self.tmxdata.tilewidth
+        self.height = self.tmxdata.height * self.tmxdata.tileheight
 
-        surface = pygame.Surface( ( width, height ) )
+        surface = pygame.Surface( ( self.width, self.height ) )
         self.rect = surface.get_rect()
+
+        #self.spawn_obj = self._access_Object('objects.spawn')
+        #self.character.rect.topleft = (self.spawn_obj.x, self.spawn_obj.y)
 
         self.rect.topleft = self.screen_rect.topleft
 
@@ -28,8 +31,8 @@ class Map():
         self.moving_up = False
         self.moving_down = False
 
-        self.mapHorizontalSpeed = self.settings.character_speed * ((width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
-        self.mapVerticalSpeed = self.settings.character_speed * ((height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+        self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
+        self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
     def _access_Object(self, path):
         """Uzyskanie dostępu do dowolnego obiektu lub warstwy i zwrócenie go
@@ -109,24 +112,62 @@ class Map():
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
-    def collision(self):
-        """Wykrycie kolizji między obiektami na mapie a postacią"""
-        obj = self._access_Object('collision.walls')
-        if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
-            self.character.image = pygame.image.load('images/test_character_blue.bmp')
-        else:
-            self.character.image = pygame.image.load('images/test_character.bmp')
-
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
+
+            #FIXME the loop only uses the first item; even after deleting the 'collision.w1'
+            # object, it still displays on the map as the only object.
+
         contents = [
-            self._access_Object('collision.walls'),
-            self._access_Object('objects.spawn')
+            self._access_Object('collision.w1'),
+            self._access_Object('collision.w2'),
+            self._access_Object('collision.w3'),
+            self._access_Object('collision.w4'),
+            self._access_Object('collision.w5'),
+            self._access_Object('collision.w6'),
+            self._access_Object('collision.w7'),
+            self._access_Object('collision.w8'),
+            self._access_Object('collision.w9'),
+            self._access_Object('collision.w10'),
+            self._access_Object('collision.w11')
         ]
         return contents
 
+    def collision(self):
+        """Wykrycie kolizji między obiektami na mapie a postacią"""
+        contents = self._get_all_contents()
+
+        for obj in contents:
+            if self.character.facing == "up":
+                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                    self.character.moving_up = False
+                    self.moving_down = False
+
+            if self.character.facing == "down":
+                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                    self.character.moving_down = False
+                    self.moving_up = False
+
+            if self.character.facing == "left":
+                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                    self.character.moving_left = False
+                    self.moving_right = False
+
+            if self.character.facing == "right":
+                if pygame.Rect(obj.x, obj.y, obj.width, obj.height).colliderect(self.character.rect):
+                    self.character.moving_right = False
+                    self.moving_left = False
+
+
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
+
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
+
+        self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
+        self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+
         contents = self._get_all_contents()
 
         if self.map_can_move_right():
@@ -148,6 +189,7 @@ class Map():
             self.y += self.mapVerticalSpeed
             for object in contents:
                 object.y += self.mapVerticalSpeed
+
 
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
