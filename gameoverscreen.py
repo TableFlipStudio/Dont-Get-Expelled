@@ -15,8 +15,7 @@ class GameOverScreen():
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
 
-        mmpos = (self.settings.screen_width / 5,
-            self.settings.screen_height / 2.5)
+        mmpos = (self.screen_rect.centerx, self.screen_rect.centery + 100)
         self.mainmenubutton = Button(self, mmpos, "Main menu")
 
         qpos = (mmpos[0], mmpos[1] + self.settings.button_space)
