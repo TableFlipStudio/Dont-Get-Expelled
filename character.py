@@ -23,7 +23,6 @@ class MainCharacter():
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
-        #self.rect.center = (809, 715)
 
         #Położenie postaci przechowywane jest w zmienniej zmiennoprzecinkwej
         self.x = float(self.rect.x)
@@ -238,15 +237,13 @@ class MainCharacter():
         if self.l >= len:
             self.l = 0
 
-        #time.sleep(0.1)
         self.l += 1
         return self.l
 
     def update(self):
         """Aktualizacja położenia postaci i jej kierunku"""
 
-        self.image = self.animation_list()#image
-        #self.rect = self.image.get_rect()
+        self.image = self.animation_list()
 
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)

@@ -281,7 +281,6 @@ class DoGeX():
 
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
-        '''
         if event.key == pygame.K_UP:
             if self.window.active:
                 self._change_selection(-1)
@@ -289,7 +288,6 @@ class DoGeX():
         if event.key == pygame.K_DOWN:
             if self.window.active:
                 self._change_selection(1)
-        '''
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
@@ -316,33 +314,24 @@ class DoGeX():
             self.settings.character_speed *= 2
 
         elif event.key == pygame.K_q:
-            if not self.interface_active("menu"):
-                self.menu.active = not self.menu.active
+            sys.exit()
 
     def check_moving_keys(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
-            #self.character.x += self.settings.character_speed
-            #self.map.x -= self.map.mapHorizontalSpeed
             self.character.moving_right = True
             self.map.moving_left = True
 
         if keys[pygame.K_LEFT]:
-            #self.character.x -= self.settings.character_speed
-            #self.map.x += self.map.mapHorizontalSpeed
             self.character.moving_left = True
             self.map.moving_right = True
 
-        if keys[pygame.K_UP]: #and self.character.rect.top > self.screen_rect.top:
-            #self.character.y += self.settings.character_speed
-            #self.map.y -= self.map.mapVerticalSpeed
+        if keys[pygame.K_UP]:
             self.character.moving_up = True
             self.map.moving_down = True
 
         if keys[pygame.K_DOWN]:
-            #self.character.y -= self.settings.character_speed
-            #self.map.y += self.map.mapHorizontalSpeed
             self.character.moving_down = True
             self.map.moving_up = True
 

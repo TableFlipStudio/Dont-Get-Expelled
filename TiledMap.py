@@ -111,31 +111,31 @@ class Map():
 
     def _get_all_contents(self):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
-        
+
         layer = self._access_Object('collision')
         contents = [obj for obj in layer]
 
         return contents
 
-      
+
     def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
         contents = self._get_all_contents()
-        
+
         for obj in contents:
 
             self.coll_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
 
             if (self.coll_rect).colliderect(self.character.rect):
-                
+
                 if abs(self.character.rect.top - self.coll_rect.bottom) < self.settings.collision_tollerance and self.character.moving_up:
                     self.character.moving_up = False
                     self.moving_down = False
-                
+
                 if abs(self.character.rect.bottom - self.coll_rect.top) < self.settings.collision_tollerance and self.character.moving_down:
                     self.character.moving_down = False
                     self.moving_up = False
-                
+
                 if abs(self.character.rect.left - self.coll_rect.right) < self.settings.collision_tollerance and self.character.moving_left:
                     self.character.moving_left = False
                     self.moving_right = False
@@ -143,13 +143,10 @@ class Map():
                 if abs(self.character.rect.right - self.coll_rect.left) < self.settings.collision_tollerance and self.character.moving_right:
                     self.character.moving_right = False
                     self.moving_left = False
-            
+
 
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
-
-        #self.x = float(self.rect.x)
-        #self.y = float(self.rect.y)
 
         self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
@@ -176,7 +173,7 @@ class Map():
             for object in contents:
                 object.y += self.mapVerticalSpeed
 
-                
+
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
