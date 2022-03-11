@@ -256,10 +256,10 @@ class DoGeX():
                 self._check_keyup_events(event)
 
             self.check_moving_keys()
-                
+
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-              
+
                 mouse_pos = pygame.mouse.get_pos()
 
                 if (self.inventory.grabbed_item is None and
@@ -289,7 +289,7 @@ class DoGeX():
         if event.key == pygame.K_DOWN:
             if self.window.active:
                 self._change_selection(1)
-        '''                
+        '''
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
@@ -316,7 +316,8 @@ class DoGeX():
             self.settings.character_speed *= 2
 
         elif event.key == pygame.K_q:
-            sys.exit()
+            if not self.interface_active("menu"):
+                self.menu.active = not self.menu.active
 
     def check_moving_keys(self):
         keys = pygame.key.get_pressed()
@@ -554,7 +555,7 @@ def prelaunch_check_events(dogex, menu):
     jednak ona do detekcji zdarzeń na etapie menu głównego, czyli przed
     uruchomieniem gry jako takiej."""
 
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
