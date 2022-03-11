@@ -18,7 +18,7 @@ class MainCharacter():
         self.l = 0
 
         #Wczytanie obrazu głównej postaci
-        self.image = pygame.image.load('animation/down/fwrd0.png') 
+        self.image = pygame.image.load('animation/down/fwrd0.png')
 
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
@@ -68,7 +68,7 @@ class MainCharacter():
             self.rect.bottom < self.screen_height
         )
         return output
-            
+
     def animation_list(self):
         down_list =  [
             pygame.image.load('animation/down/fwrd0.png'),
@@ -105,7 +105,7 @@ class MainCharacter():
             pygame.image.load('animation/down/fwrd9.png'),
             pygame.image.load('animation/down/fwrd10.png'),
             ]
-        
+
         left_list = [
             pygame.image.load('animation/left/East0.png'),
             pygame.image.load('animation/left/East1.png'),
@@ -143,7 +143,7 @@ class MainCharacter():
             ]
 
         right_list = [
-            
+
             pygame.image.load('animation/right/West0.png'),
             pygame.image.load('animation/right/West1.png'),
             pygame.image.load('animation/right/West2.png'),
@@ -217,7 +217,7 @@ class MainCharacter():
 
         stationary_image = pygame.image.load('animation/down/fwrd0.png')
 
-            
+
         if self.moving_down:
             return down_list[self.animation_loop(9)]
 
@@ -226,15 +226,15 @@ class MainCharacter():
 
         elif self.moving_right:
             return right_list[self.animation_loop(9)]
-            
+
         elif self.moving_left:
             return left_list[self.animation_loop(9)]
 
         else:
             return stationary_image
-    
+
     def animation_loop(self, len):
-        
+
         if self.l >= len:
             self.l = 0
 
@@ -246,7 +246,7 @@ class MainCharacter():
         """Aktualizacja położenia postaci i jej kierunku"""
 
         self.image = self.animation_list()#image
-        self.rect = self.image.get_rect()
+        #self.rect = self.image.get_rect()
 
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
@@ -254,13 +254,13 @@ class MainCharacter():
         #Aktualizacja wartości współrzędnych postaci a nie jej prostokąta
         if self.can_move_right():
             self.x += self.settings.character_speed
-        
+
         if self.can_move_left():
             self.x -= self.settings.character_speed
-        
+
         if self.can_move_up():
             self.y -= self.settings.character_speed
-        
+
         if self.can_move_down():
             self.y += self.settings.character_speed
 
