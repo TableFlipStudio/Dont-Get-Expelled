@@ -64,6 +64,8 @@ class DoGeX():
 
         self.npcs.add(NPC(self,'test_npc'))
 
+        self.map.set_spawn("player")
+
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
         for row_number in range(2): #Dwa rzędy slotów
@@ -100,10 +102,10 @@ class DoGeX():
         """Wczytanie zapisu i odpowiednie ustawienie parametrów gry"""
         with open("jsondata/character_pos.json") as file:
             chpos = json.load(file)
-
+        '''
         with open("jsondata/map_pos.json") as file:
             mpos = json.load(file)
-
+        '''
         with open("jsondata/inventory.json") as file:
             inv_content = json.load(file)
 
@@ -111,7 +113,7 @@ class DoGeX():
             items = json.load(file)
 
         self.character.rect.topleft = chpos
-        self.map.rect.topleft = mpos
+        #self.map.rect.topleft = mpos
         self._set_loaded_inv_content(inv_content)
         self._place_loaded_items(items)
 
@@ -144,7 +146,7 @@ class DoGeX():
     def _write_save(self):
         """Zapisanie postępu w grze"""
         chpos = self.character.rect.topleft
-        mpos = self.map.rect.topleft
+        #mpos = self.map.rect.topleft
         invcnt = []
         items = self._group_to_list(self.items)
 
@@ -177,7 +179,7 @@ class DoGeX():
     def _reset_save(self):
         """Zresetowanie postępu w grze"""
         chpos = (0, 0)
-        mpos = (0, 0)
+        #mpos = (0, 0)
         invcnt = []
         items = [
             Item(self, 'red_ball', (100, 100)),
@@ -188,10 +190,10 @@ class DoGeX():
 
         with open("jsondata/character_pos.json", 'w') as file:
             json.dump(chpos, file)
-
+        '''
         with open("jsondata/map_pos.json", 'w') as file:
             json.dump(mpos, file)
-
+        '''
         with open("jsondata/inventory.json", 'w') as file:
             json.dump(invcnt, file)
 

@@ -58,6 +58,17 @@ class Map():
                 else: #Jeśli nie, zwróc aktualnie wskazany obiekt, bo to jego szukamy
                     return subinstance
 
+    def set_spawn(self, instance):
+        if instance == "player":
+            obj = self._access_Object('objects.spawn')
+            self.character.rect.center = (self.from_map_to_screen_ratio(obj.x, obj.y))
+
+    def from_map_to_screen_ratio(self, x, y):
+        new_x = ((self.screen_rect.width * x) / self.width)
+        new_y = ((self.screen_rect.height * y) / self.height)
+        print(new_x,new_y)
+        return new_x,new_y
+
     def map_can_move_right(self):
         output = (
             self.moving_right
