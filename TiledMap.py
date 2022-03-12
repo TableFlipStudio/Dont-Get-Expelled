@@ -23,15 +23,14 @@ class Map():
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
+        self.last_x = 0
+        self.last_y = 0
+
         self.moving_right = False
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
 
-        self.running = False
-
-        self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
-        self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
     def _access_Object(self, path):
         """Uzyskanie dostępu do dowolnego obiektu lub warstwy i zwrócenie go
@@ -58,6 +57,16 @@ class Map():
                     return child
                 else: #Jeśli nie, zwróc aktualnie wskazany obiekt, bo to jego szukamy
                     return subinstance
+
+    def set_spawn(self, instance):
+        if instance == "player":
+            obj = self._access_Object('objects.spawn')
+            self.character.rect.center = (self.from_map_to_screen_ratio(obj.x, obj.y))
+
+    def from_map_to_screen_ratio(self, x, y):
+        new_x = ((self.screen_rect.width * x) / self.width)
+        new_y = ((self.screen_rect.height * y) / self.height)
+        return new_x,new_y
 
     def map_can_move_right(self):
         output = (
@@ -150,33 +159,30 @@ class Map():
     def update(self):
         """Aktualizacja położenia mapy oraz jej zawartości"""
 
-        self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
-        self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
+        mapHorizontalSpeed = ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2)) * -1
+        mapVerticalSpeed = ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2)) * -1
 
         contents = self._get_all_contents()
+        
+        self.last_x = self.x
+        self.last_y = self.y
 
-        if self.map_can_move_right():
-            self.x += self.mapHorizontalSpeed
-            for object in contents:
-                object.x += self.mapHorizontalSpeed
+        '''Przesuwanie mapy ze względu na położenie postaci'''
+        self.x = self.character.x * mapHorizontalSpeed
+        self.y = self.character.y * mapVerticalSpeed
 
-        if self.map_can_move_left():
-            self.x -= self.mapHorizontalSpeed
-            for object in contents:
-                object.x -= self.mapHorizontalSpeed
-
-        if self.map_can_move_up():
-            self.y -= self.mapVerticalSpeed
-            for object in contents:
-                object.y -= self.mapVerticalSpeed
-
-        if self.map_can_move_down():
-            self.y += self.mapVerticalSpeed
-            for object in contents:
-                object.y += self.mapVerticalSpeed
-
-        print(self.mapHorizontalSpeed, self.mapVerticalSpeed)
-
+        '''Przesuwanie objektów kolizji w zależności od ostatniego położenia mapy'''
+        for obj in contents:
+            if self.last_x > self.x:
+                obj.x -= (self.last_x - self.x)
+            else:
+                obj.x += (self.x - self.last_x)
+            
+            if self.last_y > self.y:
+                obj.y -= (self.last_y - self.y)
+            else:
+                obj.y += (self.y - self.last_y)
+            
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
