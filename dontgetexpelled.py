@@ -288,6 +288,7 @@ class DoGeX():
         if event.key == pygame.K_DOWN:
             if self.window.active:
                 self._change_selection(1)
+
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
@@ -312,6 +313,7 @@ class DoGeX():
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
+            self.map.running = True
 
         elif event.key == pygame.K_q:
             sys.exit()
@@ -375,6 +377,7 @@ class DoGeX():
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed /= 2
+            self.map.running = False
 
     def rewrite_dialogue_files(self):
         """Funkcja zczytuje zawartość wszystkich plików a następnie odtwarza

@@ -28,6 +28,8 @@ class Map():
         self.moving_up = False
         self.moving_down = False
 
+        self.running = False
+
         self.mapHorizontalSpeed = self.settings.character_speed * ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2))
         self.mapVerticalSpeed = self.settings.character_speed * ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2))
 
@@ -173,6 +175,7 @@ class Map():
             for object in contents:
                 object.y += self.mapVerticalSpeed
 
+        print(self.mapHorizontalSpeed, self.mapVerticalSpeed)
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
