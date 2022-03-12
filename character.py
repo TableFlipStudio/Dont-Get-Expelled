@@ -22,7 +22,7 @@ class MainCharacter():
 
         #Wczytanie prostokąta postaci i wycentrowanie go
         self.rect = self.image.get_rect()
-        self.rect.topleft = self.screen_rect.topleft
+        #self.rect.center = self.screen_rect.center
 
         #Położenie postaci przechowywane jest w zmienniej zmiennoprzecinkwej
         self.x = float(self.rect.x)
@@ -33,6 +33,8 @@ class MainCharacter():
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
+
+        self.moving = False
 
 
     def can_move_right(self):
@@ -264,6 +266,8 @@ class MainCharacter():
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
+
+        #print("character: ", self.y)
 
     def blitme(self):
         """Wyświetlenie postaci głównej na ekranie"""
