@@ -66,7 +66,6 @@ class Map():
     def from_map_to_screen_ratio(self, x, y):
         new_x = ((self.screen_rect.width * x) / self.width)
         new_y = ((self.screen_rect.height * y) / self.height)
-        print(new_x,new_y)
         return new_x,new_y
 
     def map_can_move_right(self):
@@ -163,7 +162,6 @@ class Map():
         mapHorizontalSpeed = ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2)) * -1
         mapVerticalSpeed = ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2)) * -1
 
-
         contents = self._get_all_contents()
         
         self.last_x = self.x
@@ -173,23 +171,18 @@ class Map():
         self.x = self.character.x * mapHorizontalSpeed
         self.y = self.character.y * mapVerticalSpeed
 
-
         '''Przesuwanie objektów kolizji w zależności od ostatniego położenia mapy'''
         for obj in contents:
             if self.last_x > self.x:
                 obj.x -= (self.last_x - self.x)
-
             else:
                 obj.x += (self.x - self.last_x)
             
-
             if self.last_y > self.y:
                 obj.y -= (self.last_y - self.y)
-            
             else:
                 obj.y += (self.y - self.last_y)
             
-
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
