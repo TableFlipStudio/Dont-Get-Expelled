@@ -142,7 +142,6 @@ class DoGeX():
     def _write_save(self):
         """Zapisanie postępu w grze"""
         chpos = self.character.rect.topleft
-        #mpos = self.map.rect.topleft
         invcnt = []
         items = self._group_to_list(self.items)
 
