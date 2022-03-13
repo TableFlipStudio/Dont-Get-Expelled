@@ -120,18 +120,20 @@ class Map():
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
-    def _get_all_contents(self):
+    def _get_all_contents(self, parameter):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
 
-        layer = self._access_Object('collision')
-        contents = [obj for obj in layer]
+        if parameter == "collision":
+            layer = self._access_Object('collision')
+            contents = [obj for obj in layer]
 
+    
         return contents
 
 
     def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
-        contents = self._get_all_contents()
+        contents = self._get_all_contents('collision')
 
         for obj in contents:
 
@@ -162,7 +164,7 @@ class Map():
         mapHorizontalSpeed = ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2)) * -1
         mapVerticalSpeed = ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2)) * -1
 
-        contents = self._get_all_contents()
+        contents = self._get_all_contents('collision')
         
         self.last_x = self.x
         self.last_y = self.y
