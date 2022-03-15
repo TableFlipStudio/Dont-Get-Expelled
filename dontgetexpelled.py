@@ -1,3 +1,5 @@
+# FIXME: Saving faults does not work (216)
+
 import sys
 import pygame
 import pygame.font
@@ -114,10 +116,14 @@ class DoGeX():
         with open("jsondata/items.json") as file:
             items = json.load(file)
 
+        with open("jsondata/faults.json") as file:
+            faultcntr = json.load(file)
+
         self.character.rect.topleft = chpos
         self.map.rect.topleft = mpos
         self._set_loaded_inv_content(inv_content)
         self._place_loaded_items(items)
+        self.expelling.fault_counter = faultcntr
 
     def _set_loaded_inv_content(self, inv_content):
         """Załadowanie do ekwipunku przedmiotów wczytanych z inventory.json"""
@@ -156,6 +162,8 @@ class DoGeX():
             if slot.content is not None:
                 invcnt.append(slot.content.id)
 
+        faultcntr = self.expelling.fault_counter
+
         with open("jsondata/character_pos.json", 'w') as file:
             json.dump(chpos, file)
 
@@ -167,6 +175,9 @@ class DoGeX():
 
         with open("jsondata/items.json", 'w') as file:
             json.dump(items, file)
+
+        with open("jsondata/faults.json", 'w') as file:
+            json.dump(faultcntr, file)
 
     def _group_to_list(self, group):
         """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
@@ -189,6 +200,7 @@ class DoGeX():
             Item(self, 'green_ball', (500, 650))
             ]
         items = [(item.id, item.rect.topleft) for item in items]
+        faultcntr = self.settings.faults_to_be_expelled
 
         with open("jsondata/character_pos.json", 'w') as file:
             json.dump(chpos, file)
@@ -201,6 +213,9 @@ class DoGeX():
 
         with open("jsondata/items.json", 'w') as file:
             json.dump(items, file)
+
+        with open("jsondata/faults.json", 'w') as file:
+            json.dump(faultcntr, file)
 
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
