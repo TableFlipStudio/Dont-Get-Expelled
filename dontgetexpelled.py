@@ -1,5 +1,8 @@
+# FIXME: Saving faults does not work (216)
+
 import sys
 import pygame
+import pygame.font
 import json
 from time import sleep
 
@@ -7,11 +10,13 @@ from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
 from dialogues import DialogueWindow
+from expelling import Expelling
 from item import Item
 from TiledMap import Map
 from npc import NPC
 from save import SaveMenu, Button
 from mainmenu import MainMenu
+from gameoverscreen import GameOverScreen
 
 
 class DoGeX():
@@ -35,6 +40,7 @@ class DoGeX():
         self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
+        self.expelling = Expelling(self)
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
 
@@ -102,16 +108,20 @@ class DoGeX():
         """Wczytanie zapisu i odpowiednie ustawienie parametrów gry"""
         with open("jsondata/character_pos.json") as file:
             chpos = json.load(file)
-        
+
         with open("jsondata/inventory.json") as file:
             inv_content = json.load(file)
 
         with open("jsondata/items.json") as file:
             items = json.load(file)
 
+        with open("jsondata/faults.json") as file:
+            faultcntr = json.load(file)
+
         self.character.rect.topleft = chpos
         self._set_loaded_inv_content(inv_content)
         self._place_loaded_items(items)
+        self.expelling.fault_counter = faultcntr
 
     def _set_loaded_inv_content(self, inv_content):
         """Załadowanie do ekwipunku przedmiotów wczytanych z inventory.json"""
@@ -149,6 +159,8 @@ class DoGeX():
             if slot.content is not None:
                 invcnt.append(slot.content.id)
 
+        faultcntr = self.expelling.fault_counter
+
         with open("jsondata/character_pos.json", 'w') as file:
             json.dump(chpos, file)
 
@@ -157,6 +169,9 @@ class DoGeX():
 
         with open("jsondata/items.json", 'w') as file:
             json.dump(items, file)
+
+        with open("jsondata/faults.json", 'w') as file:
+            json.dump(faultcntr, file)
 
     def _group_to_list(self, group):
         """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
@@ -178,6 +193,7 @@ class DoGeX():
             Item(self, 'green_ball', (500, 650))
             ]
         items = [(item.id, item.rect.topleft) for item in items]
+        faultcntr = self.settings.faults_to_be_expelled
 
         with open("jsondata/character_pos.json", 'w') as file:
             json.dump(chpos, file)
@@ -187,6 +203,9 @@ class DoGeX():
 
         with open("jsondata/items.json", 'w') as file:
             json.dump(items, file)
+
+        with open("jsondata/faults.json", 'w') as file:
+            json.dump(faultcntr, file)
 
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
@@ -222,6 +241,7 @@ class DoGeX():
 
         while True:
             self._check_events()
+            self.expelling.check_fault_committed()
             self.map.collision()
 
             if not self.interface_active():
@@ -231,6 +251,10 @@ class DoGeX():
 
             self._update_screen()
             self.clock.tick(self.settings.fps)
+
+            # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
+            if self.expelling.check_expelled():
+                break
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
@@ -278,7 +302,7 @@ class DoGeX():
         if event.key == pygame.K_DOWN:
             if self.window.active:
                 self._change_selection(1)
-                
+
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
@@ -492,6 +516,7 @@ class DoGeX():
         self.screen.blit(self.map_image, (self.map.x, self.map.y))
         #pygame.draw.rect(self.screen, ((0,255,0)), self.map.rect) #TOBEDELETED
         self.character.blitme()
+        self.expelling.blitmsg()
 
         #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
         if not self.inventory.active:
@@ -530,41 +555,36 @@ class DoGeX():
         #Wyświetlenie zmodyfikowanego ekranu
         pygame.display.flip()
 
-def prelaunch_check_events(dogex, menu):
-    """Metoda identyczna jak _check_events() classy DoGeX(), służy
-    jednak ona do detekcji zdarzeń na etapie menu głównego, czyli przed
-    uruchomieniem gry jako takiej."""
 
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_pos = pygame.mouse.get_pos()
-
-            if menu.newgamebutton.rect.collidepoint(mouse_pos):
-                dogex._reset_save()
-                return True
-
-            elif menu.loadgamebutton.rect.collidepoint(mouse_pos):
-                dogex._load_save()
-                return True
-
-            elif menu.quitbutton.rect.collidepoint(mouse_pos):
-                sys.exit()
-
-if __name__ == '__main__':
-    dogex = DoGeX()
-    menu = MainMenu(dogex)
-
+def _run_main_menu(dogex):
+    """Uruchomienie menu głównego - wykrywanie zdarzeń itd."""
     menu.blitme()
     pygame.display.flip()
 
     while True:
         # Jeśli kliknięto Load game albo New game, przerwij działanie menu
         # i uruchom grę
-        run_detected = prelaunch_check_events(dogex, menu)
+        run_detected = menu.check_events(dogex)
         if run_detected:
             break
-    dogex.run_game()
+
+def _run_game_over(dogex):
+    """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
+    gmovr = GameOverScreen(dogex)
+    gmovr.blitme()
+    pygame.display.flip()
+
+    while True:
+        # Patrz: _run_main_menu()
+        relaunch = gmovr.check_events(dogex)
+        if relaunch:
+            break
+
+if __name__ == '__main__':
+    while True:
+        dogex = DoGeX()
+        menu = MainMenu(dogex)
+
+        _run_main_menu(dogex)
+        dogex.run_game()
+        _run_game_over(dogex)
