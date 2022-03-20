@@ -1,8 +1,5 @@
-# FIXME: Saving faults does not work (216)
-
 import sys
 import pygame
-import pygame.font
 import json
 from time import sleep
 

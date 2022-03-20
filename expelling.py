@@ -1,5 +1,4 @@
 import pygame
-import pygame.font
 
 class Expelling():
     """Klasa nadzoruje mechanikę wyrzucania ze szkoły"""

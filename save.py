@@ -1,5 +1,4 @@
 import pygame
-import pygame.font
 
 class SaveMenu():
     """Menu zapisywania i resetowania"""

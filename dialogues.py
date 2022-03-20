@@ -1,11 +1,10 @@
-#POSSIBLYTODO: Currently the way how msgs work is a parody of OOP (atributes etc.)
+# POSSIBLY TODO: Currently the way how msgs work is a parody of OOP (atributes etc.)
 # We may want to actually make it OOP - make a Message() class, and so on.
 # This would probably make things a lit simpler but
 # currently I'm quite unmotivated to do it, so, Igor, tell me what do you think
 # about it
 
 import pygame
-import pygame.freetype
 
 class DialogueWindow():
     """Klasa odpowiadająca za okno dialogowe"""
