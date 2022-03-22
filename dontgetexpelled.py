@@ -266,8 +266,7 @@ class DoGeX():
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
-            self.check_h_moving_keys()
-            self.check_v_moving_keys()
+            self.check_moving_keys()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -328,7 +327,7 @@ class DoGeX():
         elif event.key == pygame.K_q:
             sys.exit()
 
-    def check_v_moving_keys(self):
+    def check_moving_keys(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_UP]:
@@ -338,9 +337,6 @@ class DoGeX():
         if keys[pygame.K_DOWN]:
             self.character.moving_down = True
             self.map.moving_up = True
-
-    def check_h_moving_keys(self):
-        keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
             self.character.moving_right = True
