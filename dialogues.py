@@ -46,7 +46,7 @@ class DialogueWindow():
         self.dialogues = {
             'test_npc': [
                 self.build_dialogue_tree("testnpcstage0"),
-                #self.build_dialogue_tree("testnpcstage1")
+                self.build_dialogue_tree("testnpcstage1")
             ]
         }
 
@@ -63,7 +63,7 @@ class DialogueWindow():
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""
         if mode == "testnpcstage0":
-            dp = "Dialogues/stage0/" # Directory Prefix
+            dp = "Dialogues/test_npc/stage0/" # Directory Prefix
             root = DialogueTreeNode(dp+"test_dialogue1.txt")
 
             #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
@@ -77,6 +77,14 @@ class DialogueWindow():
 
             root.add_child(after0, "0")
             root.add_child(after1, "1")
+
+        elif mode == "testnpcstage1":
+            dp = "Dialogues/test_npc/stage1/"
+            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+
+            after0 = DialogueTreeNode("QUIT", stageUp=True)
+
+            root.add_child(after0, "0")
 
         return root
 
@@ -171,9 +179,11 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, faultValue=0):
+    def __init__(self, data, faultValue=0, stageUp=False):
         """Inicjalizacja węzła"""
         self.data = data
+        self.stageUp = stageUp # Does this dialogue change something between you an NPC?
+                               # e.g. quest accepted.
         self.faultValue = faultValue     # The bigger the fault value, the more
         self.children = {}               # severe the fault is and makes you
         self.parent = None               # closer to being expelled
