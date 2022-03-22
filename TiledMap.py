@@ -10,7 +10,7 @@ class Map():
         self.character = dogex.character
 
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/map_good.tmx')
+        self.tmxdata = load_pygame('mapfolder/test.tmx')
 
         self.width = self.tmxdata.width * self.tmxdata.tilewidth
         self.height = self.tmxdata.height * self.tmxdata.tileheight
@@ -117,7 +117,7 @@ class Map():
                     tile = tmxdata.get_tile_image_by_gid(gid)
                     if tile:
                         #image = tmxdata.get_tile_image(x, y, layer)
-                        surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
+                        surface.blit(tile, ( x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight ))
         return surface
 
     def _get_all_contents(self, parameter='all'):
