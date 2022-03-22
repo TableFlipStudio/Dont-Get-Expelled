@@ -61,7 +61,7 @@ class Map():
     def set_spawn(self, instance):
         if instance == "player":
             obj = self._access_Object('objects.spawn')
-            self.character.rect.topleft = (self.from_map_to_screen_ratio(obj.x, obj.y))
+            self.character.rect.center = (self.from_map_to_screen_ratio(obj.x, obj.y))
 
     def from_map_to_screen_ratio(self, x, y):
         new_x = ((self.screen_rect.width * x) / self.width)
@@ -115,8 +115,6 @@ class Map():
             if isinstance(layer, TiledTileLayer):
                 for x, y, gid in layer:
                     tile = tmxdata.get_tile_image_by_gid(gid)
-                    #if not tile == None:                    
-                    #    tile = pyga.transform.scale(tile,(64,64))
                     if tile:
                         #image = tmxdata.get_tile_image(x, y, layer)
                         surface.blit(tile, ( x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight ))
