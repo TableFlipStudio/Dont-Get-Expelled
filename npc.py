@@ -16,7 +16,7 @@ class NPC(Sprite):
         self.id = id
 
         image = f'images/{self.settings.npc_images[id]}.bmp'
-        self.image = pygame.image.load(image)
+        self.image = pygame.image.load(image).convert_alpha()
         self.rect = self.image.get_rect()
 
         #Postać testowa zaczyna po lewej stronie mapy

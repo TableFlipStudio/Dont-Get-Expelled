@@ -117,18 +117,11 @@ class Map():
                     tile = tmxdata.get_tile_image_by_gid(gid)
                     if tile:
                         #image = tmxdata.get_tile_image(x, y, layer)
-                        surface.blit(tile, ( x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight ))
+                        surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
-    def _get_all_contents(self, parameter='all'):
+    def _get_all_contents(self, parameter):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
-        if parameter == 'all':
-            contents = []
-            #TODO make this to return all objects from map
-            #for l in self.tmxdata.visible_layers:
-                 #print(l)
-                #layer = self._access_Object(l)
-                #contents += [obj for obj in layer]
 
         if parameter == "collision":
             layer = self._access_Object('collision')
