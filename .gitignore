@@ -1,3 +1,4 @@
 rewriter.py
 __pycache__/
 *.kate-swp
+.vscode
