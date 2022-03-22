@@ -266,7 +266,8 @@ class MainCharacter():
         self.rect.x = self.x
         self.rect.y = self.y
 
-        #print("character: ", self.y)
+        
+            
 
     def blitme(self):
         """Wyświetlenie postaci głównej na ekranie"""

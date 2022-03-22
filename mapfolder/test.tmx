@@ -239,7 +239,7 @@
   <object id="156" x="6272" y="2944.5" width="404" height="63"/>
  </objectgroup>
  <objectgroup id="11" name="objects">
-  <object id="106" name="spawn" x="2702.67" y="3768">
+  <object id="106" name="spawn" x="2350.67" y="3456">
    <point/>
   </object>
  </objectgroup>

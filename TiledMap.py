@@ -63,9 +63,11 @@ class Map():
             obj = self._access_Object('objects.spawn')
             self.character.rect.center = (self.from_map_to_screen_ratio(obj.x, obj.y))
 
+            
+
     def from_map_to_screen_ratio(self, x, y):
-        new_x = ((self.screen_rect.width * x) / self.width)
-        new_y = ((self.screen_rect.height * y) / self.height)
+        new_x = ((self.settings.screen_width * x) / self.width)
+        new_y = ((self.settings.screen_height * y) / self.height)-30
         return new_x,new_y
 
     def map_can_move_right(self):
@@ -120,16 +122,21 @@ class Map():
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
-    def _get_all_contents(self, parameter):
+
+    def _get_all_contents(self, parameter='all'):
         """Zwraca listę wszystkich obiektów na mapie, pomocnicza do update()"""
 
-        if parameter == "collision":
+        if parameter == 'all':
+            contents = []
+            for i in self.tmxdata.visible_layers:
+                if isinstance(i, TiledObjectGroup):
+                    contents += [obj for obj in i]
+
+        elif parameter == "collision":
             layer = self._access_Object('collision')
             contents = [obj for obj in layer]
-
-    
+            
         return contents
-
 
     def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
@@ -164,7 +171,7 @@ class Map():
         mapHorizontalSpeed = ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2)) * -1
         mapVerticalSpeed = ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2)) * -1
 
-        contents = self._get_all_contents('collision')
+        contents = self._get_all_contents()#'collision')
         
         self.last_x = self.x
         self.last_y = self.y
