@@ -10,7 +10,7 @@ class Map():
         self.character = dogex.character
 
         self.screen_rect = self.screen.get_rect()
-        self.tmxdata = load_pygame('mapfolder/map_good.tmx')
+        self.tmxdata = load_pygame('mapfolder/test.tmx')
 
         self.width = self.tmxdata.width * self.tmxdata.tilewidth
         self.height = self.tmxdata.height * self.tmxdata.tileheight
@@ -61,7 +61,7 @@ class Map():
     def set_spawn(self, instance):
         if instance == "player":
             obj = self._access_Object('objects.spawn')
-            self.character.rect.center = (self.from_map_to_screen_ratio(obj.x, obj.y))
+            self.character.rect.topleft = (self.from_map_to_screen_ratio(obj.x, obj.y))
 
     def from_map_to_screen_ratio(self, x, y):
         new_x = ((self.screen_rect.width * x) / self.width)
@@ -115,9 +115,11 @@ class Map():
             if isinstance(layer, TiledTileLayer):
                 for x, y, gid in layer:
                     tile = tmxdata.get_tile_image_by_gid(gid)
+                    #if not tile == None:                    
+                    #    tile = pyga.transform.scale(tile,(64,64))
                     if tile:
                         #image = tmxdata.get_tile_image(x, y, layer)
-                        surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
+                        surface.blit(tile, ( x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight ))
         return surface
 
     def _get_all_contents(self, parameter):
