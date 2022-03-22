@@ -5,6 +5,7 @@
 # about it
 
 import pygame
+import pygame.freetype
 
 class DialogueWindow():
     """Klasa odpowiadająca za okno dialogowe"""
@@ -43,7 +44,10 @@ class DialogueWindow():
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'test_npc': self.build_dialogue_tree()
+            'test_npc': [
+                self.build_dialogue_tree("testnpcstage0"),
+                #self.build_dialogue_tree("testnpcstage1")
+            ]
         }
 
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
@@ -55,23 +59,24 @@ class DialogueWindow():
         # przejrzystości kodu
         self.node = None
 
-    def build_dialogue_tree(self):
+    def build_dialogue_tree(self, mode):
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""
-        dp = "Dialogues/" # Directory Prefix
-        root = DialogueTreeNode(dp+"test_dialogue1.txt")
+        if mode == "testnpcstage0":
+            dp = "Dialogues/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"test_dialogue1.txt")
 
-        #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-        # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-        # to zmienna dotyczące pytania 4 będzie się nazywać after010
-        after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-        after00 = DialogueTreeNode("QUIT", faultValue=1)
-        after0.add_child(after00, "0")
+            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
+            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
+            # to zmienna dotyczące pytania 4 będzie się nazywać after010
+            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+            after00 = DialogueTreeNode("QUIT", faultValue=1)
+            after0.add_child(after00, "0")
 
-        after1 = DialogueTreeNode("QUIT")
+            after1 = DialogueTreeNode("QUIT")
 
-        root.add_child(after0, "0")
-        root.add_child(after1, "1")
+            root.add_child(after0, "0")
+            root.add_child(after1, "1")
 
         return root
 

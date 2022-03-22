@@ -239,7 +239,7 @@ class DoGeX():
         while True:
             self._check_events()
             self.expelling.check_fault_committed()
-            self.map.collision()
+            #self.map.collision()
 
             if not self.interface_active():
                 self.character.update()
@@ -318,7 +318,7 @@ class DoGeX():
                 else:
                     #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
                     self.window.active = True
-                    self.window.node = self.window.dialogues[npc_collide.id]
+                    self.window.node = self.window.dialogues[npc_collide.id][npc_collide.stage]
                     self.window.load_dialogue(npc_collide.id)
 
         if event.key == pygame.K_LSHIFT:
