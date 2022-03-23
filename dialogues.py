@@ -5,6 +5,7 @@
 # about it
 
 import pygame
+import pygame.freetype
 
 class DialogueWindow():
     """Klasa odpowiadająca za okno dialogowe"""
@@ -43,7 +44,10 @@ class DialogueWindow():
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'test_npc': self.build_dialogue_tree()
+            'test_npc': [
+                self.build_dialogue_tree("testnpcstage0"),
+                self.build_dialogue_tree("testnpcstage1")
+            ]
         }
 
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
@@ -55,27 +59,36 @@ class DialogueWindow():
         # przejrzystości kodu
         self.node = None
 
-    def build_dialogue_tree(self):
+    def build_dialogue_tree(self, mode):
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""
-        dp = "Dialogues/" # Directory Prefix
-        root = DialogueTreeNode(dp+"test_dialogue1.txt")
+        if mode == "testnpcstage0":
+            dp = "Dialogues/test_npc/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"test_dialogue1.txt")
 
-        #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-        # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-        # to zmienna dotyczące pytania 4 będzie się nazywać after010
-        after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-        after00 = DialogueTreeNode("QUIT", faultValue=1)
-        after0.add_child(after00, "0")
+            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
+            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
+            # to zmienna dotyczące pytania 4 będzie się nazywać after010
+            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=True)
+            after0.add_child(after00, "0")
 
-        after1 = DialogueTreeNode("QUIT")
+            after1 = DialogueTreeNode("QUIT")
 
-        root.add_child(after0, "0")
-        root.add_child(after1, "1")
+            root.add_child(after0, "0")
+            root.add_child(after1, "1")
+
+        elif mode == "testnpcstage1":
+            dp = "Dialogues/test_npc/stage1/"
+            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+
+            after0 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
 
         return root
 
-    def load_dialogue(self, id):
+    def load_dialogue(self, npc):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
 
@@ -83,14 +96,17 @@ class DialogueWindow():
         if self.node.faultValue > 0:
             self.expelling.faults.append(self.node.faultValue)
 
+        if self.node.stageUp:
+            npc.stage += 1
+
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False
         else:
-            self._load_msg_by_id(id)
-            self._load_answs_by_id(id)
+            self._load_msg_from_node()
+            self._load_answs_from_node()
             self._update_pointer()
 
-    def _load_msg_by_id(self, id):
+    def _load_msg_from_node(self):
         """Wczytanie kwestii NPC z pliku po podaniu jego ID
         (zwykle jego nazwa)"""
         filename = self.node.data
@@ -104,7 +120,7 @@ class DialogueWindow():
             self._prep_msg(line.strip(), yPos)
             yPos += self.font.get_sized_height()
 
-    def _load_answs_by_id(self, id):
+    def _load_answs_from_node(self):
         # WARNING: Function crashes on multi-line answers. To be fixed later
         """Wczytanie możliwych odpowiedzi gracza po ID NPC,
         z którym go prowadzi"""
@@ -166,9 +182,11 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, faultValue=0):
+    def __init__(self, data, faultValue=0, stageUp=False):
         """Inicjalizacja węzła"""
         self.data = data
+        self.stageUp = stageUp # Does this dialogue change something between you an NPC?
+                               # e.g. quest accepted.
         self.faultValue = faultValue     # The bigger the fault value, the more
         self.children = {}               # severe the fault is and makes you
         self.parent = None               # closer to being expelled

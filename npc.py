@@ -13,7 +13,11 @@ class NPC(Sprite):
         self.settings = dogex.settings
         self.character = dogex.character
 
+        # Identyfikator NPC - używany np. do wczytywania dialogów
         self.id = id
+
+        # Etap 'relacji' z NPC - przed questem, w trakcie, po queście itd.
+        self.stage = 0
 
         image = f'images/{self.settings.npc_images[id]}.bmp'
         self.image = pygame.image.load(image).convert_alpha()

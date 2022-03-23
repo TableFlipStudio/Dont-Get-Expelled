@@ -1,3 +1,7 @@
+# TODO: Gotta make saving the stages
+
+
+
 import sys
 import pygame
 import json
@@ -115,10 +119,17 @@ class DoGeX():
         with open("jsondata/faults.json") as file:
             faultcntr = json.load(file)
 
+        with open("jsondata/stages.json") as file:
+            stages = json.load(file)
+
+
         self.character.rect.topleft = chpos
         self._set_loaded_inv_content(inv_content)
         self._place_loaded_items(items)
         self.expelling.fault_counter = faultcntr
+
+        for npc in self.npcs.sprites():
+            npc.stage = stages[npc.id]
 
     def _set_loaded_inv_content(self, inv_content):
         """Załadowanie do ekwipunku przedmiotów wczytanych z inventory.json"""
@@ -157,6 +168,10 @@ class DoGeX():
                 invcnt.append(slot.content.id)
 
         faultcntr = self.expelling.fault_counter
+        stages = {}
+
+        for npc in self.npcs.sprites():
+            stages[npc.id] = npc.stage
 
         with open("jsondata/character_pos.json", 'w') as file:
             json.dump(chpos, file)
@@ -169,6 +184,9 @@ class DoGeX():
 
         with open("jsondata/faults.json", 'w') as file:
             json.dump(faultcntr, file)
+
+        with open("jsondata/stages.json", 'w') as file:
+            json.dump(stages, file)
 
     def _group_to_list(self, group):
         """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
@@ -191,6 +209,8 @@ class DoGeX():
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         faultcntr = self.settings.faults_to_be_expelled
+        stages = {}
+
 
         with open("jsondata/character_pos.json", 'w') as file:
             json.dump(chpos, file)
@@ -203,6 +223,9 @@ class DoGeX():
 
         with open("jsondata/faults.json", 'w') as file:
             json.dump(faultcntr, file)
+
+        with open("jsondata/stages.json", 'w') as file:
+            json.dump(stages, file)
 
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
@@ -318,8 +341,8 @@ class DoGeX():
                 else:
                     #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
                     self.window.active = True
-                    self.window.node = self.window.dialogues[npc_collide.id]
-                    self.window.load_dialogue(npc_collide.id)
+                    self.window.node = self.window.dialogues[npc_collide.id][npc_collide.stage]
+                    self.window.load_dialogue(npc_collide)
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
@@ -361,9 +384,9 @@ class DoGeX():
         dialogu"""
         if self.window.active:
             msgid = str(self.window.selectedID)
-            npcid = self._find_npc_collision().id
+            npc = self._find_npc_collision()
             self.window.node = self.window.node.children[msgid]
-            self.window.load_dialogue(npcid)
+            self.window.load_dialogue(npc)
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
