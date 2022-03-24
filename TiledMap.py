@@ -63,7 +63,7 @@ class Map():
             obj = self._access_Object('objects.spawn')
             self.character.rect.center = (self.from_map_to_screen_ratio(obj.x, obj.y))
 
-            
+
 
     def from_map_to_screen_ratio(self, x, y):
         new_x = ((self.settings.screen_width * x) / self.width)
@@ -128,14 +128,14 @@ class Map():
 
         if parameter == 'all':
             contents = []
-            for i in self.tmxdata.visible_layers:
+            for layer in self.tmxdata.visible_layers:
                 if isinstance(i, TiledObjectGroup):
-                    contents += [obj for obj in i]
+                    contents += [obj for obj in layer]
 
         elif parameter == "collision":
             layer = self._access_Object('collision')
             contents = [obj for obj in layer]
-            
+
         return contents
 
     def collision(self):
@@ -172,7 +172,7 @@ class Map():
         mapVerticalSpeed = ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2)) * -1
 
         contents = self._get_all_contents()#'collision')
-        
+
         self.last_x = self.x
         self.last_y = self.y
 
@@ -186,12 +186,12 @@ class Map():
                 obj.x -= (self.last_x - self.x)
             else:
                 obj.x += (self.x - self.last_x)
-            
+
             if self.last_y > self.y:
                 obj.y -= (self.last_y - self.y)
             else:
                 obj.y += (self.y - self.last_y)
-            
+
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x
         self.rect.y = self.y
