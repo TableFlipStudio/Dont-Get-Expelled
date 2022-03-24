@@ -129,7 +129,7 @@ class Map():
         if parameter == 'all':
             contents = []
             for layer in self.tmxdata.visible_layers:
-                if isinstance(i, TiledObjectGroup):
+                if isinstance(layer, TiledObjectGroup):
                     contents += [obj for obj in layer]
 
         elif parameter == "collision":
