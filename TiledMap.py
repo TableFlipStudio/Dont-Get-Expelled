@@ -15,10 +15,9 @@ class Map():
         self.width = self.tmxdata.width * self.tmxdata.tilewidth
         self.height = self.tmxdata.height * self.tmxdata.tileheight
 
-        surface = pygame.Surface( ( self.width, self.height ) )
         self.rect = surface.get_rect()
 
-        self.rect.topleft = self.screen_rect.topleft
+        #self.rect.topleft = self.screen_rect.topleft
 
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
@@ -26,10 +25,6 @@ class Map():
         self.last_x = 0
         self.last_y = 0
 
-        self.moving_right = False
-        self.moving_left = False
-        self.moving_up = False
-        self.moving_down = False
 
 
     def _access_Object(self, path):
@@ -70,42 +65,6 @@ class Map():
         new_y = ((self.settings.screen_height * y) / self.height)-30
         return new_x,new_y
 
-    def map_can_move_right(self):
-        output = (
-            self.moving_right
-            and
-            self.rect.left < self.screen_rect.left
-
-        )
-        return output
-
-    def map_can_move_left(self):
-        output = (
-            self.moving_left
-            and
-            self.rect.right > self.screen_rect.right
-
-        )
-        return output
-
-    def map_can_move_up(self):
-        output = (
-            self.moving_up
-            and
-            self.rect.bottom > self.screen_rect.bottom
-
-        )
-        return output
-
-    def map_can_move_down(self):
-        output = (
-            self.moving_down
-            and
-            self.rect.top < self.screen_rect.top
-
-        )
-        return output
-
     def map_setup(self, tmxdata):
 
         width = tmxdata.width * tmxdata.tilewidth
@@ -118,7 +77,6 @@ class Map():
                 for x, y, gid in layer:
                     tile = tmxdata.get_tile_image_by_gid(gid)
                     if tile:
-                        #image = tmxdata.get_tile_image(x, y, layer)
                         surface.blit(tile, ( x * tmxdata.tilewidth, y * tmxdata.tileheight ))
         return surface
 
