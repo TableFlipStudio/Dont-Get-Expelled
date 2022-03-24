@@ -132,8 +132,8 @@ class Map():
                 if isinstance(layer, TiledObjectGroup):
                     contents += [obj for obj in layer]
 
-        elif parameter == "collision":
-            layer = self._access_Object('collision')
+        else:
+            layer = self._access_Object(parameter)
             contents = [obj for obj in layer]
 
         return contents
