@@ -15,6 +15,7 @@ class Map():
         self.width = self.tmxdata.width * self.tmxdata.tilewidth
         self.height = self.tmxdata.height * self.tmxdata.tileheight
 
+        surface = pygame.Surface((self.width, self.height))
         self.rect = surface.get_rect()
 
         #self.rect.topleft = self.screen_rect.topleft
