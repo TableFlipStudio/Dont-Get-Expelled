@@ -25,25 +25,23 @@ class NPC(Sprite):
         # Identyfikator NPC - używany np. do wczytywania dialogów
         self.id = id
 
+
         # Etap 'relacji' z NPC - przed questem, w trakcie, po queście itd.
         self.stage = 0
 
-        image = f'images/{id}.bmp'
-        self.image = pygame.image.load(image)
+        image = {
+            #'kasia': 'images/npc/kasia.bmp',
+            #'kuba': 'images/npc/kuba.bmp',
+            'marek': 'images/npc/marek.bmp',
+        }
+        self.image = pygame.image.load(image[id])
         self.rect = self.image.get_rect()
-  
-        #Postać testowa zaczyna po lewej stronie mapy
-        self.rect.midleft = self.screen_rect.midleft
-        self.rect.x += 50
-    
+
+        self.sprite_name = id
 
         #Położenie NPc przechowywane jest w zmiennej zmiennoprzecinkwej
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
-
-        #Kierunek poruszania się NPC
-        self.xDirection = 1
-        self.yDirection = -1
 
     def check_vertical_edges(self):
         """Zwraca True, jeśli NPC znajduje w określonej odległości od górnej
@@ -54,9 +52,11 @@ class NPC(Sprite):
 
     def update(self):
         """Przesuwanie postaci dookoła mapy"""
-        if not self.rect.colliderect(self.character):
-            self.y += self.settings.npc_speed * self.yDirection
-            self.rect.y = self.y
+
+        for obj in self.map._access_Object('npc'):
+            self.rect.x = obj.x
+            self.rect.y = obj.y
+            
 
     def blit_npc(self):
         """Wyświetlene NPC na ekranie"""

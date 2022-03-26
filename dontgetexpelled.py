@@ -1,7 +1,3 @@
-# TODO: Gotta make saving the stages
-
-
-
 import sys
 import pygame
 import json
@@ -69,9 +65,29 @@ class DoGeX():
         self.items.add(Item(self, 'blue_ball', (1000, 400)))
         self.items.add(Item(self, 'green_ball', (500, 650)))
 
-        self.npcs.add(NPC(self,'test_npc'))
+        self.npcs.add(NPC(self,'marek'))
 
         self.map.set_spawn("player")
+
+    def run_game(self):
+        """Uruchomienie pętli głównej gry"""
+
+        while True:
+            self._check_events()
+            self.expelling.check_fault_committed()
+            self.map.collision()
+
+            if not self.interface_active():
+                self.character.update()
+                self.map.update()
+                self._update_npcs()
+
+            self._update_screen()
+            self.clock.tick(self.settings.fps)
+
+            # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
+            if self.expelling.check_expelled():
+                break
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
@@ -256,25 +272,6 @@ class DoGeX():
                 )
         return detected
 
-    def run_game(self):
-        """Uruchomienie pętli głównej gry"""
-
-        while True:
-            self._check_events()
-            self.expelling.check_fault_committed()
-            self.map.collision()
-
-            if not self.interface_active():
-                self.character.update()
-                self.map.update()
-                self._update_npcs()
-
-            self._update_screen()
-            self.clock.tick(self.settings.fps)
-
-            # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
-            if self.expelling.check_expelled():
-                break
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
@@ -517,17 +514,21 @@ class DoGeX():
 
                 self.items.remove(item)
 
-    def _check_npc_vertical_edges(self):
-        """Zmiana kierunku poruszania się NPC, jeśli dotarł blisko
-        krawędzi ekranu"""
-        for npc in self.npcs.sprites():
-            if npc.check_vertical_edges():
-                npc.yDirection *= -1
-
     def _update_npcs(self):
         """Uaktualnienie pozycji wszystkich NPC"""
-        self._check_npc_vertical_edges()
-        self.npcs.update()
+        #self._check_npc_vertical_edges()
+        #self.npcs.update()
+        for npc in self.npcs.sprites():
+            if npc.sprite_name == 'marek':
+                obj = self.map._access_Object('npc.marek')
+            
+            if npc.sprite_name == 'kasia':
+                obj = self.map._access_Object('npc.kasia')
+            
+            if npc.sprite_name == 'kuba':
+                obj = self.map._access_Object('npc.kuba')
+            
+            npc.rect.center = ((obj.x), (obj.y))
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
