@@ -65,9 +65,9 @@ class DoGeX():
         self.items.add(Item(self, 'blue_ball'))
         self.items.add(Item(self, 'green_ball'))
 
-        self.npcs.add(NPC(self,'marek'))
         self.npcs.add(NPC(self,'kuba'))
         self.npcs.add(NPC(self,'kasia'))
+        self.npcs.add(NPC(self,'marek'))
         
         self.map.set_spawn("player")
 
@@ -338,15 +338,19 @@ class DoGeX():
                 self.menu.active = not self.menu.active
 
         if event.key == pygame.K_e:
-            npc_collide = self._find_npc_collision()
-            if not self.interface_active():
-                if npc_collide is None:
-                    self._pickup_item()
-                else:
-                    #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
-                    self.window.active = True
-                    self.window.node = self.window.dialogues[npc_collide.id][npc_collide.stage]
-                    self.window.load_dialogue(npc_collide)
+            for npc in self.npcs.sprites():
+                if self.character.rect.colliderect(npc):  
+                    print(npc.id, npc.stage)   
+            #found_npc = self._find_npc_collision()
+                    if not self.interface_active():
+                        if npc is None:
+                            self._pickup_item()
+                        else:
+                            #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
+                            self.window.active = True
+                            self.window.node = self.window.dialogues[npc.id][npc.stage]
+                            print(npc)
+                            self.window.load_dialogue(npc)
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
@@ -503,6 +507,7 @@ class DoGeX():
         jeśli tak, zwraca go"""
         for npc in self.npcs.sprites():
             if self.character.rect.colliderect(npc):
+                print(npc)
                 return npc
             else:
                 return None
@@ -525,7 +530,7 @@ class DoGeX():
         """Uaktualnienie pozycji wszystkich NPC"""
         for npc in self.npcs.sprites():
             obj = self.map._access_Object("npc."+ npc.id)
-            
+            #print(npc.id,": ", npc.rect.center)
             npc.rect.center = ((obj.x), (obj.y))
 
     def _update_items(self):
