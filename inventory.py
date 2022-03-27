@@ -10,6 +10,7 @@ class Inventory():
         self.settings = dogex.settings
         self.image = pygame.image.load('images/inventory_tab.bmp')
         self.rect = self.image.get_rect()
+        self.map = dogex.map
 
         #Okno ekwipunku na początku jest zamknięte
         self.active = False
@@ -45,7 +46,9 @@ class Inventory():
             # Nie umieszczaj przedmiotu jeśli kolidowałby z przedmiotem już leżącym
             if self._check_item_collides(dogex, item):
                 return
-
+            obj = self.map._access_Object("objects." + item.id)
+            #item.rect.topleft = self.character.rect.center
+            ((obj.x), (obj.y)) = item.rect.center  
             dogex.items.add(item)
             self.grabbed_item = None
 

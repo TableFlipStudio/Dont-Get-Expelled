@@ -34,9 +34,9 @@ class DoGeX():
 
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
-        self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
+        self.inventory = Inventory(self)
         self.expelling = Expelling(self)
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
@@ -61,12 +61,14 @@ class DoGeX():
         self._create_smenu_buttons()
 
         #Testowe rozmieszczenie przedmiotów i NPC
-        self.items.add(Item(self, 'red_ball', (100, 100)))
-        self.items.add(Item(self, 'blue_ball', (1000, 400)))
-        self.items.add(Item(self, 'green_ball', (500, 650)))
+        self.items.add(Item(self, 'red_ball'))
+        self.items.add(Item(self, 'blue_ball'))
+        self.items.add(Item(self, 'green_ball'))
 
         self.npcs.add(NPC(self,'marek'))
-
+        self.npcs.add(NPC(self,'kuba'))
+        self.npcs.add(NPC(self,'kasia'))
+        
         self.map.set_spawn("player")
 
     def run_game(self):
@@ -81,6 +83,8 @@ class DoGeX():
                 self.character.update()
                 self.map.update()
                 self._update_npcs()
+                self._update_items()
+
 
             self._update_screen()
             self.clock.tick(self.settings.fps)
@@ -163,8 +167,12 @@ class DoGeX():
         w self.items (a więc na mapie)"""
         self.items.empty() # Tworzymy tę grupę od nowa
         for itemdata in items:
-            item = Item(self, itemdata[0], itemdata[1])
+            item = Item(self, itemdata[0])
+            obj = self.map._access_Object("objects." + itemdata[0])
+            (obj.x, obj.y) = itemdata[1]
+            #print("obj: ",obj.x, obj.y)
             self.items.add(item)
+            print("item: ", item.rect.center)
 
     def _list_to_group(self, myList):
         """Utworzenie grupy sprite'ów na podstawie listy ich ID,
@@ -219,9 +227,9 @@ class DoGeX():
         chpos = (0, 0)
         invcnt = []
         items = [
-            Item(self, 'red_ball', (100, 100)),
-            Item(self, 'blue_ball', (1000, 400)),
-            Item(self, 'green_ball', (500, 650))
+            Item(self, 'red_ball'),
+            Item(self, 'blue_ball'),
+            Item(self, 'green_ball')
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         faultcntr = self.settings.faults_to_be_expelled
@@ -271,7 +279,6 @@ class DoGeX():
                 self.window.active
                 )
         return detected
-
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
@@ -516,19 +523,18 @@ class DoGeX():
 
     def _update_npcs(self):
         """Uaktualnienie pozycji wszystkich NPC"""
-        #self._check_npc_vertical_edges()
-        #self.npcs.update()
         for npc in self.npcs.sprites():
-            if npc.sprite_name == 'marek':
-                obj = self.map._access_Object('npc.marek')
-            
-            if npc.sprite_name == 'kasia':
-                obj = self.map._access_Object('npc.kasia')
-            
-            if npc.sprite_name == 'kuba':
-                obj = self.map._access_Object('npc.kuba')
+            obj = self.map._access_Object("npc."+ npc.id)
             
             npc.rect.center = ((obj.x), (obj.y))
+
+    def _update_items(self):
+        """Uaktualnienie pozycji wszystkich przedmiotów"""
+        for item in self.items.sprites():
+            obj = self.map._access_Object("objects." + item.id)
+           
+            item.rect.center = ((obj.x), (obj.y))
+            #print(item.rect.center)
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
@@ -547,6 +553,7 @@ class DoGeX():
 
             for item in self.items.sprites():
                 item.blit_item()
+                #print(item.id)
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
         if self.inventory.active and not self.window.active:

@@ -44,7 +44,7 @@ class DialogueWindow():
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'test_npc': [
+            'marek': [
                 self.build_dialogue_tree("testnpcstage0"),
                 self.build_dialogue_tree("testnpcstage1")
             ]
