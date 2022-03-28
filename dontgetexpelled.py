@@ -338,19 +338,15 @@ class DoGeX():
                 self.menu.active = not self.menu.active
 
         if event.key == pygame.K_e:
-            for npc in self.npcs.sprites():
-                if self.character.rect.colliderect(npc):  
-                    print(npc.id, npc.stage)   
-            #found_npc = self._find_npc_collision()
-                    if not self.interface_active():
-                        if npc is None:
-                            self._pickup_item()
-                        else:
-                            #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
-                            self.window.active = True
-                            self.window.node = self.window.dialogues[npc.id][npc.stage]
-                            print(npc)
-                            self.window.load_dialogue(npc)
+            found_npc = self._find_npc_collision()
+            if not self.interface_active():
+                if found_npc is None:
+                    self._pickup_item()
+                else:
+                    #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
+                    self.window.active = True
+                    self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
+                    self.window.load_dialogue(found_npc)
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
@@ -507,10 +503,9 @@ class DoGeX():
         jeśli tak, zwraca go"""
         for npc in self.npcs.sprites():
             if self.character.rect.colliderect(npc):
-                print(npc)
                 return npc
-            else:
-                return None
+        else:
+            return None
 
     def _pickup_item(self):
         """Sprawdzenie, czy postać stoi koło przedmiotu
