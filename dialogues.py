@@ -105,7 +105,6 @@ class DialogueWindow():
             self.expelling.faults.append(self.node.faultValue)
 
         if self.node.stageUp:
-            #print(npc.id, npc.stage)
             npc.stage = npc.stage + 1
 
         if self.node.data == "QUIT": # See: build_dialogue_tree()

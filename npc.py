@@ -28,8 +28,6 @@ class NPC(Sprite):
         self.image = pygame.image.load(image[id])
         self.rect = self.image.get_rect()
 
-    
-
     def blit_npc(self):
         """Wyświetlene NPC na ekranie"""
         self.screen.blit(self.image, self.rect)

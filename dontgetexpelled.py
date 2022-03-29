@@ -524,16 +524,13 @@ class DoGeX():
         """Uaktualnienie pozycji wszystkich NPC"""
         for npc in self.npcs.sprites():
             obj = self.map._access_Object("npc."+ npc.id)
-            #print(npc.id,": ", npc.rect.center)
             npc.rect.center = ((obj.x), (obj.y))
 
     def _update_items(self):
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
             obj = self.map._access_Object("objects." + item.id)
-           
             item.rect.center = ((obj.x), (obj.y))
-            print(f" item: {item.id} {item.rect.center} \n object: {obj.x} {obj.y}")        #debug
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
