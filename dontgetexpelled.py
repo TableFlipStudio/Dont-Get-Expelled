@@ -1,3 +1,11 @@
+# WAŻNE: Ciekawa rzecz: wartości X i Y dla węzłów przedmiotów są przesunięte
+# równo o 30 px między zamknięciem gry a jej wcyztaniem.
+# Przykład dla blue_ball (939, 574) przed zamknięciem; (909, 544) po. Wszystkie
+# inne to samo.
+
+# W momencie wczytania gry koordynaty obiektów się zgadzają, pomijając w/w przesunięcie
+# problem musi leżeć dalej
+
 import sys
 import pygame
 import json
@@ -68,7 +76,7 @@ class DoGeX():
         self.npcs.add(NPC(self,'kuba'))
         self.npcs.add(NPC(self,'kasia'))
         self.npcs.add(NPC(self,'marek'))
-        
+
         self.map.set_spawn("player")
 
     def run_game(self):
@@ -170,7 +178,8 @@ class DoGeX():
             item = Item(self, itemdata[0])
             obj = self.map._access_Object("objects." + itemdata[0])
             (obj.x, obj.y) = (itemdata[1])
-            item.rect.center = (itemdata[1])    
+            print("OBJECTS AFTER LOAD: ", obj.x, obj.y)
+            item.rect.center = (itemdata[1])
             self.items.add(item)
 
     def _list_to_group(self, myList):
@@ -530,6 +539,7 @@ class DoGeX():
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
             obj = self.map._access_Object("objects." + item.id)
+            print(obj.name, obj.x, obj.y)
             item.rect.center = ((obj.x), (obj.y))
 
     def _update_screen(self):
