@@ -41,12 +41,23 @@ class MainMenu():
                     dogex._reset_save()
                     return True
 
-                elif self.loadgamebutton.rect.collidepoint(mouse_pos):
+                elif (
+                    self.loadgamebutton.rect.collidepoint(mouse_pos)
+                    and self._check_save_exists()
+                        ):
                     dogex._load_save()
                     return True
 
                 elif self.quitbutton.rect.collidepoint(mouse_pos):
                     sys.exit()
+
+    def _check_save_exists(self):
+        with open('jsondata/character_pos.json') as file:
+            test = file.read()
+        if '[0, 0]' not in test:
+            return True
+        else:
+            return False
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
