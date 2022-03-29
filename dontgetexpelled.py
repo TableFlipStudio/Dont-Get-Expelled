@@ -1,7 +1,3 @@
-# TODO: Gotta make saving the stages
-
-
-
 import sys
 import pygame
 import json
@@ -38,9 +34,9 @@ class DoGeX():
 
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
-        self.inventory = Inventory(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
+        self.inventory = Inventory(self)
         self.expelling = Expelling(self)
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
@@ -65,13 +61,37 @@ class DoGeX():
         self._create_smenu_buttons()
 
         #Testowe rozmieszczenie przedmiotów i NPC
-        self.items.add(Item(self, 'red_ball', (100, 100)))
-        self.items.add(Item(self, 'blue_ball', (1000, 400)))
-        self.items.add(Item(self, 'green_ball', (500, 650)))
+        self.items.add(Item(self, 'red_ball'))
+        self.items.add(Item(self, 'blue_ball'))
+        self.items.add(Item(self, 'green_ball'))
 
-        self.npcs.add(NPC(self,'test_npc'))
-
+        self.npcs.add(NPC(self,'kuba'))
+        self.npcs.add(NPC(self,'kasia'))
+        self.npcs.add(NPC(self,'marek'))
+        
         self.map.set_spawn("player")
+
+    def run_game(self):
+        """Uruchomienie pętli głównej gry"""
+
+        while True:
+            self._check_events()
+            self.expelling.check_fault_committed()
+            self.map.collision()
+
+            if not self.interface_active():
+                self.character.update()
+                self.map.update()
+                self._update_npcs()
+                self._update_items()
+
+
+            self._update_screen()
+            self.clock.tick(self.settings.fps)
+
+            # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
+            if self.expelling.check_expelled():
+                break
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
@@ -140,14 +160,17 @@ class DoGeX():
             except IndexError:
                 slot.content = None
             else:
-                slot.content = Item(self, itemid, (0, 0))
+                slot.content = Item(self, itemid)
 
     def _place_loaded_items(self, items):
         """Umieszczenie przedmiotów wczytanych z items.json z powrotem
         w self.items (a więc na mapie)"""
         self.items.empty() # Tworzymy tę grupę od nowa
         for itemdata in items:
-            item = Item(self, itemdata[0], itemdata[1])
+            item = Item(self, itemdata[0])
+            obj = self.map._access_Object("objects." + itemdata[0])
+            (obj.x, obj.y) = (itemdata[1])
+            item.rect.center = (itemdata[1])    
             self.items.add(item)
 
     def _list_to_group(self, myList):
@@ -203,9 +226,9 @@ class DoGeX():
         chpos = (0, 0)
         invcnt = []
         items = [
-            Item(self, 'red_ball', (100, 100)),
-            Item(self, 'blue_ball', (1000, 400)),
-            Item(self, 'green_ball', (500, 650))
+            Item(self, 'red_ball'),
+            Item(self, 'blue_ball'),
+            Item(self, 'green_ball')
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         faultcntr = self.settings.faults_to_be_expelled
@@ -255,26 +278,6 @@ class DoGeX():
                 self.window.active
                 )
         return detected
-
-    def run_game(self):
-        """Uruchomienie pętli głównej gry"""
-
-        while True:
-            self._check_events()
-            self.expelling.check_fault_committed()
-            self.map.collision()
-
-            if not self.interface_active():
-                self.character.update()
-                self.map.update()
-                self._update_npcs()
-
-            self._update_screen()
-            self.clock.tick(self.settings.fps)
-
-            # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
-            if self.expelling.check_expelled():
-                break
 
     def _check_events(self):
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
@@ -334,15 +337,15 @@ class DoGeX():
                 self.menu.active = not self.menu.active
 
         if event.key == pygame.K_e:
-            npc_collide = self._find_npc_collision()
+            found_npc = self._find_npc_collision()
             if not self.interface_active():
-                if npc_collide is None:
+                if found_npc is None:
                     self._pickup_item()
                 else:
                     #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
                     self.window.active = True
-                    self.window.node = self.window.dialogues[npc_collide.id][npc_collide.stage]
-                    self.window.load_dialogue(npc_collide)
+                    self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
+                    self.window.load_dialogue(found_npc)
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
@@ -500,8 +503,8 @@ class DoGeX():
         for npc in self.npcs.sprites():
             if self.character.rect.colliderect(npc):
                 return npc
-            else:
-                return None
+        else:
+            return None
 
     def _pickup_item(self):
         """Sprawdzenie, czy postać stoi koło przedmiotu
@@ -517,17 +520,20 @@ class DoGeX():
 
                 self.items.remove(item)
 
-    def _check_npc_vertical_edges(self):
-        """Zmiana kierunku poruszania się NPC, jeśli dotarł blisko
-        krawędzi ekranu"""
-        for npc in self.npcs.sprites():
-            if npc.check_vertical_edges():
-                npc.yDirection *= -1
-
     def _update_npcs(self):
         """Uaktualnienie pozycji wszystkich NPC"""
-        self._check_npc_vertical_edges()
-        self.npcs.update()
+        for npc in self.npcs.sprites():
+            obj = self.map._access_Object("npc."+ npc.id)
+            #print(npc.id,": ", npc.rect.center)
+            npc.rect.center = ((obj.x), (obj.y))
+
+    def _update_items(self):
+        """Uaktualnienie pozycji wszystkich przedmiotów"""
+        for item in self.items.sprites():
+            obj = self.map._access_Object("objects." + item.id)
+           
+            item.rect.center = ((obj.x), (obj.y))
+            print(f" item: {item.id} {item.rect.center} \n object: {obj.x} {obj.y}")        #debug
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
@@ -546,6 +552,7 @@ class DoGeX():
 
             for item in self.items.sprites():
                 item.blit_item()
+                #print(item.id)
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
         if self.inventory.active and not self.window.active:

@@ -4,10 +4,11 @@ from pygame.sprite import Sprite
 class Item(Sprite):
     """Klasa zarządzająca przedmiotami w grze"""
 
-    def __init__(self, dogex, item_type, pos):
+    def __init__(self, dogex, item_type):
         """Inicjalizacja przedmiotu"""
         super().__init__()
         self.screen = dogex.screen
+        self.map = dogex.map
 
         #Rózne obrazy dla róznych egzemplarzy
         images = {
@@ -20,8 +21,6 @@ class Item(Sprite):
         self.rect =  self.image.get_rect()
 
         #Położenie zależy od atrybutu xyPos (krotka)
-        self.rect.x, self.rect.y = pos
-
         self.id = item_type
 
     def blit_item(self):

@@ -44,7 +44,15 @@ class DialogueWindow():
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'test_npc': [
+            'marek': [
+                self.build_dialogue_tree("testnpcstage0"),
+                self.build_dialogue_tree("testnpcstage1")
+            ],
+            'kasia': [
+                self.build_dialogue_tree("testnpcstage0"),
+                self.build_dialogue_tree("testnpcstage1")
+            ],
+            'kuba': [
                 self.build_dialogue_tree("testnpcstage0"),
                 self.build_dialogue_tree("testnpcstage1")
             ]
@@ -97,7 +105,8 @@ class DialogueWindow():
             self.expelling.faults.append(self.node.faultValue)
 
         if self.node.stageUp:
-            npc.stage += 1
+            #print(npc.id, npc.stage)
+            npc.stage = npc.stage + 1
 
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False
