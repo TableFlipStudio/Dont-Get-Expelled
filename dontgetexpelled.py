@@ -69,9 +69,10 @@ class DoGeX():
         self._create_smenu_buttons()
 
         #Testowe rozmieszczenie przedmiotów i NPC
-        self.items.add(Item(self, 'red_ball'))
-        self.items.add(Item(self, 'blue_ball'))
-        self.items.add(Item(self, 'green_ball'))
+        self.items.add(Item(self, 'energy-drink'))
+        self.items.add(Item(self, 'kartka'))
+        self.items.add(Item(self, 'trampki'))
+        self.items.add(Item(self, 'zubr'))
 
         self.npcs.add(NPC(self,'kuba'))
         self.npcs.add(NPC(self,'kasia'))
@@ -235,9 +236,10 @@ class DoGeX():
         chpos = (0, 0)
         invcnt = []
         items = [
-            Item(self, 'red_ball'),
-            Item(self, 'blue_ball'),
-            Item(self, 'green_ball')
+            Item(self, 'kartka'),
+            Item(self, 'trampki'),
+            Item(self, 'zubr'),
+            Item(self, 'energy-drink')
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         faultcntr = self.settings.faults_to_be_expelled

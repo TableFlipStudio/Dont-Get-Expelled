@@ -12,9 +12,10 @@ class Item(Sprite):
 
         #Rózne obrazy dla róznych egzemplarzy
         images = {
-            'green_ball': 'images/green_ball.bmp',
-            'red_ball': 'images/red_ball.bmp',
-            'blue_ball': 'images/blue_ball.bmp'
+            'zubr': 'images/items/zubr.png',
+            'trampki': 'images/items/trampki.png',
+            'kartka': 'images/items/kartka.png',
+            'energy-drink': 'images/items/energy-drink.png',
         }
 
         self.image = pygame.image.load(images[item_type])

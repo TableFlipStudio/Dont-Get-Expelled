@@ -21,9 +21,9 @@ class NPC(Sprite):
         self.stage = 0
 
         image = {
-            'kasia': 'images/npc/marek.bmp',#'images/npc/kasia.bmp',
-            'kuba': 'images/npc/marek.bmp',#'images/npc/kuba.bmp',
-            'marek': 'images/npc/marek.bmp',
+            'kasia': 'images/npc/npc-nerd.png',#'images/npc/kasia.bmp',
+            'kuba': 'images/npc/npc-smoker1.png',#'images/npc/kuba.bmp',
+            'marek': 'images/npc/npc-smoker2.png',
         }
         self.image = pygame.image.load(image[id])
         self.rect = self.image.get_rect()
