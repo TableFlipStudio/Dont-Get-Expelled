@@ -20,14 +20,8 @@ class Item(Sprite):
         self.image = pygame.image.load(images[item_type])
         self.rect =  self.image.get_rect()
 
-        obj = self.map._access_Object("objects." + item_type)
-        self.rect.center = (obj.x, obj.y)
-
-
-
         #Położenie zależy od atrybutu xyPos (krotka)
         self.id = item_type
-
 
     def blit_item(self):
         """Wyświetlenie przedmiotu na ekranie"""

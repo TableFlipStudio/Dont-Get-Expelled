@@ -160,7 +160,7 @@ class DoGeX():
             except IndexError:
                 slot.content = None
             else:
-                slot.content = Item(self, itemid, (0, 0))
+                slot.content = Item(self, itemid)
 
     def _place_loaded_items(self, items):
         """Umieszczenie przedmiotów wczytanych z items.json z powrotem
@@ -169,10 +169,9 @@ class DoGeX():
         for itemdata in items:
             item = Item(self, itemdata[0])
             obj = self.map._access_Object("objects." + itemdata[0])
-            (obj.x, obj.y) = itemdata[1]
-            #print("obj: ",obj.x, obj.y)
+            (obj.x, obj.y) = (itemdata[1])
+            item.rect.center = (itemdata[1])    
             self.items.add(item)
-            print("item: ", item.rect.center)
 
     def _list_to_group(self, myList):
         """Utworzenie grupy sprite'ów na podstawie listy ich ID,
@@ -534,7 +533,7 @@ class DoGeX():
             obj = self.map._access_Object("objects." + item.id)
            
             item.rect.center = ((obj.x), (obj.y))
-            #print(item.rect.center)
+            print(f" item: {item.id} {item.rect.center} \n object: {obj.x} {obj.y}")        #debug
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
