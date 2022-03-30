@@ -69,7 +69,7 @@ class DoGeX():
         self._create_smenu_buttons()
 
         #Testowe rozmieszczenie przedmiotów i NPC
-        self.items.add(Item(self, 'energy-drink'))
+        self.items.add(Item(self, 'energy_drink'))
         self.items.add(Item(self, 'kartka'))
         self.items.add(Item(self, 'trampki'))
         self.items.add(Item(self, 'zubr'))
@@ -177,9 +177,9 @@ class DoGeX():
         self.items.empty() # Tworzymy tę grupę od nowa
         for itemdata in items:
             item = Item(self, itemdata[0])
-            obj = self.map._access_Object("objects." + itemdata[0])
-            (obj.x, obj.y) = (itemdata[1])
-            print("OBJECTS AFTER LOAD: ", obj.x, obj.y)
+            #obj = self.map._access_Object("objects." + itemdata[0])
+            (item.obj.x, item.obj.y) = (itemdata[1])
+            print("OBJECTS AFTER LOAD: ", item.obj.x, item.obj.y)
             item.rect.center = (itemdata[1])
             self.items.add(item)
 
@@ -239,7 +239,7 @@ class DoGeX():
             Item(self, 'kartka'),
             Item(self, 'trampki'),
             Item(self, 'zubr'),
-            Item(self, 'energy-drink')
+            Item(self, 'energy_drink')
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         faultcntr = self.settings.faults_to_be_expelled
@@ -534,15 +534,15 @@ class DoGeX():
     def _update_npcs(self):
         """Uaktualnienie pozycji wszystkich NPC"""
         for npc in self.npcs.sprites():
-            obj = self.map._access_Object("npc."+ npc.id)
-            npc.rect.center = ((obj.x), (obj.y))
+            #obj = self.map._access_Object("npc."+ npc.id)
+            npc.rect.center = ((npc.obj.x), (npc.obj.y))
 
     def _update_items(self):
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
-            obj = self.map._access_Object("objects." + item.id)
-            print(obj.name, obj.x, obj.y)
-            item.rect.center = ((obj.x), (obj.y))
+            #obj = self.map._access_Object("objects." + item.id)
+            #print(item.id, item.obj.x, item.obj.y)
+            item.rect.center = ((item.obj.x), (item.obj.y))
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""

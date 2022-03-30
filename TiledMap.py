@@ -91,6 +91,13 @@ class Map():
                 if isinstance(layer, TiledObjectGroup):
                     contents += [obj for obj in layer]
 
+        elif parameter == 'except_items':
+            contents = []
+            layers = ['collision', 'objects', 'npc']
+            for layer in layers:
+                layer = self._access_Object(layer)
+                contents += [obj for obj in layer]
+
         else:
             layer = self._access_Object(parameter)
             contents = [obj for obj in layer]
@@ -130,7 +137,7 @@ class Map():
         mapHorizontalSpeed = ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2)) * -1
         mapVerticalSpeed = ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2)) * -1
 
-        contents = self._get_all_contents()#'collision')
+        contents = self._get_all_contents('except_items')
 
         self.last_x = self.x
         self.last_y = self.y
