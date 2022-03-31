@@ -11,6 +11,8 @@ import pygame
 import json
 from time import sleep
 
+
+
 from settings import Settings
 from character import MainCharacter
 from inventory import Inventory, Slot
@@ -34,6 +36,11 @@ class DoGeX():
         self.settings = Settings()
 
         self.clock = pygame.time.Clock()
+
+        pygame.mixer.music.load('sounds/background.wav')
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1)
+
 
         #Wczytanie ekranu i nadanie tytułu
         self.screen = pygame.display.set_mode((self.settings.screen_width,
@@ -92,6 +99,7 @@ class DoGeX():
             self.map.collision()
 
             if not self.interface_active():
+                pygame.mixer.music.unpause()
                 self.character.update()
                 if self.m_menu._check_save_exists() and i < 1:
                     self.map.update('except_items')
@@ -99,6 +107,8 @@ class DoGeX():
                 self.map.update('all')
                 self._update_npcs()
                 self._update_items()
+            else:
+                pygame.mixer.music.pause()
 
 
 
@@ -107,6 +117,7 @@ class DoGeX():
 
             # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
             if self.expelling.check_expelled():
+                pygame.mixer.music.pause()
                 break
 
     def _create_slots(self):
@@ -544,7 +555,7 @@ class DoGeX():
     def _update_items(self):
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
-            print( item.id ,item.obj.x, item.obj.y)
+            #print( item.id ,item.obj.x, item.obj.y)
             item.rect.center = ((item.obj.x), (item.obj.y))
 
     def _update_screen(self):
