@@ -42,17 +42,10 @@ class Inventory():
         w slocie upuszczającym"""
         if dogex.drop_slot.rect.collidepoint(mouse_pos):
             item = self.grabbed_item
-            #item.rect.midleft = dogex.character.rect.midright
 
             # Nie umieszczaj przedmiotu jeśli kolidowałby z przedmiotem już leżącym
             if self._check_item_collides(dogex, item):
                 return
-            #obj = self.map._access_Object("objects." + item.id)
-            #print(f'{item.id} before vector {item.obj.x} {item.obj.y}')
-            #print(f'chracter before vector {self.map.from_screen_to_map_ratio(self.character.x)} {self.map.from_screen_to_map_ratio(self.character.y)}')
-            item.vector = self.character.x - item.original_pos[0], self.character.y - item.original_pos[1]
-            #if item.id == 'kartka':
-            #    print(f"{item.id} vector {item.vector}")
             item.rect.midleft = dogex.character.rect.center
             ((item.obj.x), (item.obj.y)) = item.rect.center  
             dogex.items.add(item)

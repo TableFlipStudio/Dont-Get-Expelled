@@ -150,16 +150,10 @@ class Map():
         mapHorizontalSpeed = ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2)) * -1
         mapVerticalSpeed = ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2)) * -1
 
-        #i = 0
-
-        contents = self._get_all_contents(parameter)#'except_items')
+        contents = self._get_all_contents(parameter)
 
         self.last_x = self.x
         self.last_y = self.y
-
-        #if i < 1:
-        #    contents = self._get_all_contents('except_items')
-        #    i+=1
 
         '''Przesuwanie mapy ze względu na położenie postaci'''
         self.x = self.character.x * mapHorizontalSpeed
@@ -176,18 +170,6 @@ class Map():
                 obj.y -= (self.last_y - self.y)
             else:
                 obj.y += (self.y - self.last_y)
-
-        #for obj in items:
-        #    if self.last_x > self.x:
-        #        obj.x -= (self.last_x - self.x)
-        #    else:
-        #        obj.x += (self.x - self.last_x)
-        #
-        #    if self.last_y > self.y:
-        #        obj.y -= (self.last_y - self.y)
-        #    else:
-        #        obj.y += (self.y - self.last_y)
-
 
         #Aktualizacja położenia prostokąta na podstawie self.x i self.y
         self.rect.x = self.x

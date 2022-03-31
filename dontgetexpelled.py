@@ -184,9 +184,7 @@ class DoGeX():
         self.items.empty() # Tworzymy tę grupę od nowa
         for itemdata in items:
             item = Item(self, itemdata[0])
-            #obj = self.map._access_Object("objects." + itemdata[0])
             (item.obj.x, item.obj.y) = (itemdata[1][0] + 30, itemdata[1][1] + 30)
-            #print("OBJECTS AFTER LOAD: ", item.obj.x, item.obj.y)
             item.rect.center = (itemdata[1])
             self.items.add(item)
 
@@ -541,17 +539,12 @@ class DoGeX():
     def _update_npcs(self):
         """Uaktualnienie pozycji wszystkich NPC"""
         for npc in self.npcs.sprites():
-            #obj = self.map._access_Object("npc."+ npc.id)
             npc.rect.center = ((npc.obj.x), (npc.obj.y))
 
     def _update_items(self):
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
-            #item.obj.x, item.obj.y = self.map.x + item.original_pos[0] - item.vector[0], self.map.y + item.original_pos[1] - item.vector[1]
-            #item.vector = (0, 0)
             print( item.id ,item.obj.x, item.obj.y)
-            #obj = self.map._access_Object("objects." + item.id)
-            #print(item.id, item.obj.x, item.obj.y)
             item.rect.center = ((item.obj.x), (item.obj.y))
 
     def _update_screen(self):
