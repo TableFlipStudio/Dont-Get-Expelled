@@ -109,7 +109,7 @@ class DialogueWindow():
 
             elif prefix == "1":
                 dp = "Dialogues/kasia/stage1/"
-                root = DialogueTreeNode(dp+"test_dialogue2.txt")
+                root = DialogueTreeNode(dp+"test_dialogue3.txt")
 
                 after0 = DialogueTreeNode("QUIT")
 
@@ -130,7 +130,7 @@ class DialogueWindow():
 
             elif prefix == "1":
                 dp = "Dialogues/kuba/stage1/"
-                root = DialogueTreeNode(dp+"test_dialogue2.txt")
+                root = DialogueTreeNode(dp+"test_dialogue3.txt")
 
                 after0 = DialogueTreeNode("QUIT")
 
