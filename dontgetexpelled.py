@@ -21,6 +21,7 @@ from TiledMap import Map
 from npc import NPC
 from save import SaveMenu, Button
 from mainmenu import MainMenu
+from mainmenu import MainMenu
 from gameoverscreen import GameOverScreen
 
 
@@ -48,6 +49,7 @@ class DoGeX():
         self.expelling = Expelling(self)
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
+        self.m_menu = MainMenu(self)
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -82,6 +84,7 @@ class DoGeX():
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
+        i = 0
 
         while True:
             self._check_events()
@@ -90,9 +93,13 @@ class DoGeX():
 
             if not self.interface_active():
                 self.character.update()
-                self.map.update()
+                if self.m_menu._check_save_exists() and i < 1:
+                    self.map.update('except_items')
+                    i+=1
+                self.map.update('all')
                 self._update_npcs()
                 self._update_items()
+
 
 
             self._update_screen()
@@ -178,8 +185,8 @@ class DoGeX():
         for itemdata in items:
             item = Item(self, itemdata[0])
             #obj = self.map._access_Object("objects." + itemdata[0])
-            (item.obj.x, item.obj.y) = (itemdata[1])
-            print("OBJECTS AFTER LOAD: ", item.obj.x, item.obj.y)
+            (item.obj.x, item.obj.y) = (itemdata[1][0] + 30, itemdata[1][1] + 30)
+            #print("OBJECTS AFTER LOAD: ", item.obj.x, item.obj.y)
             item.rect.center = (itemdata[1])
             self.items.add(item)
 
@@ -540,6 +547,9 @@ class DoGeX():
     def _update_items(self):
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
+            #item.obj.x, item.obj.y = self.map.x + item.original_pos[0] - item.vector[0], self.map.y + item.original_pos[1] - item.vector[1]
+            #item.vector = (0, 0)
+            print( item.id ,item.obj.x, item.obj.y)
             #obj = self.map._access_Object("objects." + item.id)
             #print(item.id, item.obj.x, item.obj.y)
             item.rect.center = ((item.obj.x), (item.obj.y))

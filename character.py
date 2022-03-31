@@ -218,6 +218,12 @@ class MainCharacter():
 
     def animation_list(self):
     
+        if self.moving_up and self.moving_down:
+            return self.stationary_image
+
+        if self.moving_right and self.moving_left:
+            return self.stationary_image
+
         if self.moving_down:
             return self.down_list[self.animation_loop(9)]
 
@@ -230,6 +236,7 @@ class MainCharacter():
         elif self.moving_left:
             return self.left_list[self.animation_loop(9)]
 
+        
         else:
             return self.stationary_image
 
