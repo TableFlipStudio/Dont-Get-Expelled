@@ -18,6 +18,10 @@ class Map():
         surface = pygame.Surface((self.width, self.height))
         self.rect = surface.get_rect()
 
+        self.image = 0#pygame.image.load('mapfolder/mini_map.png')
+
+        self.active = False
+
         #self.rect.topleft = self.screen_rect.topleft
 
         self.x = float(self.rect.x)
@@ -116,6 +120,10 @@ class Map():
             contents = [obj for obj in layer]
 
         return contents
+
+    def display_mini_map(self):
+        #self.screen.blit(self.image, self.screen_rect)
+        pygame.draw.rect(self.screen, ((0,255,0)), self.screen_rect)
 
     def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
