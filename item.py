@@ -15,11 +15,13 @@ class Item(Sprite):
             'zubr': 'images/items/zubr.png',
             'trampki': 'images/items/trampki.png',
             'kartka': 'images/items/kartka.png',
-            'energy-drink': 'images/items/energy-drink.png',
+            'energy_drink': 'images/items/energy-drink.png',
         }
 
         self.image = pygame.image.load(images[item_type])
         self.rect =  self.image.get_rect()
+
+        self.obj = self.map._access_Object('items.'+item_type)
 
         #Położenie zależy od atrybutu xyPos (krotka)
         self.id = item_type

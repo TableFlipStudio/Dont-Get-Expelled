@@ -21,12 +21,14 @@ class NPC(Sprite):
         self.stage = 0
 
         image = {
-            'kasia': 'images/npc/npc-nerd.png',#'images/npc/kasia.bmp',
-            'kuba': 'images/npc/npc-smoker1.png',#'images/npc/kuba.bmp',
+            'kasia': 'images/npc/npc-nerd.png',
+            'kuba': 'images/npc/npc-smoker1.png',
             'marek': 'images/npc/npc-smoker2.png',
         }
         self.image = pygame.image.load(image[id])
         self.rect = self.image.get_rect()
+
+        self.obj = self.map._access_Object('npc.'+id)
 
     def blit_npc(self):
         """Wyświetlene NPC na ekranie"""

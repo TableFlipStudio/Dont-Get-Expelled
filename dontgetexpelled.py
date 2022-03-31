@@ -21,6 +21,7 @@ from TiledMap import Map
 from npc import NPC
 from save import SaveMenu, Button
 from mainmenu import MainMenu
+from mainmenu import MainMenu
 from gameoverscreen import GameOverScreen
 
 
@@ -48,6 +49,7 @@ class DoGeX():
         self.expelling = Expelling(self)
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
+        self.m_menu = MainMenu(self)
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -69,7 +71,7 @@ class DoGeX():
         self._create_smenu_buttons()
 
         #Testowe rozmieszczenie przedmiotów i NPC
-        self.items.add(Item(self, 'energy-drink'))
+        self.items.add(Item(self, 'energy_drink'))
         self.items.add(Item(self, 'kartka'))
         self.items.add(Item(self, 'trampki'))
         self.items.add(Item(self, 'zubr'))
@@ -82,6 +84,7 @@ class DoGeX():
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
+        i = 0
 
         while True:
             self._check_events()
@@ -90,9 +93,13 @@ class DoGeX():
 
             if not self.interface_active():
                 self.character.update()
-                self.map.update()
+                if self.m_menu._check_save_exists() and i < 1:
+                    self.map.update('except_items')
+                    i+=1
+                self.map.update('all')
                 self._update_npcs()
                 self._update_items()
+
 
 
             self._update_screen()
@@ -177,9 +184,7 @@ class DoGeX():
         self.items.empty() # Tworzymy tę grupę od nowa
         for itemdata in items:
             item = Item(self, itemdata[0])
-            obj = self.map._access_Object("objects." + itemdata[0])
-            (obj.x, obj.y) = (itemdata[1])
-            print("OBJECTS AFTER LOAD: ", obj.x, obj.y)
+            (item.obj.x, item.obj.y) = (itemdata[1][0] + 30, itemdata[1][1] + 30)
             item.rect.center = (itemdata[1])
             self.items.add(item)
 
@@ -239,7 +244,7 @@ class DoGeX():
             Item(self, 'kartka'),
             Item(self, 'trampki'),
             Item(self, 'zubr'),
-            Item(self, 'energy-drink')
+            Item(self, 'energy_drink')
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         faultcntr = self.settings.faults_to_be_expelled
@@ -534,15 +539,13 @@ class DoGeX():
     def _update_npcs(self):
         """Uaktualnienie pozycji wszystkich NPC"""
         for npc in self.npcs.sprites():
-            obj = self.map._access_Object("npc."+ npc.id)
-            npc.rect.center = ((obj.x), (obj.y))
+            npc.rect.center = ((npc.obj.x), (npc.obj.y))
 
     def _update_items(self):
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
-            obj = self.map._access_Object("objects." + item.id)
-            print(obj.name, obj.x, obj.y)
-            item.rect.center = ((obj.x), (obj.y))
+            print( item.id ,item.obj.x, item.obj.y)
+            item.rect.center = ((item.obj.x), (item.obj.y))
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""

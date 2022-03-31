@@ -66,6 +66,19 @@ class Map():
         new_y = ((self.settings.screen_height * y) / self.height)-30
         return new_x,new_y
 
+    def from_screen_to_map_ratio(self, x=0, y=0):
+        new_x = ((self.width * x) / self.settings.screen_width)
+        new_y = ((self.height * y) / self.settings.screen_height)
+        
+        if x==0:
+            return new_y
+
+        elif y==0:
+            return new_x
+        
+        else:
+            return new_x,new_y
+
     def map_setup(self, tmxdata):
 
         width = tmxdata.width * tmxdata.tilewidth
@@ -90,6 +103,13 @@ class Map():
             for layer in self.tmxdata.visible_layers:
                 if isinstance(layer, TiledObjectGroup):
                     contents += [obj for obj in layer]
+
+        elif parameter == 'except_items':
+            contents = []
+            layers = ['collision', 'objects', 'npc']
+            for layer in layers:
+                layer = self._access_Object(layer)
+                contents += [obj for obj in layer]
 
         else:
             layer = self._access_Object(parameter)
@@ -124,13 +144,13 @@ class Map():
                     self.moving_left = False
 
 
-    def update(self):
+    def update(self, parameter):
         """Aktualizacja położenia mapy oraz jej zawartości"""
 
         mapHorizontalSpeed = ((self.width - self.screen_rect.width) / 2) / (self.screen_rect.width / 2 - (self.character.rect.width / 2)) * -1
         mapVerticalSpeed = ((self.height - self.screen_rect.height) / 2) / (self.screen_rect.height / 2 - (self.character.rect.height / 2)) * -1
 
-        contents = self._get_all_contents()#'collision')
+        contents = self._get_all_contents(parameter)
 
         self.last_x = self.x
         self.last_y = self.y
