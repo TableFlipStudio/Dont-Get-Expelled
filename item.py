@@ -26,6 +26,8 @@ class Item(Sprite):
         #Położenie zależy od atrybutu xyPos (krotka)
         self.id = item_type
 
+        self.shown = False
+
     def blit_item(self):
         """Wyświetlenie przedmiotu na ekranie"""
         self.screen.blit(self.image, self.rect)

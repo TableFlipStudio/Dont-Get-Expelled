@@ -1,10 +1,8 @@
-# WAŻNE: Ciekawa rzecz: wartości X i Y dla węzłów przedmiotów są przesunięte
-# równo o 30 px między zamknięciem gry a jej wcyztaniem.
-# Przykład dla blue_ball (939, 574) przed zamknięciem; (909, 544) po. Wszystkie
-# inne to samo.
+#TODO music integration
 
-# W momencie wczytania gry koordynaty obiektów się zgadzają, pomijając w/w przesunięcie
-# problem musi leżeć dalej
+#TODO intro screen
+
+#TODO scenario 
 
 import sys
 import pygame
@@ -287,22 +285,32 @@ class DoGeX():
             detected = (
                 self.inventory.active or
                 self.window.active or
-                self.menu.active
+                self.menu.active or 
+                self.map.active
                 )
         elif exclude == "inventory":
             detected = (
                 self.window.active or
-                self.menu.active
+                self.menu.active or
+                self.map.active
                 )
         elif exclude == "window":
             detected = (
                 self.inventory.active or
-                self.menu.active
+                self.menu.active or 
+                self.map.active
                 )
         elif exclude == "menu":
             detected = (
                 self.inventory.active or
-                self.window.active
+                self.window.active or
+                self.map.active
+                )
+        elif exclude == "map":
+            detected = (
+                self.inventory.active or
+                self.window.active or
+                self.menu.active
                 )
         return detected
 
@@ -355,6 +363,10 @@ class DoGeX():
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
+        
+        if event.key == pygame.K_m:
+            if not self.interface_active("map"):
+                self.map.active = not self.map.active
 
         if event.key == pygame.K_RETURN:
             self._choose_answer()
@@ -362,6 +374,12 @@ class DoGeX():
         if event.key == pygame.K_ESCAPE:
             if not self.interface_active("menu"):
                 self.menu.active = not self.menu.active
+            else:
+                self.map.active = False
+                self.window.active = False
+                self.inventory.active = False
+                self.menu.active = False
+                
 
         if event.key == pygame.K_e:
             found_npc = self._find_npc_collision()
@@ -557,6 +575,8 @@ class DoGeX():
         for item in self.items.sprites():
             #print( item.id ,item.obj.x, item.obj.y)
             item.rect.center = ((item.obj.x), (item.obj.y))
+            if item.id == 'kartka':
+                item.shown = True
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
@@ -568,17 +588,20 @@ class DoGeX():
 
         #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
         if not self.inventory.active:
-            self.character.blitme()
 
             for npc in self.npcs.sprites():
                 npc.blit_npc()
 
             for item in self.items.sprites():
                 item.blit_item()
-                #print(item.id)
+
+            self.character.blitme()
+
+        if self.map.active and not self.interface_active('map'):
+            self.map.display_mini_map()
 
         #Wyświetlamy ekwipunek tylko, jeśli jest on aktywny (naciśnięto I)
-        if self.inventory.active and not self.window.active:
+        if self.inventory.active and not self.interface_active('inventory'):
             self.inventory.display_inventory()
             for slot in self.slots.sprites():
                 slot.draw_slot()
@@ -591,7 +614,7 @@ class DoGeX():
             self.inventory.display_grabbed_item()
 
         #Ekwipunek i okno dialogowe nie mogą występować jednocześnie
-        if not self.inventory.active and self.window.active:
+        if self.window.active and not self.interface_active('window'):
             self.window.blit_window()
 
         # Menu zapisu
