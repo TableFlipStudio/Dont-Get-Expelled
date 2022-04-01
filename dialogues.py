@@ -50,16 +50,16 @@ class DialogueWindow():
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
             'marek': [
-                self.build_dialogue_tree("marek", "0"),
-                self.build_dialogue_tree("marek", "1")
+                self.build_dialogue_tree("marekstage0"),
+                self.build_dialogue_tree("marekstage1")
             ],
             'kasia': [
-                self.build_dialogue_tree("kasia", "0"),
-                self.build_dialogue_tree("kasia", "1")
+                self.build_dialogue_tree("kasiastage0"),
+                self.build_dialogue_tree("kasiastage1")
             ],
             'kuba': [
-                self.build_dialogue_tree("kuba", "0"),
-                self.build_dialogue_tree("kuba", "1")
+                self.build_dialogue_tree("kubastage0"),
+                self.build_dialogue_tree("kubastage1")
             ]
         }
 
@@ -72,11 +72,11 @@ class DialogueWindow():
         # przejrzystości kodu
         self.node = None
 
-    def build_dialogue_tree(self, npc, prefix):
+    def build_dialogue_tree(self, mode):
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""
-        if prefix == "0":
-            dp = "Dialogues/"+npc+"/stage0/" # Directory Prefix
+        if mode == "marekstage0":
+            dp = "Dialogues/marek/stage0/" # Directory Prefix
             root = DialogueTreeNode(dp+"test_dialogue1.txt")
 
             #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
@@ -85,16 +85,62 @@ class DialogueWindow():
             after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
             after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=True)
             after0.add_child(after00, "0")
-            
+
             after1 = DialogueTreeNode("QUIT")
 
             root.add_child(after0, "0")
             root.add_child(after1, "1")
-        elif prefix == "1":
-            #if npc == "marek":
-            #    self.kartka = True
 
-            dp = "Dialogues/"+npc+"/stage1/"
+        elif mode == "marekstage1":
+            dp = "Dialogues/marek/stage1/"
+            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+
+            after0 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
+
+        elif mode == "kasiastage0":
+            dp = "Dialogues/kasia/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"test_dialogue1.txt")
+
+            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
+            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
+            # to zmienna dotyczące pytania 4 będzie się nazywać after010
+            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+            after00 = DialogueTreeNode("QUIT", stageUp=True)
+            after0.add_child(after00, "0")
+
+            after1 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
+            root.add_child(after1, "1")
+
+        elif mode == "kasiastage1":
+            dp = "Dialogues/kasia/stage1/"
+            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+
+            after0 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
+
+        elif mode == "kubastage0":
+            dp = "Dialogues/kuba/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"test_dialogue1.txt")
+
+            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
+            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
+            # to zmienna dotyczące pytania 4 będzie się nazywać after010
+            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=True)
+            after0.add_child(after00, "0")
+
+            after1 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
+            root.add_child(after1, "1")
+
+        elif mode == "kubastage1":
+            dp = "Dialogues/kuba/stage1/"
             root = DialogueTreeNode(dp+"test_dialogue3.txt")
 
             after0 = DialogueTreeNode("QUIT")
