@@ -34,10 +34,12 @@ class GameOverScreen():
                 mouse_pos = pygame.mouse.get_pos()
 
                 if self.mainmenubutton.rect.collidepoint(mouse_pos):
+                    pygame.mixer.Sound('sounds/interakcja.wav').play()
                     dogex._reset_save()
                     return True
 
                 elif self.quitbutton.rect.collidepoint(mouse_pos):
+                    pygame.mixer.Sound('sounds/interakcja.wav').play()
                     sys.exit()
 
     def blitme(self):

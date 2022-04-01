@@ -33,6 +33,7 @@ class Inventory():
     def release_item(self, dogex, mouse_pos):
         """Upuszczenie przedmiotu z powrotem do slotu lub wyrzucenie
         z ekwipunku"""
+        pygame.mixer.Sound('sounds/podnoszenie_przedmiotu.wav').play()
         self._lay_item(dogex, mouse_pos)
         self._put_item_in_slot(dogex, mouse_pos)
         self._put_item_back(dogex)
@@ -41,6 +42,7 @@ class Inventory():
         """Umieszczenie na mapie przedmiotu, gdy został on umieszczony
         w slocie upuszczającym"""
         if dogex.drop_slot.rect.collidepoint(mouse_pos):
+            pygame.mixer.Sound('sounds/podnoszenie_przedmiotu.wav').play()
             item = self.grabbed_item
 
             # Nie umieszczaj przedmiotu jeśli kolidowałby z przedmiotem już leżącym
