@@ -60,7 +60,9 @@ class DialogueWindow():
             'kuba': [
                 self.build_dialogue_tree("kubastage0"),
                 self.build_dialogue_tree("kubastage1")
-            ]
+            ],
+            'matma': self.build_maths_tree()
+
         }
 
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
@@ -149,7 +151,38 @@ class DialogueWindow():
 
         return root
 
-    def load_dialogue(self, npc):
+    def build_maths_tree(self):
+        """Drzewo dialogowe do pytań matematycznych na początku gry"""
+        dp = "Dialogues/maths/"
+
+        root = DialogueTreeNode(dp+"addition.txt")
+
+        # X is the faulty option
+        square_func = DialogueTreeNode(dp+'square_func.txt')
+        square_funcX = DialogueTreeNode(dp+'square_func.txt', faultValue=1)
+        bytkow = DialogueTreeNode(dp+'bytkow.txt')
+        bytkowX = DialogueTreeNode(dp+'bytkow.txt', faultValue=1)
+        end = DialogueTreeNode("QUIT")
+        endX = DialogueTreeNode("QUIT", faultValue=1)
+
+        bytkow.add_child(endX, "0")
+        bytkow.add_child(end, "1")
+
+        bytkowX.add_child(endX, "0")
+        bytkowX.add_child(end, "1")
+
+        square_func.add_child(bytkow, "0")
+        square_func.add_child(bytkowX, "1")
+
+        square_funcX.add_child(bytkow, "0")
+        square_funcX.add_child(bytkowX, "1")
+
+        root.add_child(square_funcX, "0")
+        root.add_child(square_func, "1")
+
+        return root
+
+    def load_dialogue(self, npc=None):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
 
@@ -157,8 +190,9 @@ class DialogueWindow():
         if self.node.faultValue > 0:
             self.expelling.faults.append(self.node.faultValue)
 
-        if self.node.stageUp:
-            npc.stage = npc.stage + 1
+        if npc: # uruchom tylko, jesli to dialog z NPC (nieszczęsne pytania matematyczne)
+            if self.node.stageUp:
+                npc.stage = npc.stage + 1
 
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False

@@ -34,7 +34,7 @@ class Settings():
         self.answ_tab_Xpos = self.tab_Xpos
         self.answ_tab_Ypos = self.screen_height * 0.6
 
-        self.faults_to_be_expelled = 2
+        self.faults_to_be_expelled = 5
 
         # Ustawienia dotyczące przycisków zapisu i resetu
         self.button_size = (self.screen_width / 4, self.slot_height)

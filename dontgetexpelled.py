@@ -1,10 +1,4 @@
-# WAŻNE: Ciekawa rzecz: wartości X i Y dla węzłów przedmiotów są przesunięte
-# równo o 30 px między zamknięciem gry a jej wcyztaniem.
-# Przykład dla blue_ball (939, 574) przed zamknięciem; (909, 544) po. Wszystkie
-# inne to samo.
-
-# W momencie wczytania gry koordynaty obiektów się zgadzają, pomijając w/w przesunięcie
-# problem musi leżeć dalej
+# TODO: Change math questions answers so that bad ones are actually the bad ones
 
 import sys
 import pygame
@@ -88,6 +82,8 @@ class DoGeX():
         self.npcs.add(NPC(self,'marek'))
 
         self.map.set_spawn("player")
+
+        self.mathdone = False
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -287,7 +283,7 @@ class DoGeX():
             detected = (
                 self.inventory.active or
                 self.window.active or
-                self.menu.active or 
+                self.menu.active or
                 self.map.active
                 )
         elif exclude == "inventory":
@@ -299,7 +295,7 @@ class DoGeX():
         elif exclude == "window":
             detected = (
                 self.inventory.active or
-                self.menu.active or 
+                self.menu.active or
                 self.map.active
                 )
         elif exclude == "menu":
@@ -352,6 +348,8 @@ class DoGeX():
                 mouse_pos = pygame.mouse.get_pos()
                 self.inventory.release_item(self, mouse_pos)
 
+        self._check_story_events()
+
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
         if event.key == pygame.K_UP:
@@ -365,7 +363,7 @@ class DoGeX():
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
-        
+
         if event.key == pygame.K_m:
             if not self.interface_active("map"):
                 self.map.active = not self.map.active
@@ -381,7 +379,10 @@ class DoGeX():
                 self.window.active = False
                 self.inventory.active = False
                 self.menu.active = False
-                
+
+        if event.key == pygame.K_KP_ENTER:
+            self.mathdone = False
+
 
         if event.key == pygame.K_e:
             found_npc = self._find_npc_collision()
@@ -418,6 +419,20 @@ class DoGeX():
         if keys[pygame.K_LEFT]:
             self.character.moving_left = True
             self.map.moving_right = True
+
+    def _check_story_events(self):
+        """Zdarzenia związane z biegiem fabuły"""
+        if not self.mathdone:
+            math_trigger_area = self.map._access_Object('objects.mathtrigger')
+            mta_rect = pygame.Rect(math_trigger_area.x, math_trigger_area.y,
+                math_trigger_area.width, math_trigger_area.height)
+
+            if self.character.rect.colliderect(mta_rect):
+                self.window.active = True
+                self.window.node = self.window.dialogues['matma']
+                self.window.load_dialogue()
+                self.mathdone = True
+
 
     def _change_selection(self, UpOrDown: "-1 or 1 (int)"):
         """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym
