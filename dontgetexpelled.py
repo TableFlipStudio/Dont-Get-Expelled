@@ -659,7 +659,6 @@ def intro(dogex):
     pygame.display.flip()
 
     pygame.time.wait(1000)
-    #intro_screen.blitme()
     intro_screen.intro_fadein(0.5)
     intro_screen.blitme()
     pygame.display.flip()
@@ -684,7 +683,7 @@ if __name__ == '__main__':
     while True:
         dogex = DoGeX()
         intro_screen = IntroScreen(dogex)
-        #intro(dogex)
+        intro(dogex)
         menu = MainMenu(dogex)
 
         _run_main_menu(dogex)

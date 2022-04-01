@@ -38,7 +38,6 @@ class MainMenu():
                 mouse_pos = pygame.mouse.get_pos()
 
                 if self.newgamebutton.rect.collidepoint(mouse_pos):
-                    pygame.mixer.Sound('sounds/interakcja.wav').play()
                     dogex._reset_save()
                     return True
 
@@ -46,12 +45,10 @@ class MainMenu():
                     self.loadgamebutton.rect.collidepoint(mouse_pos)
                     and self._check_save_exists()
                         ):
-                    pygame.mixer.Sound('sounds/interakcja.wav').play()
                     dogex._load_save()
                     return True
 
                 elif self.quitbutton.rect.collidepoint(mouse_pos):
-                    pygame.mixer.Sound('sounds/interakcja.wav').play()
                     sys.exit()
 
     def _check_save_exists(self):
