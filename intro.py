@@ -9,7 +9,7 @@ class IntroScreen():
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
 
-        self.image = pygame.image.load("images/amogus.bmp")
+        self.image = pygame.image.load("images/intro_better.png")#amogus.bmp")
         self.image = pygame.transform.scale(self.image, (self.settings.screen_width, self.settings.screen_height))
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
@@ -35,8 +35,12 @@ class IntroScreen():
             if i >= 200:
                 done = False
         
-    def fadein(self, speed=0.1):
-        fadein = pygame.Surface((self.settings.screen_width, self.settings.screen_height))
+    def fadein(self, image,speed=0.1, duration=255):
+        if image == None:
+            fadein = pygame.Surface((self.settings.screen_width, self.settings.screen_height))
+        else:
+            fadein = image
+
         fadein = fadein.convert()
         i = 0
         #for i in range(255,0):
@@ -47,7 +51,7 @@ class IntroScreen():
             self.screen.blit(fadein, (0, 0))
             pygame.display.update()
             i+=speed
-            if i >= 255:
+            if i >= duration:
                 done = False
         
 

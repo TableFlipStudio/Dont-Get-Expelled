@@ -54,9 +54,9 @@ class DoGeX():
         self.expelling = Expelling(self)
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
+        self.sounds = Music(self)
         self.m_menu = MainMenu(self)
         self.window_options = IntroScreen(self)# ta klasa występuje też pod nazwą intro_screen tylko dla głównej pętli gry (na dole)
-        self.sounds = Music(self)
 
 
         self.slots = pygame.sprite.Group()
@@ -346,11 +346,15 @@ class DoGeX():
 
                 elif self.menu.active:
                     if self.savebutton.rect.collidepoint(mouse_pos):
+                        self.sounds.play_sound('interakcja')
                         self._write_save()
+                        self.menu.active = False
                     elif self.snquitbutton.rect.collidepoint(mouse_pos):
                         self._write_save()
+                        self.sounds.play_sound('interakcja')
                         sys.exit()
                     elif self.quitbutton.rect.collidepoint(mouse_pos):
+                        self.sounds.play_sound('interakcja')
                         sys.exit()
 
             elif event.type == pygame.MOUSEBUTTONUP and self.inventory.active:
@@ -583,8 +587,7 @@ class DoGeX():
         for item in self.items.sprites():
             #print( item.id ,item.obj.x, item.obj.y)
             item.rect.center = ((item.obj.x), (item.obj.y))
-            if item.id == 'kartka':
-                item.shown = True
+            
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
@@ -640,16 +643,19 @@ class DoGeX():
 
 def _run_main_menu(dogex):
     """Uruchomienie menu głównego - wykrywanie zdarzeń itd."""
+    #commented ponieważ przyciski są działające a fade in zajmuje się obrazem
 
-    #dogex.sounds.play_music('background')
+    dogex.sounds.play_music('background')
 
+    intro_screen.fadein(menu.static_img, 0.2, 50)
+    menu.blitme() 
+    pygame.display.flip()
     while True:
         # Jeśli kliknięto Load game albo New game, przerwij działanie menu
         # i uruchom grę
         run_detected = menu.check_events(dogex)
         if run_detected:
             pygame.mixer.music.stop()
-            #pygame.mixer.music.pause()
             intro_screen.fadeout(0.3)
             break
 
@@ -659,7 +665,7 @@ def intro(dogex):
     pygame.display.flip()
 
     pygame.time.wait(1000)
-    intro_screen.intro_fadein(0.5)
+    intro_screen.intro_fadein(0.3)
     intro_screen.blitme()
     pygame.display.flip()
 
@@ -670,6 +676,8 @@ def intro(dogex):
 def _run_game_over(dogex):
     """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
     gmovr = GameOverScreen(dogex)
+    dogex.sounds.play_sound('game_over_better')
+    intro_screen.fadein(gmovr.static_img, 0.3)
     gmovr.blitme()
     pygame.display.flip()
 

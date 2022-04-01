@@ -10,8 +10,10 @@ class MainMenu():
         self.settings = dogex.settings
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
+        self.sounds = dogex.sounds
 
         self.image = pygame.image.load("images/mainmenu.bmp")
+        self.static_img = pygame.image.load("images/static_img/mMenu.png")
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
 
@@ -38,6 +40,7 @@ class MainMenu():
                 mouse_pos = pygame.mouse.get_pos()
 
                 if self.newgamebutton.rect.collidepoint(mouse_pos):
+                    self.sounds.play_sound('interakcja')
                     dogex._reset_save()
                     return True
 
@@ -45,10 +48,12 @@ class MainMenu():
                     self.loadgamebutton.rect.collidepoint(mouse_pos)
                     and self._check_save_exists()
                         ):
+                    self.sounds.play_sound('interakcja')
                     dogex._load_save()
                     return True
 
                 elif self.quitbutton.rect.collidepoint(mouse_pos):
+                    self.sounds.play_sound('interakcja')
                     sys.exit()
 
     def _check_save_exists(self):
