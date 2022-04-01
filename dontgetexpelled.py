@@ -19,6 +19,7 @@ from save import SaveMenu, Button
 from mainmenu import MainMenu
 from mainmenu import MainMenu
 from gameoverscreen import GameOverScreen
+from story import StoryEvents
 
 
 class DoGeX():
@@ -51,6 +52,7 @@ class DoGeX():
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
         self.m_menu = MainMenu(self)
+        self.story = StoryEvents(self)
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -82,8 +84,6 @@ class DoGeX():
         self.npcs.add(NPC(self,'marek'))
 
         self.map.set_spawn("player")
-
-        self.mathdone = False
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
@@ -348,7 +348,7 @@ class DoGeX():
                 mouse_pos = pygame.mouse.get_pos()
                 self.inventory.release_item(self, mouse_pos)
 
-        self._check_story_events()
+        self.story._check_story_events()
 
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
@@ -381,7 +381,7 @@ class DoGeX():
                 self.menu.active = False
 
         if event.key == pygame.K_KP_ENTER:
-            self.mathdone = False
+            self.story.inx = 0
 
 
         if event.key == pygame.K_e:
@@ -419,20 +419,6 @@ class DoGeX():
         if keys[pygame.K_LEFT]:
             self.character.moving_left = True
             self.map.moving_right = True
-
-    def _check_story_events(self):
-        """Zdarzenia związane z biegiem fabuły"""
-        if not self.mathdone:
-            math_trigger_area = self.map._access_Object('objects.mathtrigger')
-            mta_rect = pygame.Rect(math_trigger_area.x, math_trigger_area.y,
-                math_trigger_area.width, math_trigger_area.height)
-
-            if self.character.rect.colliderect(mta_rect):
-                self.window.active = True
-                self.window.node = self.window.dialogues['matma']
-                self.window.load_dialogue()
-                self.mathdone = True
-
 
     def _change_selection(self, UpOrDown: "-1 or 1 (int)"):
         """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym
