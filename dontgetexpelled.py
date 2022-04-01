@@ -165,11 +165,18 @@ class DoGeX():
         with open("jsondata/stages.json") as file:
             stages = json.load(file)
 
+        with open("jsondata/quest.json") as file:
+            quest = json.load(file)
+
+        with open("jsondata/npcs.json") as file:
+            npcs = json.load(file)
 
         self.character.rect.topleft = chpos
         self._set_loaded_inv_content(inv_content)
         self._place_loaded_items(items)
+        self._place_loaded_NPCs(npcs)
         self.expelling.fault_counter = faultcntr
+        self.story.inx = quest
 
         for npc in self.npcs.sprites():
             npc.stage = stages[npc.id]
@@ -195,6 +202,16 @@ class DoGeX():
             item.rect.center = (itemdata[1])
             self.items.add(item)
 
+    def _place_loaded_NPCs(self, npcs):
+        """Umieszczenie przedmiotów wczytanych z npcs.json z powrotem
+        w self.npcs (a więc na mapie)"""
+        self.npcs.empty() # Tworzymy tę grupę od nowa
+        for NPCdata in npcs:
+            npc = NPC(self, NPCdata[0])
+            (npc.obj.x, npc.obj.y) = (NPCdata[1][0] + 30, NPCdata[1][1] + 30)
+            npc.rect.center = (NPCdata[1])
+            self.npcs.add(npc)
+
     def _list_to_group(self, myList):
         """Utworzenie grupy sprite'ów na podstawie listy ich ID,
         wczytanej przez moduł JSON"""
@@ -207,6 +224,8 @@ class DoGeX():
         chpos = self.character.rect.topleft
         invcnt = []
         items = self._group_to_list(self.items)
+        npcs = self._group_to_list(self.npcs)
+        quest = self.story.inx
 
         for slot in self.slots.sprites():
             if slot.content is not None:
@@ -214,6 +233,7 @@ class DoGeX():
 
         faultcntr = self.expelling.fault_counter
         stages = {}
+
 
         for npc in self.npcs.sprites():
             stages[npc.id] = npc.stage
@@ -232,6 +252,12 @@ class DoGeX():
 
         with open("jsondata/stages.json", 'w') as file:
             json.dump(stages, file)
+
+        with open("jsondata/npcs.json", 'w') as file:
+            json.dump(npcs, file)
+
+        with open('jsondata/quest.json', 'w') as file:
+            json.dump(quest, file)
 
     def _group_to_list(self, group):
         """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
@@ -253,9 +279,16 @@ class DoGeX():
             Item(self, 'zubr'),
             Item(self, 'energy_drink')
             ]
+        npcs = [
+            NPC(self, 'kasia'),
+            NPC(self, 'kuba'),
+            NPC(self, 'marek')
+            ]
         items = [(item.id, item.rect.topleft) for item in items]
+        npcs = [(npc.id, npc.rect.center) for npc in npcs]
         faultcntr = self.settings.faults_to_be_expelled
         stages = {}
+        quest = 0
 
 
         with open("jsondata/character_pos.json", 'w') as file:
@@ -272,6 +305,12 @@ class DoGeX():
 
         with open("jsondata/stages.json", 'w') as file:
             json.dump(stages, file)
+
+        with open("jsondata/npcs.json", 'w') as file:
+            json.dump(npcs, file)
+
+        with open('jsondata/quest.json', 'w') as file:
+            json.dump(quest, file)
 
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
