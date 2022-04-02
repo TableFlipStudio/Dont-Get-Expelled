@@ -103,8 +103,8 @@ class DoGeX():
                 self.map.update('all')
                 self._update_npcs()
                 self._update_items()
-            else:
-                pygame.mixer.music.pause()
+            #else:
+                #pygame.mixer.music.pause()
 
 
 
@@ -418,10 +418,6 @@ class DoGeX():
                 self.window.active = False
                 self.inventory.active = False
                 self.menu.active = False
-
-        if event.key == pygame.K_KP_ENTER:
-            self.story.inx = 0
-
 
         if event.key == pygame.K_e:
             found_npc = self._find_npc_collision()
