@@ -635,14 +635,7 @@ class DoGeX():
                 npc.blit_npc()
 
             for item in self.items.sprites():
-                if self.window.kartka and item.id == 'kartka':
-                    item.blit_item()
-                elif self.window.energy_drink and item.id == 'energy_drink':
-                    item.blit_item()
-                elif self.window.trampki and item.id == 'trampki':
-                    item.blit_item()
-                elif self.window.zubr and item.id == 'zubr':
-                    item.blit_item()
+                item.blit_item()
 
             self.character.blitme()
 
