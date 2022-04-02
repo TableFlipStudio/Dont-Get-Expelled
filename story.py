@@ -38,3 +38,7 @@ class StoryEvents():
                 self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
                 self.window.load_dialogue(found_npc)
                 self.inx += 1
+                
+                for npc in self.dogex.npcs.sprites():
+                    if npc.id == 'kasia':
+                        npc.stage = 0

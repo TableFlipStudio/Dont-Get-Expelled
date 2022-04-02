@@ -80,7 +80,7 @@ class DoGeX():
         self.items.add(Item(self, 'zubr'))
 
         self.npcs.add(NPC(self,'kuba'))
-        self.npcs.add(NPC(self,'kasia'))
+        self.npcs.add(NPC(self,'kasia', -1))
         self.npcs.add(NPC(self,'marek'))
 
         self.map.set_spawn("player")
@@ -280,7 +280,7 @@ class DoGeX():
             Item(self, 'energy_drink')
             ]
         npcs = [
-            NPC(self, 'kasia'),
+            NPC(self, 'kasia', -1),
             NPC(self, 'kuba'),
             NPC(self, 'marek')
             ]
@@ -429,10 +429,12 @@ class DoGeX():
                 if found_npc is None:
                     self._pickup_item()
                 else:
-                    #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
-                    self.window.active = True
-                    self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
-                    self.window.load_dialogue(found_npc)
+                    max_stage = len(self.window.dialogues[found_npc.id]) - 1
+                    if found_npc.stage <= max_stage and found_npc.stage >= 0:
+                        #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
+                        self.window.active = True
+                        self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
+                        self.window.load_dialogue(found_npc)
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
