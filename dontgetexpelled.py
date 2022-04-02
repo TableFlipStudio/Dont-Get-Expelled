@@ -676,7 +676,11 @@ def intro(dogex):
 def _run_game_over(dogex):
     """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
     gmovr = GameOverScreen(dogex)
+    intro_screen.black_screen()
+    pygame.display.flip()
+    pygame.time.wait(300)
     dogex.sounds.play_sound('game_over_better')
+    pygame.time.wait(1700)
     intro_screen.fadein(gmovr.static_img, 0.3)
     gmovr.blitme()
     pygame.display.flip()
