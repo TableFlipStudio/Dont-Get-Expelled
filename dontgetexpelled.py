@@ -103,10 +103,6 @@ class DoGeX():
                 self.map.update('all')
                 self._update_npcs()
                 self._update_items()
-            #else:
-                #pygame.mixer.music.pause()
-
-
 
             self._update_screen()
             self.clock.tick(self.settings.fps)
@@ -507,8 +503,12 @@ class DoGeX():
         exammple_char = self.window.font.render('x')[0]
         char_width = exammple_char.get_width()
         available_chars = self.settings.tab_width // char_width
-        for tree in self.window.dialogues.values():
-            self._rewriteNodeAndGO(tree, available_chars)
+        for trees in self.window.dialogues.values():
+            if isinstance(trees, list): # Math questions is a tree, not a list of trees
+                for tree in trees:
+                    self._rewriteNodeAndGO(tree, available_chars)
+            else:
+                self._rewriteNodeAndGO(trees, available_chars)
 
     def _rewriteNodeAndGO(self, node, available_chars):
         """Rekurencyjnie odtwrzarza wszystkie pliki drzewa dialogowego"""

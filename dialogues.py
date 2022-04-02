@@ -12,6 +12,7 @@ class DialogueWindow():
     def __init__(self, dogex):
         """Inicjalizacja okna dialogowego"""
         self.screen = dogex.screen
+        self.screen_rect = self.screen.get_rect()
         self.settings  = dogex.settings
         self.expelling = dogex.expelling
 
@@ -28,19 +29,19 @@ class DialogueWindow():
         self.trampki = False
 
         #Pole tekstwowe - kwestie NPC
-        self.tab_rect = pygame.Rect(self.settings.tab_Xpos,
-            self.settings.tab_Ypos, self.settings.tab_width,
-            self.settings.tab_height)
+        self.tab_rect = pygame.Rect(0, self.settings.tab_Ypos,
+            self.settings.tab_width, self.settings.tab_height)
+        self.tab_rect.centerx = self.screen_rect.centerx
 
         #Pole tesktowe - odpowiedzi gracza
-        self.answ_tab_rect = pygame.Rect(self.settings.answ_tab_Xpos,
-            self.settings.answ_tab_Ypos, self.settings.tab_width,
-            self.settings.tab_height)
+        self.answ_tab_rect = pygame.Rect(0, self.settings.answ_tab_Ypos,
+            self.settings.tab_width, self.settings.tab_height)
+        self.answ_tab_rect.centerx = self.screen_rect.centerx
 
         #Pole tekstowe - ogólne
         self.tab_color = self.settings.tab_color
         self.text_color = self.settings.text_color
-        self.font = pygame.freetype.SysFont('monospace', 16)
+        self.font = pygame.freetype.SysFont('monospace', 15)
 
         #Strzałka wzkazująca wybraną odpowiedź
         self.pointer_image = pygame.image.load('images/answer_pointer.bmp')
@@ -58,8 +59,7 @@ class DialogueWindow():
                 self.build_dialogue_tree("kasiastage1")
             ],
             'kuba': [
-                self.build_dialogue_tree("kubastage0"),
-                self.build_dialogue_tree("kubastage1")
+                self.build_dialogue_tree("kubastage0")
             ],
             'matma': self.build_maths_tree()
 
@@ -133,19 +133,8 @@ class DialogueWindow():
             # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
             # to zmienna dotyczące pytania 4 będzie się nazywać after010
             after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=True)
+            after00 = DialogueTreeNode("QUIT", stageUp=True)
             after0.add_child(after00, "0")
-
-            after1 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
-            root.add_child(after1, "1")
-
-        elif mode == "kubastage1":
-            dp = "Dialogues/kuba/stage1/"
-            root = DialogueTreeNode(dp+"test_dialogue3.txt")
-
-            after0 = DialogueTreeNode("QUIT")
 
             root.add_child(after0, "0")
 
