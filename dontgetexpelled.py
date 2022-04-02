@@ -98,8 +98,8 @@ class DoGeX():
                 pygame.mixer.music.unpause()
                 self.character.update()
                 if self.m_menu._check_save_exists() and i < 1:
-                    self.map.update('except_items')
-                    i+=1
+                    self.map.update('static_only')
+                    i += 1
                 self.map.update('all')
                 self._update_npcs()
                 self._update_items()
