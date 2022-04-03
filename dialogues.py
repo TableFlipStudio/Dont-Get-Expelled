@@ -154,9 +154,10 @@ class DialogueWindow():
         """Drzewo dialogowe do pytań matematycznych na początku gry"""
         dp = "Dialogues/maths/"
 
-        root = DialogueTreeNode(dp+"addition.txt")
+        root = DialogueTreeNode(dp+"root.txt")
 
         # X is the faulty option
+        addition = DialogueTreeNode(dp+'addition.txt')
         square_func = DialogueTreeNode(dp+'square_func.txt')
         square_funcX = DialogueTreeNode(dp+'square_func.txt', faultValue=1)
         bytkow = DialogueTreeNode(dp+'bytkow.txt')
@@ -164,20 +165,22 @@ class DialogueWindow():
         end = DialogueTreeNode("QUIT")
         endX = DialogueTreeNode("QUIT", faultValue=1)
 
-        bytkow.add_child(endX, "0")
-        bytkow.add_child(end, "1")
+        bytkow.add_child(end, "0")
+        bytkow.add_child(endX, "1")
 
-        bytkowX.add_child(endX, "0")
-        bytkowX.add_child(end, "1")
+        bytkowX.add_child(end, "0")
+        bytkowX.add_child(endX, "1")
 
-        square_func.add_child(bytkow, "0")
-        square_func.add_child(bytkowX, "1")
+        square_func.add_child(bytkowX, "0")
+        square_func.add_child(bytkow, "1")
 
-        square_funcX.add_child(bytkow, "0")
-        square_funcX.add_child(bytkowX, "1")
+        square_funcX.add_child(bytkowX, "0")
+        square_funcX.add_child(bytkow, "1")
 
-        root.add_child(square_funcX, "0")
-        root.add_child(square_func, "1")
+        addition.add_child(square_func, "0")
+        addition.add_child(square_funcX, "1")
+
+        root.add_child(addition, '0')
 
         return root
 
@@ -215,7 +218,7 @@ class DialogueWindow():
             yPos += self.font.get_sized_height()
 
     def _load_answs_from_node(self):
-        # WARNING: Function crashes on multi-line answers. To be fixed later
+        # WARNING: Function crashes on multi-line answers. Don't make multi-line answers.
         """Wczytanie możliwych odpowiedzi gracza po ID NPC,
         z którym go prowadzi"""
         filename  = self.node.data

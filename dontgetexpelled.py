@@ -1,5 +1,3 @@
-# TODO: Change math questions answers so that bad ones are actually the bad ones
-
 import sys
 import pygame
 import json
