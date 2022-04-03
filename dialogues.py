@@ -139,16 +139,14 @@ class DialogueWindow():
 
         elif mode == "kubastage0":
             dp = "Dialogues/kuba/stage0/" # Directory Prefix
-            root = DialogueTreeNode(dp+"test_dialogue1.txt")
+            root = DialogueTreeNode(dp+"root.txt")
 
-            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-            # to zmienna dotyczące pytania 4 będzie się nazywać after010
-            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", stageUp=1)
-            after0.add_child(after00, "0")
+            library = DialogueTreeNode(dp+"library.txt")
+            after_library = DialogueTreeNode("QUIT", stageUp=1)
 
-            root.add_child(after0, "0")
+            library.add_child(after_library, "0")
+
+            root.add_child(library, "0")
 
         return root
 
