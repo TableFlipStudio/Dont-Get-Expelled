@@ -1,9 +1,3 @@
-#TODO music integration
-
-#TODO intro screen
-
-#TODO scenario 
-
 import sys
 import pygame
 import json
@@ -22,6 +16,7 @@ from npc import NPC
 from save import SaveMenu, Button
 from mainmenu import MainMenu
 from gameoverscreen import GameOverScreen
+from story import StoryEvents
 from intro import IntroScreen
 from music import Music
 
@@ -56,8 +51,10 @@ class DoGeX():
         self.menu = SaveMenu(self)
         self.sounds = Music(self)
         self.m_menu = MainMenu(self)
-        self.window_options = IntroScreen(self)# ta klasa występuje też pod nazwą intro_screen tylko dla głównej pętli gry (na dole)
 
+        self.story = StoryEvents(self)
+  
+        self.window_options = IntroScreen(self)# ta klasa występuje też pod nazwą intro_screen tylko dla głównej pętli gry (na dole)
 
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -86,7 +83,7 @@ class DoGeX():
 
 
         self.npcs.add(NPC(self,'kuba'))
-        self.npcs.add(NPC(self,'kasia'))
+        self.npcs.add(NPC(self,'kasia', -1))
         self.npcs.add(NPC(self,'marek'))
 
         self.map.set_spawn("player")
@@ -107,15 +104,11 @@ class DoGeX():
                 pygame.mixer.music.unpause()
                 self.character.update()
                 if self.m_menu._check_save_exists() and i < 1:
-                    self.map.update('except_items')
-                    i+=1
+                    self.map.update('static_only')
+                    i += 1
                 self.map.update('all')
                 self._update_npcs()
                 self._update_items()
-            else:
-                pygame.mixer.music.pause()
-
-
 
             self._update_screen()
             self.clock.tick(self.settings.fps)
@@ -174,11 +167,18 @@ class DoGeX():
         with open("jsondata/stages.json") as file:
             stages = json.load(file)
 
+        with open("jsondata/quest.json") as file:
+            quest = json.load(file)
+
+        with open("jsondata/npcs.json") as file:
+            npcs = json.load(file)
 
         self.character.rect.topleft = chpos
         self._set_loaded_inv_content(inv_content)
         self._place_loaded_items(items)
+        self._place_loaded_NPCs(npcs)
         self.expelling.fault_counter = faultcntr
+        self.story.inx = quest
 
         for npc in self.npcs.sprites():
             npc.stage = stages[npc.id]
@@ -204,6 +204,16 @@ class DoGeX():
             item.rect.center = (itemdata[1])
             self.items.add(item)
 
+    def _place_loaded_NPCs(self, npcs):
+        """Umieszczenie przedmiotów wczytanych z npcs.json z powrotem
+        w self.npcs (a więc na mapie)"""
+        self.npcs.empty() # Tworzymy tę grupę od nowa
+        for NPCdata in npcs:
+            npc = NPC(self, NPCdata[0])
+            (npc.obj.x, npc.obj.y) = (NPCdata[1][0] + 30, NPCdata[1][1] + 30)
+            npc.rect.center = (NPCdata[1])
+            self.npcs.add(npc)
+
     def _list_to_group(self, myList):
         """Utworzenie grupy sprite'ów na podstawie listy ich ID,
         wczytanej przez moduł JSON"""
@@ -216,6 +226,8 @@ class DoGeX():
         chpos = self.character.rect.topleft
         invcnt = []
         items = self._group_to_list(self.items)
+        npcs = self._group_to_list(self.npcs)
+        quest = self.story.inx
 
         for slot in self.slots.sprites():
             if slot.content is not None:
@@ -223,6 +235,7 @@ class DoGeX():
 
         faultcntr = self.expelling.fault_counter
         stages = {}
+
 
         for npc in self.npcs.sprites():
             stages[npc.id] = npc.stage
@@ -241,6 +254,12 @@ class DoGeX():
 
         with open("jsondata/stages.json", 'w') as file:
             json.dump(stages, file)
+
+        with open("jsondata/npcs.json", 'w') as file:
+            json.dump(npcs, file)
+
+        with open('jsondata/quest.json', 'w') as file:
+            json.dump(quest, file)
 
     def _group_to_list(self, group):
         """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
@@ -262,9 +281,16 @@ class DoGeX():
             Item(self, 'zubr'),
             Item(self, 'energy_drink')
             ]
+        npcs = [
+            NPC(self, 'kasia', -1),
+            NPC(self, 'kuba'),
+            NPC(self, 'marek')
+            ]
         items = [(item.id, item.rect.topleft) for item in items]
+        npcs = [(npc.id, npc.rect.center) for npc in npcs]
         faultcntr = self.settings.faults_to_be_expelled
         stages = {}
+        quest = 0
 
 
         with open("jsondata/character_pos.json", 'w') as file:
@@ -282,6 +308,12 @@ class DoGeX():
         with open("jsondata/stages.json", 'w') as file:
             json.dump(stages, file)
 
+        with open("jsondata/npcs.json", 'w') as file:
+            json.dump(npcs, file)
+
+        with open('jsondata/quest.json', 'w') as file:
+            json.dump(quest, file)
+
     def interface_active(self, exclude=None):
         """Zwraca True, jeśli którykolwiek z interfejsów
         (ekranów wyświetlanych zamiast głównego widoku gry i blokujących
@@ -292,7 +324,7 @@ class DoGeX():
             detected = (
                 self.inventory.active or
                 self.window.active or
-                self.menu.active or 
+                self.menu.active or
                 self.map.active
                 )
         elif exclude == "inventory":
@@ -304,7 +336,7 @@ class DoGeX():
         elif exclude == "window":
             detected = (
                 self.inventory.active or
-                self.menu.active or 
+                self.menu.active or
                 self.map.active
                 )
         elif exclude == "menu":
@@ -361,6 +393,8 @@ class DoGeX():
                 mouse_pos = pygame.mouse.get_pos()
                 self.inventory.release_item(self, mouse_pos)
 
+        self.story._check_story_events()
+
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
         if event.key == pygame.K_UP:
@@ -374,7 +408,7 @@ class DoGeX():
         if event.key == pygame.K_i:
             if not self.interface_active("inventory"):
                 self.inventory.active = not self.inventory.active
-        
+
         if event.key == pygame.K_m:
             if not self.interface_active("map"):
                 self.map.active = not self.map.active
@@ -390,7 +424,6 @@ class DoGeX():
                 self.window.active = False
                 self.inventory.active = False
                 self.menu.active = False
-                
 
         if event.key == pygame.K_e:
             found_npc = self._find_npc_collision()
@@ -398,10 +431,12 @@ class DoGeX():
                 if found_npc is None:
                     self._pickup_item()
                 else:
-                    #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
-                    self.window.active = True
-                    self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
-                    self.window.load_dialogue(found_npc)
+                    max_stage = len(self.window.dialogues[found_npc.id]) - 1
+                    if found_npc.stage <= max_stage and found_npc.stage >= 0:
+                        #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
+                        self.window.active = True
+                        self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
+                        self.window.load_dialogue(found_npc)
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
@@ -478,8 +513,12 @@ class DoGeX():
         exammple_char = self.window.font.render('x')[0]
         char_width = exammple_char.get_width()
         available_chars = self.settings.tab_width // char_width
-        for tree in self.window.dialogues.values():
-            self._rewriteNodeAndGO(tree, available_chars)
+        for trees in self.window.dialogues.values():
+            if isinstance(trees, list): # Math questions is a tree, not a list of trees
+                for tree in trees:
+                    self._rewriteNodeAndGO(tree, available_chars)
+            else:
+                self._rewriteNodeAndGO(trees, available_chars)
 
     def _rewriteNodeAndGO(self, node, available_chars):
         """Rekurencyjnie odtwrzarza wszystkie pliki drzewa dialogowego"""

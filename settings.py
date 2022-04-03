@@ -24,7 +24,7 @@ class Settings():
 
         #Ustawienia dotyczące okna dialogowego
         self.window_color = (128, 141, 146)
-        self.tab_width = self.screen_width // 2
+        self.tab_width = self.screen_width // 1.5
         self.tab_height = self.screen_height // 4
         self.tab_color = (255, 255, 255)
         self.text_color = (0, 0, 0)
@@ -34,7 +34,7 @@ class Settings():
         self.answ_tab_Xpos = self.tab_Xpos
         self.answ_tab_Ypos = self.screen_height * 0.6
 
-        self.faults_to_be_expelled = 2
+        self.faults_to_be_expelled = 5
 
         # Ustawienia dotyczące przycisków zapisu i resetu
         self.button_size = (self.screen_width / 4, self.slot_height)

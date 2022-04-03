@@ -73,13 +73,13 @@ class Map():
     def from_screen_to_map_ratio(self, x=0, y=0):
         new_x = ((self.width * x) / self.settings.screen_width)
         new_y = ((self.height * y) / self.settings.screen_height)
-        
+
         if x==0:
             return new_y
 
         elif y==0:
             return new_x
-        
+
         else:
             return new_x,new_y
 
@@ -108,9 +108,13 @@ class Map():
                 if isinstance(layer, TiledObjectGroup):
                     contents += [obj for obj in layer]
 
-        elif parameter == 'except_items':
+        # Przesuwanie tylko tych obiektów, które nigdy nie zmieniają swojego
+        # położenia względem mapy. Był problem z NPC i itemami - nakładające
+        # się dane z plików zapisu oraz pliku mapy powodowały olbrzymie przesunięcia
+        # tych obiektów, czyli praktycznie ich usunięcie po wcyztaniu zapisu.
+        elif parameter == 'static_only':
             contents = []
-            layers = ['collision', 'objects', 'npc']
+            layers = ['collision', 'objects']
             for layer in layers:
                 layer = self._access_Object(layer)
                 contents += [obj for obj in layer]

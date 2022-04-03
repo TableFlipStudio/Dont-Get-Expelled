@@ -1,0 +1,3 @@
+Find roots of this function: f(x) = 4x^2 - 4x - 24
+> 2 and -3
+> -2 and 3

@@ -1,0 +1,4 @@
+Good morning children! Today is your first day in our school. As a warm-up, you 
+will do three simple math exercises. This is a serious school, so if you fail to 
+answer properly, you might be expelled. Good luck! 
+> (proceed with exercises)

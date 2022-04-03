@@ -38,6 +38,7 @@ class GameOverScreen():
                 mouse_pos = pygame.mouse.get_pos()
 
                 if self.mainmenubutton.rect.collidepoint(mouse_pos):
+
                     self.sounds.play_sound('interakcja')
                     dogex._reset_save()
                     return True

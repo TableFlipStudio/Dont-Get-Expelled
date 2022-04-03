@@ -12,6 +12,7 @@ class DialogueWindow():
     def __init__(self, dogex):
         """Inicjalizacja okna dialogowego"""
         self.screen = dogex.screen
+        self.screen_rect = self.screen.get_rect()
         self.settings  = dogex.settings
         self.expelling = dogex.expelling
 
@@ -23,19 +24,19 @@ class DialogueWindow():
         self.active = False
 
         #Pole tekstwowe - kwestie NPC
-        self.tab_rect = pygame.Rect(self.settings.tab_Xpos,
-            self.settings.tab_Ypos, self.settings.tab_width,
-            self.settings.tab_height)
+        self.tab_rect = pygame.Rect(0, self.settings.tab_Ypos,
+            self.settings.tab_width, self.settings.tab_height)
+        self.tab_rect.centerx = self.screen_rect.centerx
 
         #Pole tesktowe - odpowiedzi gracza
-        self.answ_tab_rect = pygame.Rect(self.settings.answ_tab_Xpos,
-            self.settings.answ_tab_Ypos, self.settings.tab_width,
-            self.settings.tab_height)
+        self.answ_tab_rect = pygame.Rect(0, self.settings.answ_tab_Ypos,
+            self.settings.tab_width, self.settings.tab_height)
+        self.answ_tab_rect.centerx = self.screen_rect.centerx
 
         #Pole tekstowe - ogólne
         self.tab_color = self.settings.tab_color
         self.text_color = self.settings.text_color
-        self.font = pygame.freetype.SysFont('monospace', 16)
+        self.font = pygame.freetype.SysFont('monospace', 15)
 
         #Strzałka wzkazująca wybraną odpowiedź
         self.pointer_image = pygame.image.load('images/answer_pointer.bmp')
@@ -45,17 +46,18 @@ class DialogueWindow():
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
             'marek': [
-                self.build_dialogue_tree("marek", "0"),
-                self.build_dialogue_tree("marek", "1")
+                self.build_dialogue_tree("marekstage0"),
+                self.build_dialogue_tree("marekstage1")
             ],
             'kasia': [
-                self.build_dialogue_tree("kasia", "0"),
-                self.build_dialogue_tree("kasia", "1")
+                self.build_dialogue_tree("kasiastage0"),
+                self.build_dialogue_tree("kasiastage1")
             ],
             'kuba': [
-                self.build_dialogue_tree("kuba", "0"),
-                self.build_dialogue_tree("kuba", "1")
-            ]
+                self.build_dialogue_tree("kubastage0")
+            ],
+            'matma': self.build_maths_tree()
+
         }
 
         #Pusta lista do przechowywania wszystkich tekstów do wyświetlenia
@@ -67,78 +69,118 @@ class DialogueWindow():
         # przejrzystości kodu
         self.node = None
 
-    def build_dialogue_tree(self, npc, prefix):
+    def build_dialogue_tree(self, mode):
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""
-        if npc == "marek":
-            if prefix == "0":
-                dp = "Dialogues/marek/stage0/" # Directory Prefix
-                root = DialogueTreeNode(dp+"test_dialogue1.txt")
 
-                #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-                # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-                # to zmienna dotyczące pytania 4 będzie się nazywać after010
-                after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-                after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=True)
-                after0.add_child(after00, "0")
+        if mode == "marekstage0":
+            dp = "Dialogues/marek/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"test_dialogue1.txt")
 
-                after1 = DialogueTreeNode("QUIT")
+            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
+            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
+            # to zmienna dotyczące pytania 4 będzie się nazywać after010
+            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=1)
+            after0.add_child(after00, "0")
 
-                root.add_child(after0, "0")
-                root.add_child(after1, "1")
-            elif prefix == "1":
-                dp = "Dialogues/marek/stage1/"
-                root = DialogueTreeNode(dp+"test_dialogue3.txt")
+            after1 = DialogueTreeNode("QUIT")
 
-                after0 = DialogueTreeNode("QUIT")
+            root.add_child(after0, "0")
+            root.add_child(after1, "1")
 
-                root.add_child(after0, "0")
-        elif npc == "kasia":
-            if prefix == "0":
-                dp = "Dialogues/kasia/stage0/"
-                root = DialogueTreeNode(dp+"test_dialogue1.txt")
+        elif mode == "marekstage1":
+            dp = "Dialogues/marek/stage1/"
+            root = DialogueTreeNode(dp+"test_dialogue3.txt")
 
-                after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-                after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=True)
-                after0.add_child(after00, "0")
+            after0 = DialogueTreeNode("QUIT")
 
-                after1 = DialogueTreeNode("QUIT")
+            root.add_child(after0, "0")
 
-                root.add_child(after0, "0")
-                root.add_child(after1, "1")
+        elif mode == "kasiastage0":
+            dp = "Dialogues/kasia/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"root.txt")
 
-            elif prefix == "1":
-                dp = "Dialogues/kasia/stage1/"
-                root = DialogueTreeNode(dp+"test_dialogue2.txt")
+            i_need_library = DialogueTreeNode(dp+'i_need_library.txt')
+            beated_up = DialogueTreeNode(dp+'beated_up.txt')
 
-                after0 = DialogueTreeNode("QUIT")
+            after_beated_up = DialogueTreeNode("QUIT", faultValue=5)
+            favour = DialogueTreeNode(dp+'favour.txt')
 
-                root.add_child(after0, "0")
-        elif npc == "kuba":
-            if prefix == "0":
-                dp = "Dialogues/kuba/stage0/"
-                root = DialogueTreeNode(dp+"test_dialogue1.txt")
+            accepted = DialogueTreeNode(dp+"accepted.txt")
+            threatened = DialogueTreeNode(dp+"threatened.txt")
+            after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2)
 
-                after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-                after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=True)
-                after0.add_child(after00, "0")
+            after_accepted = DialogueTreeNode("QUIT", stageUp=1)
 
-                after1 = DialogueTreeNode("QUIT")
+            accepted.add_child(after_accepted, '0')
+            threatened.add_child(after_threatened, '0')
 
-                root.add_child(after0, "0")
-                root.add_child(after1, "1")
+            favour.add_child(accepted, '0')
+            favour.add_child(threatened, '1')
 
-            elif prefix == "1":
-                dp = "Dialogues/kuba/stage1/"
-                root = DialogueTreeNode(dp+"test_dialogue2.txt")
+            i_need_library.add_child(favour, '0')
+            beated_up.add_child(after_beated_up, '0')
 
-                after0 = DialogueTreeNode("QUIT")
+            root.add_child(i_need_library, "0")
+            root.add_child(beated_up, "1")
 
-                root.add_child(after0, "0")
+        elif mode == "kasiastage1":
+            dp = "Dialogues/kasia/stage1/"
+            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+
+            after0 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
+
+        elif mode == "kubastage0":
+            dp = "Dialogues/kuba/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"root.txt")
+
+            library = DialogueTreeNode(dp+"library.txt")
+            after_library = DialogueTreeNode("QUIT", stageUp=1)
+
+            library.add_child(after_library, "0")
+
+            root.add_child(library, "0")
 
         return root
 
-    def load_dialogue(self, npc):
+    def build_maths_tree(self):
+        """Drzewo dialogowe do pytań matematycznych na początku gry"""
+        dp = "Dialogues/maths/"
+
+        root = DialogueTreeNode(dp+"root.txt")
+
+        # X is the faulty option
+        addition = DialogueTreeNode(dp+'addition.txt')
+        square_func = DialogueTreeNode(dp+'square_func.txt')
+        square_funcX = DialogueTreeNode(dp+'square_func.txt', faultValue=1)
+        bytkow = DialogueTreeNode(dp+'bytkow.txt')
+        bytkowX = DialogueTreeNode(dp+'bytkow.txt', faultValue=1)
+        end = DialogueTreeNode("QUIT")
+        endX = DialogueTreeNode("QUIT", faultValue=1)
+
+        bytkow.add_child(end, "0")
+        bytkow.add_child(endX, "1")
+
+        bytkowX.add_child(end, "0")
+        bytkowX.add_child(endX, "1")
+
+        square_func.add_child(bytkowX, "0")
+        square_func.add_child(bytkow, "1")
+
+        square_funcX.add_child(bytkowX, "0")
+        square_funcX.add_child(bytkow, "1")
+
+        addition.add_child(square_func, "0")
+        addition.add_child(square_funcX, "1")
+
+        root.add_child(addition, '0')
+
+        return root
+
+    def load_dialogue(self, npc=None):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
 
@@ -146,8 +188,9 @@ class DialogueWindow():
         if self.node.faultValue > 0:
             self.expelling.faults.append(self.node.faultValue)
 
-        if self.node.stageUp:
-            npc.stage = npc.stage + 1
+        if npc: # uruchom tylko, jesli to dialog z NPC (nieszczęsne pytania matematyczne)
+            if self.node.stageUp > 0:
+                npc.stage += self.node.stageUp
 
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False
@@ -171,7 +214,7 @@ class DialogueWindow():
             yPos += self.font.get_sized_height()
 
     def _load_answs_from_node(self):
-        # WARNING: Function crashes on multi-line answers. To be fixed later
+        # WARNING: Function crashes on multi-line answers. Don't make multi-line answers.
         """Wczytanie możliwych odpowiedzi gracza po ID NPC,
         z którym go prowadzi"""
         filename  = self.node.data
@@ -232,7 +275,7 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, faultValue=0, stageUp=False):
+    def __init__(self, data, faultValue=0, stageUp=0):
         """Inicjalizacja węzła"""
         self.data = data
         self.stageUp = stageUp # Does this dialogue change something between you an NPC?
