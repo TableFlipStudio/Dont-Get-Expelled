@@ -10,8 +10,12 @@ class GameOverScreen():
         self.settings = dogex.settings
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
+        self.sounds = dogex.sounds
 
-        self.image = pygame.image.load("images/gameover.bmp")
+        self.image = pygame.image.load('images/game_over_better.bmp')#pygame.image.load("images/gameover.bmp")
+        self.static_img = pygame.image.load('images/game_over_better.bmp')#pygame.image.load('images/static_img/gmover.png')
+        self.image = pygame.transform.scale(self.image, (self.settings.screen_width, self.settings.screen_height))
+        self.static_img = pygame.transform.scale(self.static_img, (self.settings.screen_width, self.settings.screen_height))
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
 
@@ -34,9 +38,13 @@ class GameOverScreen():
                 mouse_pos = pygame.mouse.get_pos()
 
                 if self.mainmenubutton.rect.collidepoint(mouse_pos):
+
+                    self.sounds.play_sound('interakcja')
+                    dogex._reset_save()
                     return True
 
                 elif self.quitbutton.rect.collidepoint(mouse_pos):
+                    self.sounds.play_sound('interakcja')
                     sys.exit()
 
     def blitme(self):

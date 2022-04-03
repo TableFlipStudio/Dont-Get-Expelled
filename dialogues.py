@@ -23,11 +23,6 @@ class DialogueWindow():
         #Na początku okno dialogowe jest zamknięte
         self.active = False
 
-        self.kartka = False
-        self.zubr = False
-        self.energy_drink = False
-        self.trampki = False
-
         #Pole tekstwowe - kwestie NPC
         self.tab_rect = pygame.Rect(0, self.settings.tab_Ypos,
             self.settings.tab_width, self.settings.tab_height)
@@ -77,6 +72,7 @@ class DialogueWindow():
     def build_dialogue_tree(self, mode):
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""
+
         if mode == "marekstage0":
             dp = "Dialogues/marek/stage0/" # Directory Prefix
             root = DialogueTreeNode(dp+"test_dialogue1.txt")

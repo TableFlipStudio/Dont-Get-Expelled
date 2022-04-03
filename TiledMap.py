@@ -131,7 +131,7 @@ class Map():
 
     def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
-        contents = self._get_all_contents('collision')
+        contents = self._get_all_contents('except_items')#'collision')
 
         for obj in contents:
 

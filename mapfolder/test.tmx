@@ -249,27 +249,30 @@
   </object>
  </objectgroup>
  <objectgroup id="13" name="items">
-  <object id="166" name="zubr" x="2753.33" y="3742.67">
+  <object id="166" name="zubr" x="1433.33" y="4606.67">
    <point/>
   </object>
-  <object id="167" name="trampki" x="6553.33" y="2130.67">
+  <object id="167" name="trampki" x="525.33" y="4474.67">
    <point/>
   </object>
-  <object id="168" name="kartka" x="930.67" y="3656">
+  <object id="168" name="kartka" x="1170.67" y="4456">
    <point/>
   </object>
-  <object id="169" name="energy_drink" x="3360" y="2164">
+  <object id="169" name="energy_drink" x="896" y="4636">
    <point/>
   </object>
  </objectgroup>
  <objectgroup id="12" name="npc">
-  <object id="157" name="marek" x="924" y="3808">
+  <object id="157" name="marek" x="660" y="4200">
    <point/>
   </object>
-  <object id="158" name="kasia" x="6385.33" y="3973.33">
+   <object id="158" name="kasia" x="6385.33" y="3973.33">
    <point/>
   </object>
-  <object id="159" name="kuba" x="2952" y="568">
+  <object id="158" name="kasia" x="1280" y="4264">
+   <point/>
+  </object>
+  <object id="159" name="kuba" x="984" y="4140">
    <point/>
   </object>
  </objectgroup>

@@ -1,7 +1,5 @@
 import pygame, time
 
-#TODO one error, when pressing up and down keys the character moves down
-
 class MainCharacter():
     """Klasa do zarządzania postacią główną"""
 
