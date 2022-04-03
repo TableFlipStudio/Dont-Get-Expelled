@@ -85,7 +85,7 @@ class DialogueWindow():
             # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
             # to zmienna dotyczące pytania 4 będzie się nazywać after010
             after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=True)
+            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=1)
             after0.add_child(after00, "0")
 
             after1 = DialogueTreeNode("QUIT")
@@ -103,19 +103,31 @@ class DialogueWindow():
 
         elif mode == "kasiastage0":
             dp = "Dialogues/kasia/stage0/" # Directory Prefix
-            root = DialogueTreeNode(dp+"test_dialogue1.txt")
+            root = DialogueTreeNode(dp+"root.txt")
 
-            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-            # to zmienna dotyczące pytania 4 będzie się nazywać after010
-            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", stageUp=True)
-            after0.add_child(after00, "0")
+            i_need_library = DialogueTreeNode(dp+'i_need_library.txt')
+            beated_up = DialogueTreeNode(dp+'beated_up.txt')
 
-            after1 = DialogueTreeNode("QUIT")
+            after_beated_up = DialogueTreeNode("QUIT", faultValue=5)
+            favour = DialogueTreeNode(dp+'favour.txt')
 
-            root.add_child(after0, "0")
-            root.add_child(after1, "1")
+            accepted = DialogueTreeNode(dp+"accepted.txt")
+            threatened = DialogueTreeNode(dp+"threatened.txt")
+            after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2)
+
+            after_accepted = DialogueTreeNode("QUIT", stageUp=1)
+
+            accepted.add_child(after_accepted, '0')
+            threatened.add_child(after_threatened, '0')
+
+            favour.add_child(accepted, '0')
+            favour.add_child(threatened, '1')
+
+            i_need_library.add_child(favour, '0')
+            beated_up.add_child(after_beated_up, '0')
+
+            root.add_child(i_need_library, "0")
+            root.add_child(beated_up, "1")
 
         elif mode == "kasiastage1":
             dp = "Dialogues/kasia/stage1/"
@@ -133,7 +145,7 @@ class DialogueWindow():
             # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
             # to zmienna dotyczące pytania 4 będzie się nazywać after010
             after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", stageUp=True)
+            after00 = DialogueTreeNode("QUIT", stageUp=1)
             after0.add_child(after00, "0")
 
             root.add_child(after0, "0")
@@ -180,8 +192,8 @@ class DialogueWindow():
             self.expelling.faults.append(self.node.faultValue)
 
         if npc: # uruchom tylko, jesli to dialog z NPC (nieszczęsne pytania matematyczne)
-            if self.node.stageUp:
-                npc.stage = npc.stage + 1
+            if self.node.stageUp > 0:
+                npc.stage += self.node.stageUp
 
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False
@@ -266,7 +278,7 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, faultValue=0, stageUp=False):
+    def __init__(self, data, faultValue=0, stageUp=0):
         """Inicjalizacja węzła"""
         self.data = data
         self.stageUp = stageUp # Does this dialogue change something between you an NPC?
