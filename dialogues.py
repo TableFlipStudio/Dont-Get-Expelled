@@ -139,7 +139,7 @@ class DialogueWindow():
             liar = DialogueTreeNode(dp+'dont_lie.txt')
 
             after_liar = DialogueTreeNode("QUIT")
-            after_found = DialogueTreeNode("QUIT", stageUp=1)
+            after_found = DialogueTreeNode("QUIT", stageUp=1, giveItem='energy_drink')
 
             energy_found.add_child(after_found, "0")
             liar.add_child(after_liar, "0")
@@ -195,10 +195,9 @@ class DialogueWindow():
 
         return root
 
-    def load_dialogue(self, npc=None):
-        """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
-        self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
-
+    def _check_node_events(self, npc):
+        """Sprawdzenie instrukcji specjalnych dotyczących węzła: zwiększnie
+        stage'a, popełnione przewinienie, przekazywanie przedmiotów itd."""
         if self.node.targetItem:
             if not self._check_item_in_inventory(self.node.targetItem):
                 self.node = self.node.parent.children['ITEMNOTFOUND']
@@ -210,6 +209,18 @@ class DialogueWindow():
         if npc: # uruchom tylko, jesli to dialog z NPC (nieszczęsne pytania matematyczne)
             if self.node.stageUp > 0:
                 npc.stage += self.node.stageUp
+
+        for slot in self.dogex.slots.sprites():
+            if slot.content:
+                if self.node.giveItem == slot.content.id:
+                    slot.content = None
+                    break
+
+    def load_dialogue(self, npc=None):
+        """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
+        self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
+
+        self._check_node_events(npc)
 
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False
@@ -301,7 +312,7 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, faultValue=0, stageUp=0, targetItem=None):
+    def __init__(self, data, faultValue=0, stageUp=0, targetItem=None, giveItem=None):
         """Inicjalizacja węzła"""
         self.data = data
         self.stageUp = stageUp # Does this dialogue change something between you an NPC?
@@ -312,6 +323,7 @@ class DialogueTreeNode():
         self.targetItem = targetItem # When loading this dialogue, the game will
         # check whether you have the item in inventory and basing on that
         # will load different dialogues
+        self.giveItem = giveItem # Item (ID) to be removed from invetory after loading
 
     def add_child(self, child, index: str()):
         """Dodanie potomka do drzewa. index to indeks odpowiedzi, po której

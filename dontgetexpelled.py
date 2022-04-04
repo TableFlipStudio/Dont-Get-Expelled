@@ -3,6 +3,8 @@ import pygame
 import json
 from time import sleep
 
+# Set showns
+
 
 
 from settings import Settings
@@ -72,7 +74,7 @@ class DoGeX():
         self._create_smenu_buttons()
 
         #Testowe rozmieszczenie przedmiotów i NPC
-        self.items.add(Item(self, 'energy_drink'))
+        self.items.add(Item(self, 'energy_drink', True))
         self.items.add(Item(self, 'kartka', True))
         self.items.add(Item(self, 'trampki'))
         self.items.add(Item(self, 'zubr'))
@@ -271,7 +273,7 @@ class DoGeX():
             Item(self, 'kartka', True),
             Item(self, 'trampki'),
             Item(self, 'zubr'),
-            Item(self, 'energy_drink')
+            Item(self, 'energy_drink', True)
             ]
         npcs = [
             NPC(self, 'kasia', -1),
