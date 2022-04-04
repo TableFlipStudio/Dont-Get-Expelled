@@ -12,10 +12,8 @@ class GameOverScreen():
         self.screen_rect = dogex.screen_rect
         self.sounds = dogex.sounds
 
-        self.image = pygame.image.load('images/game_over_better.bmp')#pygame.image.load("images/gameover.bmp")
-        self.static_img = pygame.image.load('images/game_over_better.bmp')#pygame.image.load('images/static_img/gmover.png')
+        self.image = pygame.image.load("images/gameover.bmp")
         self.image = pygame.transform.scale(self.image, (self.settings.screen_width, self.settings.screen_height))
-        self.static_img = pygame.transform.scale(self.static_img, (self.settings.screen_width, self.settings.screen_height))
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
 
