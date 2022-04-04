@@ -594,7 +594,7 @@ class DoGeX():
         i ewentualne podniesienie"""
 
         for item in self.items.copy():
-            if pygame.Rect.colliderect(self.character.rect, item):
+            if pygame.Rect.colliderect(self.character.rect, item) and item.shown:
                 for slot in self.slots.sprites():
                     #Umieść przedmiot tylko raz
                     if slot.content is None:
@@ -631,7 +631,8 @@ class DoGeX():
                 npc.blit_npc()
 
             for item in self.items.sprites():
-                item.blit_item()
+                if item.shown:
+                    item.blit_item()
 
             self.character.blitme()
 
