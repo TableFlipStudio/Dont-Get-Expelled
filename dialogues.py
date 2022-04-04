@@ -15,6 +15,7 @@ class DialogueWindow():
         self.screen_rect = self.screen.get_rect()
         self.settings  = dogex.settings
         self.expelling = dogex.expelling
+        self.dogex = dogex
 
         self.rect = pygame.Rect(0, 0, self.settings.screen_width,
             self.settings.screen_height)
@@ -131,11 +132,21 @@ class DialogueWindow():
 
         elif mode == "kasiastage1":
             dp = "Dialogues/kasia/stage1/"
-            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+            root = DialogueTreeNode(dp+"root.txt")
 
-            after0 = DialogueTreeNode("QUIT")
+            energy_not_found = DialogueTreeNode("QUIT")
+            energy_found = DialogueTreeNode(dp+'got_nrg_drink.txt', targetItem='energy_drink')
+            liar = DialogueTreeNode(dp+'dont_lie.txt')
 
-            root.add_child(after0, "0")
+            after_liar = DialogueTreeNode("QUIT")
+            after_found = DialogueTreeNode("QUIT", stageUp=1)
+
+            energy_found.add_child(after_found, "0")
+            liar.add_child(after_liar, "0")
+
+            root.add_child(energy_found, "0")
+            root.add_child(energy_not_found, "1")
+            root.add_child(liar, "ITEMNOTFOUND")
 
         elif mode == "kubastage0":
             dp = "Dialogues/kuba/stage0/" # Directory Prefix
@@ -187,6 +198,10 @@ class DialogueWindow():
     def load_dialogue(self, npc=None):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
+
+        if self.node.targetItem:
+            if not self._check_item_in_inventory(self.node.targetItem):
+                self.node = self.node.parent.children['ITEMNOTFOUND']
 
         # How bad is this answer?
         if self.node.faultValue > 0:
@@ -262,6 +277,13 @@ class DialogueWindow():
         rect.y = yPos
         self.msgs.append({'image': image, 'rect': rect, 'id': id})
 
+    def _check_item_in_inventory(self, itemID):
+        """Zwraca True, jeśli podany przedmiot znajduje się w ekwipunku"""
+        for slot in self.dogex.slots.sprites():
+            if slot.content:
+                if slot.content.id == itemID:
+                    return True
+
     def blit_window(self):
         """Wyświetlenie okna dialogowego, pola tekstowego
         i kwestii na ekranie"""
@@ -279,7 +301,7 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, faultValue=0, stageUp=0):
+    def __init__(self, data, faultValue=0, stageUp=0, targetItem=None):
         """Inicjalizacja węzła"""
         self.data = data
         self.stageUp = stageUp # Does this dialogue change something between you an NPC?
@@ -287,6 +309,9 @@ class DialogueTreeNode():
         self.faultValue = faultValue     # The bigger the fault value, the more
         self.children = {}               # severe the fault is and makes you
         self.parent = None               # closer to being expelled
+        self.targetItem = targetItem # When loading this dialogue, the game will
+        # check whether you have the item in inventory and basing on that
+        # will load different dialogues
 
     def add_child(self, child, index: str()):
         """Dodanie potomka do drzewa. index to indeks odpowiedzi, po której
