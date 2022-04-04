@@ -11,12 +11,11 @@ class StoryEvents():
         self.dogex = dogex
 
         # List of quest codenames and index to decide, which quest is active
-        self.quests = ['math', 'zyzio', None]
-        self.inx = 0
+        self.quests = ['math']
 
     def _check_story_events(self):
         """Zdarzenia związane z biegiem fabuły"""
-        if self.quests[self.inx] == 'math':
+        if 'math' in self.quests:
             math_trigger_area = self.map._access_Object('objects.mathtrigger')
             mta_rect = pygame.Rect(math_trigger_area.x, math_trigger_area.y,
                 math_trigger_area.width, math_trigger_area.height)
@@ -25,9 +24,10 @@ class StoryEvents():
                 self.window.active = True
                 self.window.node = self.window.dialogues['matma']
                 self.window.load_dialogue()
-                self.inx += 1
+                self.quests.remove('math')
+                self.quests.append('zyzio')
 
-        elif self.quests[self.inx] == 'zyzio':
+        elif 'zyzio' in self.quests:
             encounter = self.map._access_Object('objects.zyzioencounter')
             zyzio_obj = self.map._access_Object('npc.kuba')
             zyzio_obj.x, zyzio_obj.y = encounter.x, encounter.y
@@ -37,8 +37,8 @@ class StoryEvents():
                 self.window.active = True
                 self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
                 self.window.load_dialogue(found_npc)
-                self.inx += 1
-                
+                self.quests.remove('zyzio')
+
                 for npc in self.dogex.npcs.sprites():
                     if npc.id == 'kasia':
                         npc.stage = 0

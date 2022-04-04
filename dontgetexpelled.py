@@ -3,8 +3,6 @@ import pygame
 import json
 from time import sleep
 
-# Set showns
-
 
 
 from settings import Settings
@@ -172,7 +170,7 @@ class DoGeX():
         self._place_loaded_items(items)
         self._place_loaded_NPCs(npcs)
         self.expelling.fault_counter = faultcntr
-        self.story.inx = quest
+        self.story.quests = quest
 
         for npc in self.npcs.sprites():
             npc.stage = stages[npc.id]
@@ -222,7 +220,7 @@ class DoGeX():
         invcnt = []
         items = self._group_to_list(self.items)
         npcs = self._group_to_list(self.npcs)
-        quest = self.story.inx
+        quest = self.story.quests
 
         for slot in self.slots.sprites():
             if slot.content is not None:
@@ -285,7 +283,7 @@ class DoGeX():
         npcs = [(npc.id, npc.rect.center) for npc in npcs]
         faultcntr = self.settings.faults_to_be_expelled
         stages = {}
-        quest = 0
+        quest = ['math']
 
 
         with open("jsondata/character_pos.json", 'w') as file:
