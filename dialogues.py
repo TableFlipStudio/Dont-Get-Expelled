@@ -4,6 +4,11 @@
 # currently I'm quite unmotivated to do it, so, Igor, tell me what do you think
 # about it
 
+
+
+
+### LINE 222
+
 import pygame
 import pygame.freetype
 
@@ -62,7 +67,8 @@ class DialogueWindow():
             'kuba': [
                 self.build_dialogue_tree("kubastage0")
             ],
-            'matma': self.build_maths_tree()
+            'matma': self.build_maths_tree(),
+            'concierge': self.build_concierge_tree()
 
         }
 
@@ -114,7 +120,7 @@ class DialogueWindow():
 
             accepted = DialogueTreeNode(dp+"accepted.txt")
             threatened = DialogueTreeNode(dp+"threatened.txt")
-            after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2)
+            after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2, changeQuest=('add', 'concierge'))
 
             after_accepted = DialogueTreeNode("QUIT", stageUp=1)
 
@@ -139,7 +145,7 @@ class DialogueWindow():
             liar = DialogueTreeNode(dp+'dont_lie.txt')
 
             after_liar = DialogueTreeNode("QUIT")
-            after_found = DialogueTreeNode("QUIT", stageUp=1, giveItem='energy_drink')
+            after_found = DialogueTreeNode("QUIT", stageUp=1, giveItem='energy_drink', changeQuest=('add', 'concierge'))
 
             energy_found.add_child(after_found, "0")
             liar.add_child(after_liar, "0")
@@ -195,9 +201,22 @@ class DialogueWindow():
 
         return root
 
+    def build_concierge_tree(self):
+        dp = 'Dialogues/concierge/'
+
+        root = DialogueTreeNode(dp+'root.txt')
+        no_list = DialogueTreeNode(dp+'no_list_here.txt')
+        end = DialogueTreeNode("QUIT")
+
+        no_list.add_child(end, '0')
+        root.add_child(no_list, '0')
+
+        return root
+
     def _check_node_events(self, npc):
         """Sprawdzenie instrukcji specjalnych dotyczących węzła: zwiększnie
         stage'a, popełnione przewinienie, przekazywanie przedmiotów itd."""
+
         if self.node.targetItem:
             if not self._check_item_in_inventory(self.node.targetItem):
                 self.node = self.node.parent.children['ITEMNOTFOUND']
@@ -215,6 +234,13 @@ class DialogueWindow():
                 if self.node.giveItem == slot.content.id:
                     slot.content = None
                     break
+
+        if self.node.changeQuest:
+            mode, quest = self.node.changeQuest
+            if mode == 'add':
+                self.dogex.story.quests.append(quest)
+            elif mode == 'remove':
+                self.dogex.story.quests.remove(quest)
 
     def load_dialogue(self, npc=None):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
@@ -312,18 +338,30 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, faultValue=0, stageUp=0, targetItem=None, giveItem=None):
+    def __init__(self, data, faultValue=0, stageUp=0, targetItem=None,
+        giveItem=None, changeQuest=None):
         """Inicjalizacja węzła"""
         self.data = data
-        self.stageUp = stageUp # Does this dialogue change something between you an NPC?
-                               # e.g. quest accepted.
-        self.faultValue = faultValue     # The bigger the fault value, the more
-        self.children = {}               # severe the fault is and makes you
-        self.parent = None               # closer to being expelled
-        self.targetItem = targetItem # When loading this dialogue, the game will
-        # check whether you have the item in inventory and basing on that
-        # will load different dialogues
-        self.giveItem = giveItem # Item (ID) to be removed from invetory after loading
+        self.children = {}
+        self.parent = None
+
+        # Does this dialogue change something between you an NPC? e.g. quest accepted.
+        self.stageUp = stageUp
+
+        # The bigger the fault value, the more severe the fault is
+        # and makes you closer to being expelled
+        self.faultValue = faultValue
+
+        # When loading this dialogue, the game will check whether you have
+        # the item in inventory and basing on that will load different dialogues
+        self.targetItem = targetItem
+
+        # Item (ID) to be removed from invetory after loading
+        self.giveItem = giveItem
+
+        # Tuple (mode, quest), where mode is either 'add' or 'remove'
+        # and quest is well, the quest.
+        self.changeQuest = changeQuest
 
     def add_child(self, child, index: str()):
         """Dodanie potomka do drzewa. index to indeks odpowiedzi, po której

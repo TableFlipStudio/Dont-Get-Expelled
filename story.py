@@ -27,7 +27,7 @@ class StoryEvents():
                 self.quests.remove('math')
                 self.quests.append('zyzio')
 
-        elif 'zyzio' in self.quests:
+        if 'zyzio' in self.quests:
             encounter = self.map._access_Object('objects.zyzioencounter')
             zyzio_obj = self.map._access_Object('npc.kuba')
             zyzio_obj.x, zyzio_obj.y = encounter.x, encounter.y
@@ -42,3 +42,14 @@ class StoryEvents():
                 for npc in self.dogex.npcs.sprites():
                     if npc.id == 'kasia':
                         npc.stage = 0
+
+        if 'concierge' in self.quests:
+            concierge = self.map._access_Object('objects.concierge')
+            concierge_rect = pygame.Rect(concierge.x, concierge.y,
+                concierge.width, concierge.height)
+
+            if self.character.rect.colliderect(concierge_rect):
+                self.window.active = True
+                self.window.node = self.window.dialogues['concierge']
+                self.window.load_dialogue()
+                self.quests.remove('concierge')
