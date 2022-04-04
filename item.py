@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 class Item(Sprite):
     """Klasa zarządzająca przedmiotami w grze"""
 
-    def __init__(self, dogex, item_type):
+    def __init__(self, dogex, item_type, shown=False):
         """Inicjalizacja przedmiotu"""
         super().__init__()
         self.screen = dogex.screen
@@ -26,7 +26,7 @@ class Item(Sprite):
         #Położenie zależy od atrybutu xyPos (krotka)
         self.id = item_type
 
-        self.shown = False
+        self.shown = shown
 
     def blit_item(self):
         """Wyświetlenie przedmiotu na ekranie"""

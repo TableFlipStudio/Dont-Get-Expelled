@@ -73,7 +73,7 @@ class DoGeX():
 
         #Testowe rozmieszczenie przedmiotów i NPC
         self.items.add(Item(self, 'energy_drink'))
-        self.items.add(Item(self, 'kartka'))
+        self.items.add(Item(self, 'kartka', True))
         self.items.add(Item(self, 'trampki'))
         self.items.add(Item(self, 'zubr'))
 
@@ -268,7 +268,7 @@ class DoGeX():
         chpos = (0, 0)
         invcnt = []
         items = [
-            Item(self, 'kartka'),
+            Item(self, 'kartka', True),
             Item(self, 'trampki'),
             Item(self, 'zubr'),
             Item(self, 'energy_drink')
@@ -611,10 +611,7 @@ class DoGeX():
     def _update_items(self):
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
-            #print( item.id ,item.obj.x, item.obj.y)
             item.rect.center = ((item.obj.x), (item.obj.y))
-            if item.id == 'kartka':
-                item.shown = True
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
