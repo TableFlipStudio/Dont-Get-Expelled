@@ -196,6 +196,7 @@ class DoGeX():
             item = Item(self, itemdata[0])
             (item.obj.x, item.obj.y) = (itemdata[1][0] + 30, itemdata[1][1] + 30)
             item.rect.center = (itemdata[1])
+            item.shown = itemdata[2]
             self.items.add(item)
 
     def _place_loaded_NPCs(self, npcs):
@@ -258,10 +259,10 @@ class DoGeX():
     def _group_to_list(self, group):
         """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
         Potrzebne do zapisywania, ponieważ moduł JSON nie obsługuje
-        niewbudowanych struktur danych"""
+        niewbudowanych struktur danych. Items określa, czy nal"""
         myList = [] # nazwa dziwna bo 'list' jest zajęte przez built-in func.
         for sprite in group.sprites():
-            spritedata = (sprite.id, sprite.rect.topleft)
+            spritedata = (sprite.id, sprite.rect.topleft, sprite.shown)
             myList.append(spritedata)
         return myList
 
@@ -603,7 +604,7 @@ class DoGeX():
                         slot.content = item
                         break
 
-                self.items.remove(item)
+                item.shown = False
 
     def _update_npcs(self):
         """Uaktualnienie pozycji wszystkich NPC"""

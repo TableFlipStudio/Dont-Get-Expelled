@@ -5,7 +5,7 @@ class NPC(Sprite):
     """Klasa do zarządzania postaciami niekierowanymi przez gracza
     (Non-Person Character)"""
 
-    def __init__(self, dogex, id, stage=0):
+    def __init__(self, dogex, id, stage=0, shown=True):
         """Inicjalizacja NPC"""
         super().__init__()
         self.screen = dogex.screen
@@ -19,6 +19,9 @@ class NPC(Sprite):
 
         # Etap 'relacji' z NPC - przed questem, w trakcie, po queście itd.
         self.stage = stage
+
+        # Obecność na mapie
+        self.shown = shown
 
         image = {
             'kasia': 'images/npc/npc-nerd.png',
