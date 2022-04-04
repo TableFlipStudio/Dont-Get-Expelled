@@ -42,6 +42,7 @@ class DoGeX():
         pygame.display.set_caption("Don't Get Expelled! The Batory Game")
 
         #Wczytanie zasobów z pliku
+        self.sounds = Music(self)
         self.character = MainCharacter(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
@@ -49,11 +50,8 @@ class DoGeX():
         self.expelling = Expelling(self)
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
-        self.sounds = Music(self)
         self.m_menu = MainMenu(self)
-
         self.story = StoryEvents(self)
-  
         self.window_options = IntroScreen(self)# ta klasa występuje też pod nazwą intro_screen tylko dla głównej pętli gry (na dole)
 
         self.slots = pygame.sprite.Group()
@@ -91,9 +89,9 @@ class DoGeX():
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
         i = 0
+
         
         self.sounds.play_music('background')
-
 
         while True:
             self._check_events()
@@ -606,7 +604,7 @@ class DoGeX():
         i ewentualne podniesienie"""
 
         for item in self.items.copy():
-            if pygame.Rect.colliderect(self.character.rect, item):
+            if pygame.Rect.colliderect(self.character.rect, item) and item.shown:
                 pygame.mixer.Sound('sounds/podnoszenie_przedmiotu.wav').play()
                 for slot in self.slots.sprites():
                     #Umieść przedmiot tylko raz
@@ -626,6 +624,8 @@ class DoGeX():
         for item in self.items.sprites():
             #print( item.id ,item.obj.x, item.obj.y)
             item.rect.center = ((item.obj.x), (item.obj.y))
+            if item.id =='kartka':
+                item.shown = True
             
 
     def _update_screen(self):
@@ -644,7 +644,8 @@ class DoGeX():
                 npc.blit_npc()
 
             for item in self.items.sprites():
-                item.blit_item()
+                if item.shown:
+                    item.blit_item()
 
             self.character.blitme()
 
@@ -734,7 +735,7 @@ if __name__ == '__main__':
     while True:
         dogex = DoGeX()
         intro_screen = IntroScreen(dogex)
-        intro(dogex)
+        #intro(dogex)
         menu = MainMenu(dogex)
 
         _run_main_menu(dogex)
