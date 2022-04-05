@@ -38,10 +38,18 @@ class StoryEvents():
                 self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
                 self.window.load_dialogue(found_npc)
                 self.quests.remove('zyzio')
+                self.quests.append('cud')
 
-                for npc in self.dogex.npcs.sprites():
-                    if npc.id == 'cud':
-                        npc.stage = 0
+        if 'cud' in self.quests:
+            for npc in self.dogex.npcs.sprites():
+                if npc.id == 'cud' and npc.stage < 0:
+                    npc.stage = 0
+
+        if 'andrzej' in self.quests:
+            for npc in self.dogex.npcs.sprites():
+                if npc.id == 'andrzej' and npc.stage < 0:
+                    npc.stage = 0
+
 
         if 'concierge' in self.quests:
             concierge = self.map._access_Object('objects.concierge')

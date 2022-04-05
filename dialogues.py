@@ -8,6 +8,8 @@
 import pygame
 import pygame.freetype
 
+from item import Item
+
 class DialogueWindow():
     """Klasa odpowiadająca za okno dialogowe"""
     def __init__(self, dogex):
@@ -52,22 +54,15 @@ class DialogueWindow():
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'marek': [
-                self.build_dialogue_tree("marekstage0"),
-                self.build_dialogue_tree("marekstage1")
-            ],
             'cud': [
                 self.build_dialogue_tree("cudstage0"),
                 self.build_dialogue_tree("cudstage1")
             ],
-            'kuba': [
-                self.build_dialogue_tree("kubastage0")
-            ],
             'zyzio': [
                 self.build_dialogue_tree("zyziostage0")
             ],
-            'kasia': [
-                self.build_dialogue_tree('kasiastage0')
+            'andrzej': [
+                self.build_dialogue_tree('andrzejstage0')
             ],
             'matma': self.build_maths_tree(),
             'concierge': self.build_concierge_tree(),
@@ -87,31 +82,7 @@ class DialogueWindow():
     def build_dialogue_tree(self, mode):
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""
-        if mode == "marekstage0":
-            dp = "Dialogues/marek/stage0/" # Directory Prefix
-            root = DialogueTreeNode(dp+"test_dialogue1.txt")
-
-            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-            # to zmienna dotyczące pytania 4 będzie się nazywać after010
-            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=1)
-            after0.add_child(after00, "0")
-
-            after1 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
-            root.add_child(after1, "1")
-
-        elif mode == "marekstage1":
-            dp = "Dialogues/marek/stage1/"
-            root = DialogueTreeNode(dp+"test_dialogue3.txt")
-
-            after0 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
-
-        elif mode == "cudstage0":
+        if mode == "cudstage0":
             dp = "Dialogues/cud/stage0/" # Directory Prefix
             root = DialogueTreeNode(dp+"root.txt")
 
@@ -125,7 +96,7 @@ class DialogueWindow():
             threatened = DialogueTreeNode(dp+"threatened.txt")
             after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2, changeQuest=('add', 'concierge'))
 
-            after_accepted = DialogueTreeNode("QUIT", stageUp=1)
+            after_accepted = DialogueTreeNode("QUIT", stageUp=1, changeQuest=('add', 'andrzej'))
 
             accepted.add_child(after_accepted, '0')
             threatened.add_child(after_threatened, '0')
@@ -145,10 +116,10 @@ class DialogueWindow():
 
             energy_not_found = DialogueTreeNode("QUIT")
             energy_found = DialogueTreeNode(dp+'got_nrg_drink.txt', targetItem='energy_drink')
-            liar = DialogueTreeNode(dp+'dont_lie.txt')
+            liar = DialogueTreeNode(dp+'dont_lie.txt', faultValue=1)
 
             after_liar = DialogueTreeNode("QUIT")
-            after_found = DialogueTreeNode("QUIT", stageUp=1, giveItem='energy_drink', changeQuest=('add', 'concierge'))
+            after_found = DialogueTreeNode("QUIT", stageUp=1, giveItem='energy_drink', changeQuest=('both', ('concierge', 'cud')))
 
             energy_found.add_child(after_found, "0")
             liar.add_child(after_liar, "0")
@@ -168,53 +139,16 @@ class DialogueWindow():
 
             root.add_child(library, "0")
 
-        elif mode == 'kasiastage0':
-            dp = "Dialogues/kasia/stage0/" # Directory Prefix
-            root = DialogueTreeNode(dp+"test_dialogue1.txt")
+        elif mode == 'andrzejstage0':
+            dp = 'Dialogues/andrzej/stage0/'
+            root = DialogueTreeNode(dp+'root.txt')
+            yes = DialogueTreeNode(dp+'yes.txt')
+            oh_right = DialogueTreeNode(dp+'oh_right.txt', stageUp=1, getItem='energy_drink', changeQuest=('remove', 'andrzej'))
+            end = DialogueTreeNode("QUIT")
 
-            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-            # to zmienna dotyczące pytania 4 będzie się nazywać after010
-            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=1)
-            after0.add_child(after00, "0")
-
-            after1 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
-            root.add_child(after1, "1")
-
-        elif mode == 'kasiastage1':
-            dp = "Dialogues/kasia/stage1/"
-            root = DialogueTreeNode(dp+"test_dialogue3.txt")
-
-            after0 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
-
-        elif mode == 'kubastage0':
-            dp = "Dialogues/kuba/stage0/" # Directory Prefix
-            root = DialogueTreeNode(dp+"test_dialogue1.txt")
-
-            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-            # to zmienna dotyczące pytania 4 będzie się nazywać after010
-            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=1)
-            after0.add_child(after00, "0")
-
-            after1 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
-            root.add_child(after1, "1")
-
-        elif mode == 'kubastage1':
-            dp = "Dialogues/kuba/stage1/"
-            root = DialogueTreeNode(dp+"test_dialogue3.txt")
-
-            after0 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
+            oh_right.add_child(end, '0')
+            yes.add_child(oh_right, '0')
+            root.add_child(yes, '0')
 
         return root
 
@@ -298,12 +232,21 @@ class DialogueWindow():
                     slot.content = None
                     break
 
+        if self.node.getItem:
+            for slot in self.dogex.slots.sprites():
+                if slot.content is None:
+                    slot.content = Item(self.dogex, self.node.getItem)
+                    break
+
         if self.node.changeQuest:
             mode, quest = self.node.changeQuest
             if mode == 'add':
                 self.dogex.story.quests.append(quest)
             elif mode == 'remove':
                 self.dogex.story.quests.remove(quest)
+            elif mode == 'both':
+                self.dogex.story.quests.append(quest[0])
+                self.dogex.story.quests.remove(quest[1])
 
     def load_dialogue(self, npc=None):
         """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
@@ -402,7 +345,7 @@ class DialogueTreeNode():
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
     def __init__(self, data, faultValue=0, stageUp=0, targetItem=None,
-        giveItem=None, changeQuest=None):
+        giveItem=None, getItem=None, changeQuest=None):
         """Inicjalizacja węzła"""
         self.data = data
         self.children = {}
@@ -419,11 +362,15 @@ class DialogueTreeNode():
         # the item in inventory and basing on that will load different dialogues
         self.targetItem = targetItem
 
-        # Item (ID) to be removed from invetory after loading
+        # Item (ID) to be removed from invetory after loading this node
         self.giveItem = giveItem
 
+        # Item (ID) to be placed in inventory after loading this node
+        self.getItem = getItem
+
         # Tuple (mode, quest), where mode is either 'add' or 'remove'
-        # and quest is well, the quest.
+        # and quest is well, the quest OR
+        # ('both', (questToAdd, questToRemove))
         self.changeQuest = changeQuest
 
     def add_child(self, child, index: str()):

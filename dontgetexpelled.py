@@ -71,17 +71,18 @@ class DoGeX():
         # Utworzenie przycisków menu zapisu
         self._create_smenu_buttons()
 
-        #Testowe rozmieszczenie przedmiotów i NPC
+        # Utworzenie przedmiotów i NPC
         self.items.add(Item(self, 'energy_drink', True))
         self.items.add(Item(self, 'kartka', True))
         self.items.add(Item(self, 'trampki'))
         self.items.add(Item(self, 'zubr'))
 
-        self.npcs.add(NPC(self,'kuba'))
-        self.npcs.add(NPC(self,'kasia',))
-        self.npcs.add(NPC(self,'marek'))
+        self.npcs.add(NPC(self,'kuba', -1))
+        self.npcs.add(NPC(self,'kasia', -1))
+        self.npcs.add(NPC(self,'marek', -1))
         self.npcs.add(NPC(self, 'cud', -1))
         self.npcs.add(NPC(self, 'zyzio'))
+        self.npcs.add(NPC(self, 'andrzej', -1))
 
         self.map.set_spawn("player")
 
@@ -277,11 +278,12 @@ class DoGeX():
             Item(self, 'energy_drink', True)
             ]
         npcs = [
-            NPC(self, 'kasia'),
-            NPC(self, 'kuba'),
-            NPC(self, 'marek'),
+            NPC(self, 'kasia', -1),
+            NPC(self, 'kuba', -1),
+            NPC(self, 'marek', -1),
             NPC(self, 'zyzio'),
-            NPC(self, 'cud', -1)
+            NPC(self, 'cud', -1),
+            NPC(self, 'andrzej', -1)
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         npcs = [(npc.id, npc.rect.center) for npc in npcs]
