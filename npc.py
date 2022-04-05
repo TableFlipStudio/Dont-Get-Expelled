@@ -27,6 +27,8 @@ class NPC(Sprite):
             'kasia': 'images/npc/npc-nerd.png',
             'kuba': 'images/npc/npc-smoker1.png',
             'marek': 'images/npc/npc-smoker2.png',
+            'cud': 'images/npc/lbos.png',
+            'zyzio': 'images/npc/zyzio.png'
         }
         self.image = pygame.image.load(image[id])
         self.rect = self.image.get_rect()

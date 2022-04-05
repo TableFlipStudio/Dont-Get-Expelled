@@ -78,8 +78,10 @@ class DoGeX():
         self.items.add(Item(self, 'zubr'))
 
         self.npcs.add(NPC(self,'kuba'))
-        self.npcs.add(NPC(self,'kasia', -1))
+        self.npcs.add(NPC(self,'kasia',))
         self.npcs.add(NPC(self,'marek'))
+        self.npcs.add(NPC(self, 'cud', -1))
+        self.npcs.add(NPC(self, 'zyzio'))
 
         self.map.set_spawn("player")
 
@@ -275,9 +277,11 @@ class DoGeX():
             Item(self, 'energy_drink', True)
             ]
         npcs = [
-            NPC(self, 'kasia', -1),
+            NPC(self, 'kasia'),
             NPC(self, 'kuba'),
-            NPC(self, 'marek')
+            NPC(self, 'marek'),
+            NPC(self, 'zyzio'),
+            NPC(self, 'cud', -1)
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         npcs = [(npc.id, npc.rect.center) for npc in npcs]

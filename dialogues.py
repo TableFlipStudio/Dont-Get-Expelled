@@ -56,12 +56,18 @@ class DialogueWindow():
                 self.build_dialogue_tree("marekstage0"),
                 self.build_dialogue_tree("marekstage1")
             ],
-            'kasia': [
-                self.build_dialogue_tree("kasiastage0"),
-                self.build_dialogue_tree("kasiastage1")
+            'cud': [
+                self.build_dialogue_tree("cudstage0"),
+                self.build_dialogue_tree("cudstage1")
             ],
             'kuba': [
                 self.build_dialogue_tree("kubastage0")
+            ],
+            'zyzio': [
+                self.build_dialogue_tree("zyziostage0")
+            ],
+            'kasia': [
+                self.build_dialogue_tree('kasiastage0')
             ],
             'matma': self.build_maths_tree(),
             'concierge': self.build_concierge_tree()
@@ -104,8 +110,8 @@ class DialogueWindow():
 
             root.add_child(after0, "0")
 
-        elif mode == "kasiastage0":
-            dp = "Dialogues/kasia/stage0/" # Directory Prefix
+        elif mode == "cudstage0":
+            dp = "Dialogues/cud/stage0/" # Directory Prefix
             root = DialogueTreeNode(dp+"root.txt")
 
             i_need_library = DialogueTreeNode(dp+'i_need_library.txt')
@@ -132,8 +138,8 @@ class DialogueWindow():
             root.add_child(i_need_library, "0")
             root.add_child(beated_up, "1")
 
-        elif mode == "kasiastage1":
-            dp = "Dialogues/kasia/stage1/"
+        elif mode == "cudstage1":
+            dp = "Dialogues/cud/stage1/"
             root = DialogueTreeNode(dp+"root.txt")
 
             energy_not_found = DialogueTreeNode("QUIT")
@@ -150,8 +156,8 @@ class DialogueWindow():
             root.add_child(energy_not_found, "1")
             root.add_child(liar, "ITEMNOTFOUND")
 
-        elif mode == "kubastage0":
-            dp = "Dialogues/kuba/stage0/" # Directory Prefix
+        elif mode == "zyziostage0":
+            dp = "Dialogues/zyzio/stage0/" # Directory Prefix
             root = DialogueTreeNode(dp+"root.txt")
 
             library = DialogueTreeNode(dp+"library.txt")
@@ -160,6 +166,54 @@ class DialogueWindow():
             library.add_child(after_library, "0")
 
             root.add_child(library, "0")
+
+        elif mode == 'kasiastage0':
+            dp = "Dialogues/kasia/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"test_dialogue1.txt")
+
+            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
+            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
+            # to zmienna dotyczące pytania 4 będzie się nazywać after010
+            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=1)
+            after0.add_child(after00, "0")
+
+            after1 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
+            root.add_child(after1, "1")
+
+        elif mode == 'kasiastage1':
+            dp = "Dialogues/kasia/stage1/"
+            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+
+            after0 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
+
+        elif mode == 'kubastage0':
+            dp = "Dialogues/kuba/stage0/" # Directory Prefix
+            root = DialogueTreeNode(dp+"test_dialogue1.txt")
+
+            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
+            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
+            # to zmienna dotyczące pytania 4 będzie się nazywać after010
+            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
+            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=1)
+            after0.add_child(after00, "0")
+
+            after1 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
+            root.add_child(after1, "1")
+
+        elif mode == 'kubastage1':
+            dp = "Dialogues/kuba/stage1/"
+            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+
+            after0 = DialogueTreeNode("QUIT")
+
+            root.add_child(after0, "0")
 
         return root
 
