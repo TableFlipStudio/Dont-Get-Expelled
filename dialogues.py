@@ -70,7 +70,8 @@ class DialogueWindow():
                 self.build_dialogue_tree('kasiastage0')
             ],
             'matma': self.build_maths_tree(),
-            'concierge': self.build_concierge_tree()
+            'concierge': self.build_concierge_tree(),
+            'office': self.build_office_tree()
 
         }
 
@@ -253,6 +254,18 @@ class DialogueWindow():
 
     def build_concierge_tree(self):
         dp = 'Dialogues/concierge/'
+
+        root = DialogueTreeNode(dp+'root.txt')
+        no_list = DialogueTreeNode(dp+'no_list_here.txt')
+        end = DialogueTreeNode("QUIT")
+
+        no_list.add_child(end, '0')
+        root.add_child(no_list, '0')
+
+        return root
+
+    def build_office_tree(self):
+        dp = 'Dialogues/office/'
 
         root = DialogueTreeNode(dp+'root.txt')
         no_list = DialogueTreeNode(dp+'no_list_here.txt')

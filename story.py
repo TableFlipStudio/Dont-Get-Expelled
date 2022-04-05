@@ -53,3 +53,15 @@ class StoryEvents():
                 self.window.node = self.window.dialogues['concierge']
                 self.window.load_dialogue()
                 self.quests.remove('concierge')
+                self.quests.append('office')
+
+        if 'office' in self.quests:
+            office = self.map._access_Object('objects.office')
+            office_rect = pygame.Rect(office.x, office.y,
+                office.width, office.height)
+
+            if self.character.rect.colliderect(office_rect):
+                self.window.active = True
+                self.window.node = self.window.dialogues['office']
+                self.window.load_dialogue()
+                self.quests.remove('office')
