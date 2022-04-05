@@ -42,8 +42,8 @@ class DoGeX():
         pygame.display.set_caption("Don't Get Expelled! The Batory Game")
 
         #Wczytanie zasobów z pliku
-        self.sounds = Music(self)
         self.character = MainCharacter(self)
+        self.sounds = Music(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
         self.inventory = Inventory(self)
@@ -91,7 +91,7 @@ class DoGeX():
         i = 0
 
         
-        self.sounds.play_music('background')
+        #self.sounds.play_music('background')
 
         while True:
             self._check_events()
@@ -101,6 +101,7 @@ class DoGeX():
             if not self.interface_active():
                 pygame.mixer.music.unpause()
                 self.character.update()
+                self.sounds.check_walking_sound()
                 if self.m_menu._check_save_exists() and i < 1:
                     self.map.update('static_only')
                     i += 1
@@ -482,6 +483,11 @@ class DoGeX():
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
+        
+        if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+            self.character.moving = True
+        else:
+            self.character.moving = False
 
         if event.key == pygame.K_RIGHT:
             self.character.moving_right = False
@@ -716,9 +722,15 @@ def intro(dogex):
 def _run_game_over(dogex):
     """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
     gmovr = GameOverScreen(dogex)
+    intro_screen.black_screen()
+    pygame.display.flip()
+    pygame.time.wait(300)
+    dogex.sounds.play_sound('game_over_better')
+    pygame.time.wait(1700)
+    intro_screen.fadein(gmovr.static_img, 0.3)
     gmovr.blitme()
     pygame.display.flip()
-
+    
     while True:
         # Patrz: _run_main_menu()
         relaunch = gmovr.check_events(dogex)
@@ -732,6 +744,6 @@ if __name__ == '__main__':
         #intro(dogex)
         menu = MainMenu(dogex)
 
-        _run_main_menu(dogex)
+        #_run_main_menu(dogex)
         dogex.run_game()
         _run_game_over(dogex)

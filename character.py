@@ -9,7 +9,7 @@ class MainCharacter():
         self.screen_rect = self.screen.get_rect()
         self.screen_height = self.screen_rect.height
         self.screen_width = self.screen_rect.width
-        self.sounds = dogex.sounds
+        #self.sounds = dogex.sounds
 
         self.moving = False
 
@@ -226,24 +226,19 @@ class MainCharacter():
             return self.stationary_image
 
         if self.moving_down:
-            self.sounds.check_sounds('corridor')
             return self.down_list[self.animation_loop(9)]
 
         elif self.moving_up:
-            self.sounds.check_sounds('corridor')
             return self.up_list[self.animation_loop(9)]
 
         elif self.moving_right:
-            self.sounds.check_sounds('corridor')
             return self.right_list[self.animation_loop(9)]
 
         elif self.moving_left:
-            self.sounds.check_sounds('corridor')
             return self.left_list[self.animation_loop(9)]
 
         
         else:
-            self.sounds.check_sounds('corridor', 'stop')
             return self.stationary_image
 
     def animation_loop(self, len):
