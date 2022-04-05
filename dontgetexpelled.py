@@ -468,8 +468,12 @@ class DoGeX():
         if self.window.active:
             msgid = str(self.window.selectedID)
             npc = self._find_npc_collision()
-            self.window.node = self.window.node.children[msgid]
-            self.window.load_dialogue(npc)
+            try:
+                self.window.node = self.window.node.children[msgid]
+            except KeyError:
+                pass
+            else:
+                self.window.load_dialogue(npc)
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""

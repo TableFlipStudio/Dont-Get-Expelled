@@ -5,10 +5,6 @@
 # about it
 
 
-
-
-### LINE 222
-
 import pygame
 import pygame.freetype
 
