@@ -256,7 +256,7 @@
   <object id="186" name="office" x="1130.67" y="3621.33" width="496" height="250.667"/>
  </objectgroup>
  <objectgroup id="13" name="items">
-  <object id="166" name="zubr" x="2753.33" y="3742.67">
+  <object id="166" name="zubr" x="2225.33" y="4142.67">
    <point/>
   </object>
   <object id="167" name="trampki" x="6553.33" y="2130.67">

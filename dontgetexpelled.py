@@ -72,10 +72,10 @@ class DoGeX():
         self._create_smenu_buttons()
 
         # Utworzenie przedmiotów i NPC
-        self.items.add(Item(self, 'energy_drink', True))
+        self.items.add(Item(self, 'energy_drink'))
         self.items.add(Item(self, 'kartka', True))
         self.items.add(Item(self, 'trampki'))
-        self.items.add(Item(self, 'zubr'))
+        self.items.add(Item(self, 'zubr', True, 1))
 
         self.npcs.add(NPC(self,'kuba', -1))
         self.npcs.add(NPC(self,'kasia', -1))
@@ -198,6 +198,7 @@ class DoGeX():
             (item.obj.x, item.obj.y) = (itemdata[1][0] + 30, itemdata[1][1] + 30)
             item.rect.center = (itemdata[1])
             item.shown = itemdata[2]
+            item.faultValue = itemdata[3]
             self.items.add(item)
 
     def _place_loaded_NPCs(self, npcs):
@@ -257,13 +258,14 @@ class DoGeX():
         with open('jsondata/quest.json', 'w') as file:
             json.dump(quest, file)
 
-    def _group_to_list(self, group):
+    def _group_to_list(self, group, isItem=False):
         """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
         Potrzebne do zapisywania, ponieważ moduł JSON nie obsługuje
-        niewbudowanych struktur danych. Items określa, czy nal"""
+        niewbudowanych struktur danych. isItem określa, czy podana grupa
+        to przedmioty (ze względu na dodatkowe parametry)"""
         myList = [] # nazwa dziwna bo 'list' jest zajęte przez built-in func.
         for sprite in group.sprites():
-            spritedata = (sprite.id, sprite.rect.topleft, sprite.shown)
+            spritedata = (sprite.id, sprite.rect.topleft, sprite.shown, sprite.faultValue) if isItem else (sprite.id, sprite.rect.topleft)
             myList.append(spritedata)
         return myList
 
@@ -274,8 +276,8 @@ class DoGeX():
         items = [
             Item(self, 'kartka', True),
             Item(self, 'trampki'),
-            Item(self, 'zubr'),
-            Item(self, 'energy_drink', True)
+            Item(self, 'zubr', True, 1),
+            Item(self, 'energy_drink')
             ]
         npcs = [
             NPC(self, 'kasia', -1),
@@ -609,6 +611,7 @@ class DoGeX():
                 for slot in self.slots.sprites():
                     #Umieść przedmiot tylko raz
                     if slot.content is None:
+                        self.expelling.faults.append(item.faultValue)
                         slot.content = item
                         break
 
