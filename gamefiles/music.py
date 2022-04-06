@@ -43,39 +43,7 @@ class Music():
         pygame.mixer.Sound(self.sounds[sound_name]).play()
         pygame.mixer.Sound(self.sounds[sound_name]).stop()
 
-    def check_sounds(self, sound_name, state='play'):
-        """sprawdza czy dany dzwiek jest włączony i włącza go
-
-        Args:
-            sound_name (str): nazwa dzwieku
-            state (str, optional): czy ma dżwięk zatrzymać sprawdza. Defaults to 'play'. #polska jenzyk trudna być
-        """
-        sound = pygame.mixer.Sound(self.sounds[sound_name])
-        
-        if self.sound_playing == None:
-            sound.play(-1)
-            self.sound_playing = sound_name
-        
-        elif state == 'stop':
-            sound.stop()
-            self.sound_playing = None
-
-        elif self.sound_playing == sound_name:
-            sound.stop()
-            self.sound_playing = None
-            
-    def check_walking_sound(self):
-        """sprawdza czy dzwiek chodzenia jest włączony i włącza go"""
     
-        sound = pygame.mixer.Sound(self.sounds['corridor'])
-        
-        if not self.walkind_sound and self.character.moving:
-            sound.play(-1)
-            #sound.stop()
-            self.walkind_sound = True
-            
-        if self.walkind_sound and (self.character.moving == False):
-            self.walkind_sound = False
         
         
         
