@@ -69,12 +69,12 @@ class Music():
     
         sound = pygame.mixer.Sound(self.sounds['corridor'])
         
-        if self.walkind_sound == False and self.character.moving:
+        if not self.walkind_sound and self.character.moving:
             sound.play(-1)
+            #sound.stop()
             self.walkind_sound = True
-        
-        elif self.walkind_sound and self.character.moving == False:
-            sound.stop()
+            
+        if self.walkind_sound and (self.character.moving == False):
             self.walkind_sound = False
         
         
