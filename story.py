@@ -119,6 +119,16 @@ class StoryEvents():
                 self.quests.remove('office')
                 self.quests.append('exit')
 
+        if 'exit' in self.quests:
+            exits = self.map._get_all_contents('exit-areas')
+            for exit in exits:
+                exit_rect = pygame.Rect(exit.x, exit.y,
+                    exit.width, exit.height)
+
+                if self.character.rect.colliderect(exit_rect):
+                    print('collision!')
+                    self.dogex.game_won = True
+
         self._update_msg()
 
     def blitmsg(self):

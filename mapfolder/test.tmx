@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="111" height="81" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="190">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="111" height="81" tilewidth="64" tileheight="64" infinite="0" nextlayerid="15" nextobjectid="198">
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer id="5" name="doł" width="111" height="81">
   <data encoding="csv">
@@ -243,6 +243,7 @@
   <object id="177" x="2945.33" y="3956" width="24" height="10.6667"/>
   <object id="179" x="3068" y="3904" width="197.333" height="65.3333"/>
   <object id="181" x="3069.33" y="3586.67" width="12" height="165.333"/>
+  <object id="195" x="6149.33" y="1765.33" width="185.333" height="94.6667"/>
  </objectgroup>
  <objectgroup id="11" name="objects">
   <object id="106" name="spawn" x="895.03" y="4432.85">
@@ -269,8 +270,13 @@
    <point/>
   </object>
  </objectgroup>
+ <objectgroup id="14" name="exit-areas">
+  <object id="190" x="2928" y="3329.33" width="160" height="109.333"/>
+  <object id="191" x="2222.67" y="3986.67" width="65.3333" height="128"/>
+  <object id="196" x="6457.33" y="4108" width="94.6667" height="160"/>
+ </objectgroup>
  <objectgroup id="12" name="npc">
-  <object id="157" name="marek" x="4572" y="3685.33">
+  <object id="157" name="marek" x="4577.33" y="3716">
    <point/>
   </object>
   <object id="158" name="kasia" x="1565.33" y="3770.66">

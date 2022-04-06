@@ -6,12 +6,12 @@ from save import Button
 class GameOverScreen():
     """Ekran do wyświetlania po przegranej"""
 
-    def __init__(self, dogex):
+    def __init__(self, dogex, game_won):
         self.settings = dogex.settings
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
 
-        self.image = pygame.image.load("images/gameover.bmp")
+        self.image = pygame.image.load("images/gameover.bmp") if not game_won else pygame.image.load("images/gamewon.bmp")
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
 

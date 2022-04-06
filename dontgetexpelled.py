@@ -87,6 +87,8 @@ class DoGeX():
 
         self.map.set_spawn("player")
 
+        self.game_won = False
+
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
         i = 0
@@ -110,9 +112,11 @@ class DoGeX():
             self.clock.tick(self.settings.fps)
 
             # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
-            if self.expelling.check_expelled():
+            if self.expelling.check_expelled() or self.game_won:
                 pygame.mixer.music.pause()
                 break
+
+        return self.game_won
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
@@ -223,7 +227,7 @@ class DoGeX():
         """Zapisanie postępu w grze"""
         chpos = self.character.rect.topleft
         invcnt = []
-        items = self._group_to_list(self.items)
+        items = self._group_to_list(self.items, True)
         npcs = self._group_to_list(self.npcs)
         quest = self.story.quests
 
@@ -430,12 +434,17 @@ class DoGeX():
                 if found_npc is None:
                     self._pickup_item()
                 else:
-                    max_stage = len(self.window.dialogues[found_npc.id]) - 1
-                    if found_npc.stage <= max_stage and found_npc.stage >= 0:
-                        #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
-                        self.window.active = True
-                        self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
-                        self.window.load_dialogue(found_npc)
+                    # Jesli ten NPC nie ma dialogów, nie wczytuj
+                    try:
+                        max_stage = len(self.window.dialogues[found_npc.id]) - 1
+                    except KeyError:
+                        pass
+                    else:
+                        if found_npc.stage <= max_stage and found_npc.stage >= 0:
+                            #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
+                            self.window.active = True
+                            self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
+                            self.window.load_dialogue(found_npc)
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
@@ -693,9 +702,9 @@ def _run_main_menu(dogex):
         if run_detected:
             break
 
-def _run_game_over(dogex):
+def _run_game_over(dogex, game_won):
     """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
-    gmovr = GameOverScreen(dogex)
+    gmovr = GameOverScreen(dogex, game_won)
     gmovr.blitme()
     pygame.display.flip()
 
@@ -711,5 +720,5 @@ if __name__ == '__main__':
         menu = MainMenu(dogex)
 
         _run_main_menu(dogex)
-        dogex.run_game()
-        _run_game_over(dogex)
+        game_won = dogex.run_game()
+        _run_game_over(dogex, game_won) # This can be a win too
