@@ -83,6 +83,7 @@ class DoGeX():
         self.npcs.add(NPC(self, 'cud', -1))
         self.npcs.add(NPC(self, 'zyzio'))
         self.npcs.add(NPC(self, 'andrzej', -1))
+        self.npcs.add(NPC(self, 'deezlegz'))
 
         self.map.set_spawn("player")
 
@@ -285,7 +286,8 @@ class DoGeX():
             NPC(self, 'marek', -1),
             NPC(self, 'zyzio'),
             NPC(self, 'cud', -1),
-            NPC(self, 'andrzej', -1)
+            NPC(self, 'andrzej', -1),
+            NPC(self, 'deezlegz')
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         npcs = [(npc.id, npc.rect.center) for npc in npcs]
