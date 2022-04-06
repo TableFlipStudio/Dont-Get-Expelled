@@ -101,7 +101,7 @@ class DoGeX():
             if not self.interface_active():
                 pygame.mixer.music.unpause()
                 self.character.update()
-                self.sounds.check_walking_sound()
+                #self.so`unds.check_walking_sound()
                 if self.m_menu._check_save_exists() and i < 1:
                     self.map.update('static_only')
                     i += 1
@@ -741,9 +741,9 @@ if __name__ == '__main__':
     while True:
         dogex = DoGeX()
         intro_screen = IntroScreen(dogex)
-        #intro(dogex)
+        intro(dogex)
         menu = MainMenu(dogex)
 
-        #_run_main_menu(dogex)
+        _run_main_menu(dogex)
         dogex.run_game()
         _run_game_over(dogex)
