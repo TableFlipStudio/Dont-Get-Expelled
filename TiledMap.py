@@ -114,7 +114,7 @@ class Map():
         # tych obiektów, czyli praktycznie ich usunięcie po wcyztaniu zapisu.
         elif parameter == 'static_only':
             contents = []
-            layers = ['collision', 'objects']
+            layers = ['collision', 'objects', 'exit-areas']
             for layer in layers:
                 layer = self._access_Object(layer)
                 contents += [obj for obj in layer]
@@ -131,7 +131,7 @@ class Map():
 
     def collision(self):
         """Wykrycie typu kolizj między obiektami na mapie a postacią"""
-        contents = self._get_all_contents('static_only')#'collision')
+        contents = self._get_all_contents('collision')
 
         for obj in contents:
 

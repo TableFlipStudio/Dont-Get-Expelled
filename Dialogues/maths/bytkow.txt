@@ -1,3 +1,6 @@
-(Bytkow question here) 
+In Bytkow Pedzel Inc. is painting the front wall of the Bytkow History Museum. The Bytkow 
+History Museum has a shape of a right triangle and the remaining walls, that were already 
+painted, have lengths of 100m and 150m. The Museum's height is 10m. How many m^2 of paint 
+are needed to paint the front wall? 
 > about 325000 m2
 > about 5700 m2
