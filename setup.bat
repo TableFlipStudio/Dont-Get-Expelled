@@ -1,4 +1,20 @@
 @echo off
+set /A installed=0
+
+mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\ || set /A installed=1
+
+cls
+
+if %installed%==1 (
+		echo.
+		echo The game is already installed!
+		echo.
+		pause
+	exit /B
+)	
+
+echo.
+echo initializing the download...
 
 set /A i=0
 python --version || set /A i=1
@@ -6,7 +22,8 @@ python --version || set /A i=1
 
 if %i%==1 (
 
-		
+		echo.
+		echo installing Python...
 		echo. 
 		echo WAIT PATIENTLY! 
 		echo.  
@@ -20,8 +37,7 @@ if %i%==1 (
 		
 		python-3.10.4-amd64.exe /quiet PrependPath=1
 )
-
-mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\
+echo Python installed!
 
 curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/main.zip -o %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip
 
