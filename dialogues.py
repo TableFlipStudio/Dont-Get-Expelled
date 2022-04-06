@@ -4,8 +4,11 @@
 # currently I'm quite unmotivated to do it, so, Igor, tell me what do you think
 # about it
 
+
 import pygame
 import pygame.freetype
+
+from item import Item
 
 class DialogueWindow():
     """Klasa odpowiadająca za okno dialogowe"""
@@ -15,6 +18,7 @@ class DialogueWindow():
         self.screen_rect = self.screen.get_rect()
         self.settings  = dogex.settings
         self.expelling = dogex.expelling
+        self.dogex = dogex
 
         self.rect = pygame.Rect(0, 0, self.settings.screen_width,
             self.settings.screen_height)
@@ -45,18 +49,23 @@ class DialogueWindow():
 
         #Słownik przechowujący wszystkie pliki z dialogami, przypisane do NPC
         self.dialogues = {
-            'marek': [
-                self.build_dialogue_tree("marekstage0"),
-                self.build_dialogue_tree("marekstage1")
+            'cud': [
+                self.build_dialogue_tree("cudstage0"),
+                self.build_dialogue_tree("cudstage1")
             ],
-            'kasia': [
-                self.build_dialogue_tree("kasiastage0"),
-                self.build_dialogue_tree("kasiastage1")
+            'zyzio': [
+                self.build_dialogue_tree("zyziostage0")
             ],
-            'kuba': [
-                self.build_dialogue_tree("kubastage0")
+            'andrzej': [
+                self.build_dialogue_tree('andrzejstage0')
             ],
-            'matma': self.build_maths_tree()
+            'deezlegz': [
+                self.build_dialogue_tree('deezlegzstage0'),
+                self.build_dialogue_tree('deezlegzstage1')
+            ],
+            'matma': self.build_maths_tree(),
+            'concierge': self.build_concierge_tree(),
+            'office': self.build_office_tree()
 
         }
 
@@ -72,46 +81,21 @@ class DialogueWindow():
     def build_dialogue_tree(self, mode):
         """Utworzenie drzewa dialogowego. Wartość QUIT przypisawana jest
         węzłowi następującemu po odpowiedzi, która kończy dialog"""
-
-        if mode == "marekstage0":
-            dp = "Dialogues/marek/stage0/" # Directory Prefix
-            root = DialogueTreeNode(dp+"test_dialogue1.txt")
-
-            #Zmienne afterX wskazują na ścieżkę 'dostępu' do kwestii po danej odpowiedzi, czyli
-            # jeśli mamy sekwwncje pytanie1-odpowiedź0-pytanie2-odpowiedź1-pytanie3-odpwoiedź0-pytanie4
-            # to zmienna dotyczące pytania 4 będzie się nazywać after010
-            after0 = DialogueTreeNode(dp+"test_dialogue2.txt")
-            after00 = DialogueTreeNode("QUIT", faultValue=1, stageUp=1)
-            after0.add_child(after00, "0")
-
-            after1 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
-            root.add_child(after1, "1")
-
-        elif mode == "marekstage1":
-            dp = "Dialogues/marek/stage1/"
-            root = DialogueTreeNode(dp+"test_dialogue3.txt")
-
-            after0 = DialogueTreeNode("QUIT")
-
-            root.add_child(after0, "0")
-
-        elif mode == "kasiastage0":
-            dp = "Dialogues/kasia/stage0/" # Directory Prefix
+        if mode == "cudstage0":
+            dp = "Dialogues/cud/stage0/" # Directory Prefix
             root = DialogueTreeNode(dp+"root.txt")
 
             i_need_library = DialogueTreeNode(dp+'i_need_library.txt')
             beated_up = DialogueTreeNode(dp+'beated_up.txt')
 
-            after_beated_up = DialogueTreeNode("QUIT", faultValue=5)
+            after_beated_up = DialogueTreeNode("QUIT", faultValue=2137)
             favour = DialogueTreeNode(dp+'favour.txt')
 
             accepted = DialogueTreeNode(dp+"accepted.txt")
             threatened = DialogueTreeNode(dp+"threatened.txt")
-            after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2)
+            after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2, changeQuest=('both', ('concierge', 'cud')))
 
-            after_accepted = DialogueTreeNode("QUIT", stageUp=1)
+            after_accepted = DialogueTreeNode("QUIT", stageUp=1, changeQuest=('add', 'andrzej'))
 
             accepted.add_child(after_accepted, '0')
             threatened.add_child(after_threatened, '0')
@@ -125,16 +109,26 @@ class DialogueWindow():
             root.add_child(i_need_library, "0")
             root.add_child(beated_up, "1")
 
-        elif mode == "kasiastage1":
-            dp = "Dialogues/kasia/stage1/"
-            root = DialogueTreeNode(dp+"test_dialogue3.txt")
+        elif mode == "cudstage1":
+            dp = "Dialogues/cud/stage1/"
+            root = DialogueTreeNode(dp+"root.txt")
 
-            after0 = DialogueTreeNode("QUIT")
+            energy_not_found = DialogueTreeNode("QUIT")
+            energy_found = DialogueTreeNode(dp+'got_nrg_drink.txt', targetItem='energy_drink')
+            liar = DialogueTreeNode(dp+'dont_lie.txt', faultValue=1)
 
-            root.add_child(after0, "0")
+            after_liar = DialogueTreeNode("QUIT")
+            after_found = DialogueTreeNode("QUIT", stageUp=1, giveItem='energy_drink', changeQuest=('both', ('concierge', 'cud')))
 
-        elif mode == "kubastage0":
-            dp = "Dialogues/kuba/stage0/" # Directory Prefix
+            energy_found.add_child(after_found, "0")
+            liar.add_child(after_liar, "0")
+
+            root.add_child(energy_found, "0")
+            root.add_child(energy_not_found, "1")
+            root.add_child(liar, "ITEMNOTFOUND")
+
+        elif mode == "zyziostage0":
+            dp = "Dialogues/zyzio/stage0/" # Directory Prefix
             root = DialogueTreeNode(dp+"root.txt")
 
             library = DialogueTreeNode(dp+"library.txt")
@@ -143,6 +137,48 @@ class DialogueWindow():
             library.add_child(after_library, "0")
 
             root.add_child(library, "0")
+
+        elif mode == 'andrzejstage0':
+            dp = 'Dialogues/andrzej/stage0/'
+            root = DialogueTreeNode(dp+'root.txt')
+            yes = DialogueTreeNode(dp+'yes.txt')
+            oh_right = DialogueTreeNode(dp+'oh_right.txt', stageUp=1, getItem='energy_drink', changeQuest=('remove', 'andrzej'))
+            end = DialogueTreeNode("QUIT")
+
+            oh_right.add_child(end, '0')
+            yes.add_child(oh_right, '0')
+            root.add_child(yes, '0')
+
+        elif mode == 'deezlegzstage0':
+            dp = 'Dialogues/deezlegz/stage0/'
+
+            root = DialogueTreeNode(dp+'root.txt')
+            get_lost = DialogueTreeNode("QUIT")
+            wassup = DialogueTreeNode(dp+'where_trainers.txt')
+            end = DialogueTreeNode("QUIT", stageUp=1, changeQuest=('add', 'trainers'))
+
+            wassup.add_child(end, '0')
+            root.add_child(wassup, '0')
+            root.add_child(get_lost, '1')
+
+        elif mode == 'deezlegzstage1':
+            dp = 'Dialogues/deezlegz/stage1/'
+
+            root = DialogueTreeNode(dp+'root.txt')
+
+            liar = DialogueTreeNode(dp+'dont_lie.txt', faultValue=1)
+            after_liar = DialogueTreeNode('QUIT')
+            not_found = DialogueTreeNode("QUIT")
+
+            trainers = DialogueTreeNode(dp+'got_trainers.txt', targetItem='trampki', changeQuest=('remove', 'trainers'))
+            end = DialogueTreeNode("QUIT", giveItem='trainers', faultValue=-2, stageUp=1)
+
+            trainers.add_child(end, '0')
+            liar.add_child(after_liar, '0')
+
+            root.add_child(trainers, '0')
+            root.add_child(not_found, '1')
+            root.add_child(liar, 'ITEMNOTFOUND')
 
         return root
 
@@ -180,17 +216,73 @@ class DialogueWindow():
 
         return root
 
-    def load_dialogue(self, npc=None):
-        """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
-        self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
+    def build_concierge_tree(self):
+        dp = 'Dialogues/concierge/'
+
+        root = DialogueTreeNode(dp+'root.txt')
+        no_list = DialogueTreeNode(dp+'no_list_here.txt')
+        end = DialogueTreeNode("QUIT")
+
+        no_list.add_child(end, '0')
+        root.add_child(no_list, '0')
+
+        return root
+
+    def build_office_tree(self):
+        dp = 'Dialogues/office/'
+
+        root = DialogueTreeNode(dp+'root.txt')
+        no_list = DialogueTreeNode(dp+'no_list_here.txt')
+        end = DialogueTreeNode("QUIT")
+
+        no_list.add_child(end, '0')
+        root.add_child(no_list, '0')
+
+        return root
+
+    def _check_node_events(self, npc):
+        """Sprawdzenie instrukcji specjalnych dotyczących węzła: zwiększnie
+        stage'a, popełnione przewinienie, przekazywanie przedmiotów itd."""
+
+        if self.node.targetItem:
+            if not self._check_item_in_inventory(self.node.targetItem):
+                self.node = self.node.parent.children['ITEMNOTFOUND']
 
         # How bad is this answer?
-        if self.node.faultValue > 0:
+        if self.node.faultValue != 0:
             self.expelling.faults.append(self.node.faultValue)
 
         if npc: # uruchom tylko, jesli to dialog z NPC (nieszczęsne pytania matematyczne)
             if self.node.stageUp > 0:
                 npc.stage += self.node.stageUp
+
+        for slot in self.dogex.slots.sprites():
+            if slot.content:
+                if self.node.giveItem == slot.content.id:
+                    slot.content = None
+                    break
+
+        if self.node.getItem:
+            for slot in self.dogex.slots.sprites():
+                if slot.content is None:
+                    slot.content = Item(self.dogex, self.node.getItem)
+                    break
+
+        if self.node.changeQuest:
+            mode, quest = self.node.changeQuest
+            if mode == 'add':
+                self.dogex.story.quests.append(quest)
+            elif mode == 'remove':
+                self.dogex.story.quests.remove(quest)
+            elif mode == 'both':
+                self.dogex.story.quests.append(quest[0])
+                self.dogex.story.quests.remove(quest[1])
+
+    def load_dialogue(self, npc=None):
+        """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
+        self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
+
+        self._check_node_events(npc)
 
         if self.node.data == "QUIT": # See: build_dialogue_tree()
             self.active = False
@@ -258,6 +350,13 @@ class DialogueWindow():
         rect.y = yPos
         self.msgs.append({'image': image, 'rect': rect, 'id': id})
 
+    def _check_item_in_inventory(self, itemID):
+        """Zwraca True, jeśli podany przedmiot znajduje się w ekwipunku"""
+        for slot in self.dogex.slots.sprites():
+            if slot.content:
+                if slot.content.id == itemID:
+                    return True
+
     def blit_window(self):
         """Wyświetlenie okna dialogowego, pola tekstowego
         i kwestii na ekranie"""
@@ -275,14 +374,34 @@ class DialogueTreeNode():
     """Drzewo przechowujące pliki z dialogami wraz z informacją
     o kolejności, jaki dialog po jakiej odpowiedzi itd."""
 
-    def __init__(self, data, faultValue=0, stageUp=0):
+    def __init__(self, data, faultValue=0, stageUp=0, targetItem=None,
+        giveItem=None, getItem=None, changeQuest=None):
         """Inicjalizacja węzła"""
         self.data = data
-        self.stageUp = stageUp # Does this dialogue change something between you an NPC?
-                               # e.g. quest accepted.
-        self.faultValue = faultValue     # The bigger the fault value, the more
-        self.children = {}               # severe the fault is and makes you
-        self.parent = None               # closer to being expelled
+        self.children = {}
+        self.parent = None
+
+        # Does this dialogue change something between you an NPC? e.g. quest accepted.
+        self.stageUp = stageUp
+
+        # The bigger the fault value, the more severe the fault is
+        # and makes you closer to being expelled
+        self.faultValue = faultValue
+
+        # When loading this dialogue, the game will check whether you have
+        # the item in inventory and basing on that will load different dialogues
+        self.targetItem = targetItem
+
+        # Item (ID) to be removed from invetory after loading this node
+        self.giveItem = giveItem
+
+        # Item (ID) to be placed in inventory after loading this node
+        self.getItem = getItem
+
+        # Tuple (mode, quest), where mode is either 'add' or 'remove'
+        # and quest is well, the quest OR
+        # ('both', (questToAdd, questToRemove))
+        self.changeQuest = changeQuest
 
     def add_child(self, child, index: str()):
         """Dodanie potomka do drzewa. index to indeks odpowiedzi, po której

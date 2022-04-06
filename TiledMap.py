@@ -116,7 +116,7 @@ class Map():
         # tych obiektów, czyli praktycznie ich usunięcie po wcyztaniu zapisu.
         elif parameter == 'static_only':
             contents = []
-            layers = ['collision', 'objects']
+            layers = ['collision', 'objects', 'exit-areas']
             for layer in layers:
                 layer = self._access_Object(layer)
                 contents += [obj for obj in layer]

@@ -52,6 +52,7 @@ class DoGeX():
         self.menu = SaveMenu(self)
         self.m_menu = MainMenu(self)
         self.story = StoryEvents(self)
+
         self.window_options = IntroScreen(self)# ta klasa występuje też pod nazwą intro_screen tylko dla głównej pętli gry (na dole)
 
         self.slots = pygame.sprite.Group()
@@ -73,22 +74,29 @@ class DoGeX():
         # Utworzenie przycisków menu zapisu
         self._create_smenu_buttons()
 
-        #Testowe rozmieszczenie przedmiotów i NPC
+        # Utworzenie przedmiotów i NPC
         self.items.add(Item(self, 'energy_drink'))
-        self.items.add(Item(self, 'kartka'))
-        self.items.add(Item(self, 'trampki'))
-        self.items.add(Item(self, 'zubr'))
+        self.items.add(Item(self, 'kartka', True))
+        self.items.add(Item(self, 'trampki', True))
+        self.items.add(Item(self, 'zubr', True, 1))
 
-
-        self.npcs.add(NPC(self,'kuba'))
+        self.npcs.add(NPC(self,'kuba', -1))
         self.npcs.add(NPC(self,'kasia', -1))
-        self.npcs.add(NPC(self,'marek'))
+        self.npcs.add(NPC(self,'marek', -1))
+        self.npcs.add(NPC(self, 'cud', -1))
+        self.npcs.add(NPC(self, 'zyzio'))
+        self.npcs.add(NPC(self, 'andrzej', -1))
+        self.npcs.add(NPC(self, 'deezlegz'))
 
         self.map.set_spawn("player")
+
+        self.game_won = False
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
         i = 0
+
+        self.sounds.play_music('background')
 
         
         #self.sounds.play_music('background')
@@ -113,9 +121,11 @@ class DoGeX():
             self.clock.tick(self.settings.fps)
 
             # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
-            if self.expelling.check_expelled():
+            if self.expelling.check_expelled() or self.game_won:
                 pygame.mixer.music.pause()
                 break
+
+        return self.game_won
 
     def _create_slots(self):
         """Utworzenie wszystkich slotów ekwipunku"""
@@ -177,7 +187,7 @@ class DoGeX():
         self._place_loaded_items(items)
         self._place_loaded_NPCs(npcs)
         self.expelling.fault_counter = faultcntr
-        self.story.inx = quest
+        self.story.quests = quest
 
         for npc in self.npcs.sprites():
             npc.stage = stages[npc.id]
@@ -201,6 +211,8 @@ class DoGeX():
             item = Item(self, itemdata[0])
             (item.obj.x, item.obj.y) = (itemdata[1][0] + 30, itemdata[1][1] + 30)
             item.rect.center = (itemdata[1])
+            item.shown = itemdata[2]
+            item.faultValue = itemdata[3]
             self.items.add(item)
 
     def _place_loaded_NPCs(self, npcs):
@@ -224,9 +236,9 @@ class DoGeX():
         """Zapisanie postępu w grze"""
         chpos = self.character.rect.topleft
         invcnt = []
-        items = self._group_to_list(self.items)
+        items = self._group_to_list(self.items, True)
         npcs = self._group_to_list(self.npcs)
-        quest = self.story.inx
+        quest = self.story.quests
 
         for slot in self.slots.sprites():
             if slot.content is not None:
@@ -260,13 +272,14 @@ class DoGeX():
         with open('jsondata/quest.json', 'w') as file:
             json.dump(quest, file)
 
-    def _group_to_list(self, group):
+    def _group_to_list(self, group, isItem=False):
         """Utworzenie listy ID i pozycji obiektów na podstawie grupy pygame.
         Potrzebne do zapisywania, ponieważ moduł JSON nie obsługuje
-        niewbudowanych struktur danych"""
+        niewbudowanych struktur danych. isItem określa, czy podana grupa
+        to przedmioty (ze względu na dodatkowe parametry)"""
         myList = [] # nazwa dziwna bo 'list' jest zajęte przez built-in func.
         for sprite in group.sprites():
-            spritedata = (sprite.id, sprite.rect.topleft)
+            spritedata = (sprite.id, sprite.rect.topleft, sprite.shown, sprite.faultValue) if isItem else (sprite.id, sprite.rect.topleft)
             myList.append(spritedata)
         return myList
 
@@ -275,21 +288,25 @@ class DoGeX():
         chpos = (0, 0)
         invcnt = []
         items = [
-            Item(self, 'kartka'),
-            Item(self, 'trampki'),
-            Item(self, 'zubr'),
+            Item(self, 'kartka', True),
+            Item(self, 'trampki', True),
+            Item(self, 'zubr', True, 1),
             Item(self, 'energy_drink')
             ]
         npcs = [
             NPC(self, 'kasia', -1),
-            NPC(self, 'kuba'),
-            NPC(self, 'marek')
+            NPC(self, 'kuba', -1),
+            NPC(self, 'marek', -1),
+            NPC(self, 'zyzio'),
+            NPC(self, 'cud', -1),
+            NPC(self, 'andrzej', -1),
+            NPC(self, 'deezlegz')
             ]
         items = [(item.id, item.rect.topleft) for item in items]
         npcs = [(npc.id, npc.rect.center) for npc in npcs]
         faultcntr = self.settings.faults_to_be_expelled
         stages = {}
-        quest = 0
+        quest = ['math']
 
 
         with open("jsondata/character_pos.json", 'w') as file:
@@ -430,12 +447,17 @@ class DoGeX():
                 if found_npc is None:
                     self._pickup_item()
                 else:
-                    max_stage = len(self.window.dialogues[found_npc.id]) - 1
-                    if found_npc.stage <= max_stage and found_npc.stage >= 0:
-                        #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
-                        self.window.active = True
-                        self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
-                        self.window.load_dialogue(found_npc)
+                    # Jesli ten NPC nie ma dialogów, nie wczytuj
+                    try:
+                        max_stage = len(self.window.dialogues[found_npc.id]) - 1
+                    except KeyError:
+                        pass
+                    else:
+                        if found_npc.stage <= max_stage and found_npc.stage >= 0:
+                            #Jeśli E kliknięto przy NPC, wejdź z nim w dialog
+                            self.window.active = True
+                            self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
+                            self.window.load_dialogue(found_npc)
 
         if event.key == pygame.K_LSHIFT:
             self.settings.character_speed *= 2
@@ -478,8 +500,12 @@ class DoGeX():
         if self.window.active:
             msgid = str(self.window.selectedID)
             npc = self._find_npc_collision()
-            self.window.node = self.window.node.children[msgid]
-            self.window.load_dialogue(npc)
+            try:
+                self.window.node = self.window.node.children[msgid]
+            except KeyError:
+                pass
+            else:
+                self.window.load_dialogue(npc)
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
@@ -610,15 +636,19 @@ class DoGeX():
         i ewentualne podniesienie"""
 
         for item in self.items.copy():
+
             if pygame.Rect.colliderect(self.character.rect, item) and item.shown:
                 pygame.mixer.Sound('sounds/podnoszenie_przedmiotu.wav').play()
+
+            if pygame.Rect.colliderect(self.character.rect, item) and item.shown:
                 for slot in self.slots.sprites():
                     #Umieść przedmiot tylko raz
                     if slot.content is None:
+                        self.expelling.faults.append(item.faultValue)
                         slot.content = item
                         break
 
-                self.items.remove(item)
+                item.shown = False
 
     def _update_npcs(self):
         """Uaktualnienie pozycji wszystkich NPC"""
@@ -628,20 +658,20 @@ class DoGeX():
     def _update_items(self):
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
-            #print( item.id ,item.obj.x, item.obj.y)
             item.rect.center = ((item.obj.x), (item.obj.y))
+
             if item.id =='kartka':
                 item.shown = True
-            
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
-            
+
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.map_image, (self.map.x, self.map.y))
         #pygame.draw.rect(self.screen, ((0,255,0)), self.map.rect) #TOBEDELETED
         self.character.blitme()
         self.expelling.blitmsg()
+        self.story.blitmsg()
 
         #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
         if not self.inventory.active:
@@ -694,7 +724,7 @@ def _run_main_menu(dogex):
     dogex.sounds.play_music('background')
 
     intro_screen.fadein(menu.static_img, 0.2, 50)
-    menu.blitme() 
+    menu.blitme()
     pygame.display.flip()
     while True:
         # Jeśli kliknięto Load game albo New game, przerwij działanie menu
@@ -717,7 +747,7 @@ def intro(dogex):
 
     pygame.time.wait(1000)
     intro_screen.fadeout(0.3)
-    
+
 
 def _run_game_over(dogex):
     """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
@@ -737,6 +767,18 @@ def _run_game_over(dogex):
         if relaunch:
             break
 
+def _run_game_over(dogex, game_won):
+    """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
+    gmovr = GameOverScreen(dogex, game_won)
+    gmovr.blitme()
+    pygame.display.flip()
+    
+    while True:
+        # Patrz: _run_main_menu()
+        relaunch = gmovr.check_events(dogex)
+        if relaunch:
+            break
+
 if __name__ == '__main__':
     while True:
         dogex = DoGeX()
@@ -745,5 +787,5 @@ if __name__ == '__main__':
         menu = MainMenu(dogex)
 
         _run_main_menu(dogex)
-        dogex.run_game()
-        _run_game_over(dogex)
+        game_won = dogex.run_game()
+        _run_game_over(dogex, game_won) # This can be a win too
