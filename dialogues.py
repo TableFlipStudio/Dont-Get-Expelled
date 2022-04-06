@@ -98,7 +98,7 @@ class DialogueWindow():
 
             accepted = DialogueTreeNode(dp+"accepted.txt")
             threatened = DialogueTreeNode(dp+"threatened.txt")
-            after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2, changeQuest=('add', 'concierge'))
+            after_threatened = DialogueTreeNode("QUIT", faultValue=3, stageUp=2, changeQuest=('both', ('concierge', 'cud')))
 
             after_accepted = DialogueTreeNode("QUIT", stageUp=1, changeQuest=('add', 'andrzej'))
 

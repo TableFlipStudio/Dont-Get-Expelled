@@ -1,10 +1,14 @@
 import pygame
+import pygame.font
 
 class StoryEvents():
     """Zarządzanie biegiem fabuły i zdarzeniami z nim związanymi."""
 
     def __init__(self, dogex):
+        self.screen = dogex.screen
+        self.screen_rect = self.screen.get_rect()
         self.settings = dogex.settings
+
         self.map = dogex.map
         self.window = dogex.window
         self.character = dogex.character
@@ -12,6 +16,46 @@ class StoryEvents():
 
         # List of quest codenames and index to decide, which quest is active
         self.quests = ['math']
+
+        self.hints = {
+            'math': "Go to the math lesson in room 114",
+            'cud': "Get the book list from the Library",
+            'andrzej': "Bring an energy drink to the Girl In Black",
+            'concierge': "Ask for book list in the concierge",
+            'office': "Ask for book list in the school's office",
+            'exit': "Exit the school",
+            'trainers': "Find the Sporty Girl's trainers"
+        }
+
+        self.font = pygame.font.SysFont(None, 24)
+        self.text_color = (255, 255, 255)
+
+        self._update_msg()
+
+    def _set_hint(self):
+        """Uformowanie wskazówki na podstawie aktualnych questów"""
+        hint = 'Quests: '
+        for i, quest in list(enumerate(self.quests)):
+            last_quest = not (len(self.quests) > i + 1) # Checks if this is the last quest from the list
+
+            try:
+                hint += self.hints[quest]
+            except KeyError:
+                pass
+            else:
+                hint += '' if last_quest else ', '
+
+        return hint
+
+    def _update_msg(self):
+        """Utworzenie obrazka licznika na podstawie self.fault_counter."""
+        hint = self._set_hint()
+
+        self.image = self.font.render(hint, True,
+            self.text_color, None)
+        self.rect = self.image.get_rect()
+
+        self.rect.bottomleft = self.screen_rect.bottomleft
 
     def _check_story_events(self):
         """Zdarzenia związane z biegiem fabuły"""
@@ -73,3 +117,9 @@ class StoryEvents():
                 self.window.node = self.window.dialogues['office']
                 self.window.load_dialogue()
                 self.quests.remove('office')
+                self.quests.append('exit')
+
+        self._update_msg()
+
+    def blitmsg(self):
+        self.screen.blit(self.image, self.rect)

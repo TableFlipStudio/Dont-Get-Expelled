@@ -636,6 +636,7 @@ class DoGeX():
         #pygame.draw.rect(self.screen, ((0,255,0)), self.map.rect) #TOBEDELETED
         self.character.blitme()
         self.expelling.blitmsg()
+        self.story.blitmsg()
 
         #Wyświetlamy przedmioty i postacie tylko, gdy ekwipunek jest nieaktywny
         if not self.inventory.active:
