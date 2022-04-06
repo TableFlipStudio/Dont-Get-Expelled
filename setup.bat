@@ -70,5 +70,5 @@ move Dont-Get-Expelled-main\START-Dont-Get-Expelled-The-Batory-game.bat %USERPRO
 
 del Dont-Get-Expelled-main 
 
-echo The program is now installed, reboot the system and open the START Dont-Get-Expelled - The Batory game.bat file
+echo The program is now installed, RESTART the system and open the START-Dont-Get-Expelled-The-Batory-game.bat file
 pause
