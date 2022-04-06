@@ -64,6 +64,10 @@ class DialogueWindow():
             'andrzej': [
                 self.build_dialogue_tree('andrzejstage0')
             ],
+            'deezlegz': [
+                self.build_dialogue_tree('deezlegzstage0'),
+                self.build_dialogue_tree('deezlegzstage1')
+            ],
             'matma': self.build_maths_tree(),
             'concierge': self.build_concierge_tree(),
             'office': self.build_office_tree()
@@ -89,7 +93,7 @@ class DialogueWindow():
             i_need_library = DialogueTreeNode(dp+'i_need_library.txt')
             beated_up = DialogueTreeNode(dp+'beated_up.txt')
 
-            after_beated_up = DialogueTreeNode("QUIT", faultValue=5)
+            after_beated_up = DialogueTreeNode("QUIT", faultValue=2137)
             favour = DialogueTreeNode(dp+'favour.txt')
 
             accepted = DialogueTreeNode(dp+"accepted.txt")
@@ -149,6 +153,37 @@ class DialogueWindow():
             oh_right.add_child(end, '0')
             yes.add_child(oh_right, '0')
             root.add_child(yes, '0')
+
+        elif mode == 'deezlegzstage0':
+            dp = 'Dialogues/deezlegz/stage0/'
+
+            root = DialogueTreeNode(dp+'root.txt')
+            get_lost = DialogueTreeNode("QUIT")
+            wassup = DialogueTreeNode(dp+'where_trainers.txt')
+            end = DialogueTreeNode("QUIT", stageUp=1, changeQuest=('add', 'trainers'))
+
+            wassup.add_child(end, '0')
+            root.add_child(wassup, '0')
+            root.add_child(get_lost, '1')
+
+        elif mode == 'deezlegzstage1':
+            dp = 'Dialogues/deezlegz/stage1/'
+
+            root = DialogueTreeNode(dp+'root.txt')
+
+            liar = DialogueTreeNode(dp+'dont_lie.txt', faultValue=1)
+            after_liar = DialogueTreeNode('QUIT')
+            not_found = DialogueTreeNode("QUIT")
+
+            trainers = DialogueTreeNode(dp+'got_trainers.txt', targetItem='trampki', changeQuest=('remove', 'trainers'))
+            end = DialogueTreeNode("QUIT", giveItem='trainers', faultValue=-2, stageUp=1)
+
+            trainers.add_child(end, '0')
+            liar.add_child(after_liar, '0')
+
+            root.add_child(trainers, '0')
+            root.add_child(not_found, '1')
+            root.add_child(liar, 'ITEMNOTFOUND')
 
         return root
 
@@ -219,7 +254,7 @@ class DialogueWindow():
                 self.node = self.node.parent.children['ITEMNOTFOUND']
 
         # How bad is this answer?
-        if self.node.faultValue > 0:
+        if self.node.faultValue != 0:
             self.expelling.faults.append(self.node.faultValue)
 
         if npc: # uruchom tylko, jesli to dialog z NPC (nieszczęsne pytania matematyczne)

@@ -74,7 +74,7 @@ class DoGeX():
         # Utworzenie przedmiotów i NPC
         self.items.add(Item(self, 'energy_drink'))
         self.items.add(Item(self, 'kartka', True))
-        self.items.add(Item(self, 'trampki'))
+        self.items.add(Item(self, 'trampki', True))
         self.items.add(Item(self, 'zubr', True, 1))
 
         self.npcs.add(NPC(self,'kuba', -1))
@@ -276,7 +276,7 @@ class DoGeX():
         invcnt = []
         items = [
             Item(self, 'kartka', True),
-            Item(self, 'trampki'),
+            Item(self, 'trampki', True),
             Item(self, 'zubr', True, 1),
             Item(self, 'energy_drink')
             ]
