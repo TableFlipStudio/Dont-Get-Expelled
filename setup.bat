@@ -21,7 +21,14 @@ echo.
 
 if %i%==1 (
 
-		echo installing Python, WAIT PATIENTLY! && curl https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe -o %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
+		echo Python is not installed.
+		echo.
+		echo installing Python... 
+		echo. 
+		echo WAIT PATIENTLY! 
+		echo.  
+		
+		curl https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe -o %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
 		
 		echo. 
 		
@@ -40,23 +47,16 @@ if %i%==1 (
 echo Python is installed!
 echo.
 
-echo Python is now going to install the required libraries, OK?	
+cls
+
+echo Now, there will be the main file downloaded, WAIT until it is done, OK?
 pause
-
-python -m pip install pygame %*
-python -m pip install pytmx %* 
-
 echo.
-echo libraries are now installed		
-echo.  
-
-
-echo Now the program will be installed
-echo.
+echo downloading the game files...
 
 mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/main.zip -o %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip
+curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/music-and-other-features.zip -o %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip
 
 powershell expand-archive %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip %USERPROFILE%\Documents\Dont-Get-Expelled\
 
@@ -64,11 +64,15 @@ cd %USERPROFILE%\Documents\Dont-Get-Expelled
 
 del Dont-Get-Expelled.zip
 
-move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
+ren Dont-Get-Expelled-music-and-other-features Dont-Get-Expelled
 
-move Dont-Get-Expelled-main\START-Dont-Get-Expelled-The-Batory-game.bat %USERPROFILE%\Desktop\
+move Dont-Get-Expelled\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-del Dont-Get-Expelled-main 
+move gamefiles\START-Dont-Get-Expelled-The-Batory-game.bat %USERPROFILE%\Desktop\
+
+rmdir Dont-Get-Expelled
+
+cls
 
 echo The program is now installed, RESTART the system and open the START-Dont-Get-Expelled-The-Batory-game.bat file
 pause

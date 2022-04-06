@@ -1,6 +1,8 @@
 @echo off
 
-cd %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
+python -m pip install pygame 
+python -m pip install pytmx 
 
-python dontgetexpelled.py
+move %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles\RUN-Dont-Get-Expelled-The-Batory-Game.bat %USERPROFILE%\Desktop\
 
+start %USERPROFILE%\Desktop\RUN-Dont-Get-Expelled-The-Batory-Game.bat
