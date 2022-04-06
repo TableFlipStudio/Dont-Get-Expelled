@@ -9,6 +9,9 @@ class MainCharacter():
         self.screen_rect = self.screen.get_rect()
         self.screen_height = self.screen_rect.height
         self.screen_width = self.screen_rect.width
+        #self.sounds = dogex.sounds
+
+        self.moving = False
 
         self.settings = dogex.settings
 

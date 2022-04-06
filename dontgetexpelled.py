@@ -43,15 +43,14 @@ class DoGeX():
 
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
+        self.sounds = Music(self)
         self.map = Map(self)
         self.map_image = self.map.map_setup(self.map.tmxdata)
         self.inventory = Inventory(self)
         self.expelling = Expelling(self)
         self.window = DialogueWindow(self)
         self.menu = SaveMenu(self)
-        self.sounds = Music(self)
         self.m_menu = MainMenu(self)
-
         self.story = StoryEvents(self)
 
         self.window_options = IntroScreen(self)# ta klasa występuje też pod nazwą intro_screen tylko dla głównej pętli gry (na dole)
@@ -97,9 +96,10 @@ class DoGeX():
         """Uruchomienie pętli głównej gry"""
         i = 0
 
-
         self.sounds.play_music('background')
 
+        
+        #self.sounds.play_music('background')
 
         while True:
             self._check_events()
@@ -109,6 +109,7 @@ class DoGeX():
             if not self.interface_active():
                 pygame.mixer.music.unpause()
                 self.character.update()
+                #self.so`unds.check_walking_sound()
                 if self.m_menu._check_save_exists() and i < 1:
                     self.map.update('static_only')
                     i += 1
@@ -508,6 +509,11 @@ class DoGeX():
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
+        
+        if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+            self.character.moving = True
+        else:
+            self.character.moving = False
 
         if event.key == pygame.K_RIGHT:
             self.character.moving_right = False
@@ -631,7 +637,7 @@ class DoGeX():
 
         for item in self.items.copy():
 
-            if pygame.Rect.colliderect(self.character.rect, item):
+            if pygame.Rect.colliderect(self.character.rect, item) and item.shown:
                 pygame.mixer.Sound('sounds/podnoszenie_przedmiotu.wav').play()
 
             if pygame.Rect.colliderect(self.character.rect, item) and item.shown:
@@ -653,6 +659,9 @@ class DoGeX():
         """Uaktualnienie pozycji wszystkich przedmiotów"""
         for item in self.items.sprites():
             item.rect.center = ((item.obj.x), (item.obj.y))
+
+            if item.id =='kartka':
+                item.shown = True
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
@@ -749,13 +758,21 @@ def _run_game_over(dogex):
     dogex.sounds.play_sound('game_over_better')
     pygame.time.wait(1700)
     intro_screen.fadein(gmovr.static_img, 0.3)
+    gmovr.blitme()
+    pygame.display.flip()
+    
+    while True:
+        # Patrz: _run_main_menu()
+        relaunch = gmovr.check_events(dogex)
+        if relaunch:
+            break
 
 def _run_game_over(dogex, game_won):
     """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
     gmovr = GameOverScreen(dogex, game_won)
     gmovr.blitme()
     pygame.display.flip()
-
+    
     while True:
         # Patrz: _run_main_menu()
         relaunch = gmovr.check_events(dogex)
