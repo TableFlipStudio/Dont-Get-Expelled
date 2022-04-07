@@ -792,9 +792,9 @@ if __name__ == '__main__':
     while True:
         dogex = DoGeX()
         intro_screen = IntroScreen(dogex)
-        #intro(dogex)
+        ntro(dogex)
         menu = MainMenu(dogex)
 
-        #_run_main_menu(dogex)
+        _run_main_menu(dogex)
         game_won = dogex.run_game()
         _run_game_over(dogex, game_won) # This can be a win too
