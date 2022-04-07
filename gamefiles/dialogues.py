@@ -19,6 +19,7 @@ class DialogueWindow():
         self.settings  = dogex.settings
         self.expelling = dogex.expelling
         self.dogex = dogex
+        self.sounds = dogex.sounds
 
         self.rect = pygame.Rect(0, 0, self.settings.screen_width,
             self.settings.screen_height)
@@ -341,6 +342,7 @@ class DialogueWindow():
         odpowiedzi"""
         for msg in self.msgs:
             if msg['id'] == self.selectedID:
+                self.sounds.play_sound('interakcja', 0.1)
                 self.pointer_rect.midright = msg['rect'].midleft
 
     def _prep_msg(self, msg, yPos, id=None):

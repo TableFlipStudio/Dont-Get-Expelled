@@ -96,7 +96,7 @@ class DoGeX():
         """Uruchomienie pętli głównej gry"""
         i = 0
 
-        self.sounds.play_music('background')
+        self.sounds.play_music('background', 0.1)
 
         
         #self.sounds.play_music('background')
@@ -109,7 +109,7 @@ class DoGeX():
             if not self.interface_active():
                 pygame.mixer.music.unpause()
                 self.character.update()
-                #self.so`unds.check_walking_sound()
+                self.sounds.check_walking_sound()
                 if self.m_menu._check_save_exists() and i < 1:
                     self.map.update('static_only')
                     i += 1
@@ -373,6 +373,7 @@ class DoGeX():
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
 
         for event in pygame.event.get():
+            
             if event.type == pygame.QUIT:
                 sys.exit()
 
@@ -413,6 +414,7 @@ class DoGeX():
 
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
+        
         if event.key == pygame.K_UP:
             if self.window.active:
                 self._change_selection(-1)
@@ -460,6 +462,10 @@ class DoGeX():
                             self.window.load_dialogue(found_npc)
 
         if event.key == pygame.K_LSHIFT:
+            self.sounds.corridor.stop()
+            self.sounds.corridor = pygame.mixer.Sound('sounds/chodzenie_korytarz_x2.wav')    
+            self.sounds.corridor.set_volume(0)
+            self.sounds.corridor.play(-1)         
             self.settings.character_speed *= 2
 
         elif event.key == pygame.K_q:
@@ -510,11 +516,6 @@ class DoGeX():
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
         
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-            self.character.moving = True
-        else:
-            self.character.moving = False
-
         if event.key == pygame.K_RIGHT:
             self.character.moving_right = False
             self.map.moving_left = False
@@ -532,6 +533,10 @@ class DoGeX():
             self.map.moving_up = False
 
         if event.key == pygame.K_LSHIFT:
+            self.sounds.corridor.stop()
+            self.sounds.corridor = pygame.mixer.Sound('sounds/chodzenie_korytarz.wav')
+            self.sounds.corridor.set_volume(0)
+            self.sounds.corridor.play(-1)
             self.settings.character_speed /= 2
 
     def rewrite_dialogue_files(self):
@@ -789,9 +794,9 @@ if __name__ == '__main__':
     while True:
         dogex = DoGeX()
         intro_screen = IntroScreen(dogex)
-        intro(dogex)
+        #intro(dogex)
         menu = MainMenu(dogex)
 
-        _run_main_menu(dogex)
+        #_run_main_menu(dogex)
         game_won = dogex.run_game()
         _run_game_over(dogex, game_won) # This can be a win too

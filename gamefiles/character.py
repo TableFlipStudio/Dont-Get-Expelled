@@ -11,7 +11,7 @@ class MainCharacter():
         self.screen_width = self.screen_rect.width
         #self.sounds = dogex.sounds
 
-        self.moving = False
+        self.run = False
 
         self.settings = dogex.settings
 
@@ -180,9 +180,6 @@ class MainCharacter():
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
-
-        self.moving = False
-
 
     def can_move_right(self):
         output = (
