@@ -11,11 +11,11 @@ echo Welcome to the setup script for the DontGetExpelled setup
 echo This script will install Python 3.10.2, the required libraries for the setup, and the main program
 
 echo.
-pause
+pause 
 
 cls
 
-echo Checking if python is installed and/or Downloading Python 3.10.2
+echo Checking if python is installed and/or Downloading Python 3.10.2  
 echo.
 
 
@@ -23,24 +23,24 @@ if %i%==1 (
 
 		echo Python is not installed.
 		echo.
-		echo installing Python...
-		echo.
-		echo WAIT PATIENTLY!
-		echo.
-
+		echo installing Python... 
+		echo. 
+		echo WAIT PATIENTLY! 
+		echo.  
+		
 		curl https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe -o %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
-
-		echo.
-
+		
+		echo. 
+		
 		echo Now there will be a window with a shield open, check the yes box and press Enter, OK?
 		echo.
-
-		pause
-
+		
+		pause 
+		
 		cd %USERPROFILE%\Downloads/
-		echo Installing Python 3.10.2
+		echo Installing Python 3.10.2		
 		echo.
-
+		
 		python-3.10.4-amd64.exe /quiet PrependPath=1
 )
 
@@ -68,11 +68,11 @@ ren Dont-Get-Expelled-main Dont-Get-Expelled
 
 move Dont-Get-Expelled\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-move gamefiles\DOWNLOAD_LIBS.bat %USERPROFILE%\Desktop\
+move gamefiles\START-Dont-Get-Expelled-The-Batory-game.bat %USERPROFILE%\Desktop\
 
 rmdir Dont-Get-Expelled
 
 cls
 
-echo The program is now installed, RESTART the system and open the DOWNLOAD_LIBS.bat file
+echo The program is now installed, RESTART the system and open the START-Dont-Get-Expelled-The-Batory-game.bat file
 pause

@@ -1,6 +1,6 @@
 @echo off
 
-del /Q %USERPROFILE%\Desktop\DOWNLOAD_LIBS.bat
+del /Q %USERPROFILE%\Desktop\START-Dont-Get-Expelled-The-Batory-game.bat
 
 cd %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
