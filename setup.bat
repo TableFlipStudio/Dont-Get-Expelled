@@ -6,8 +6,8 @@ mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\ || set /A installed=1
 cls
 
 echo -----------------INSTALLER OF THE GAME------------------
-echo -----------------Dont-Get-Expelled----------------------
-echo -------------------Version 0.5.0------------------------
+echo -------------------Dont-Get-Expelled--------------------
+echo ---------------------Version 0.5.0----------------------
 echo.
 echo This program is going to install the game aswell as python and other necessary libraries if you dont already have them.
 if %installed%==1 (
@@ -58,7 +58,7 @@ move Dont-Get-Expelled\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
 move gamefiles\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\
 
-move gamefiles\uninstall.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
+move gamefiles\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
 
 rmdir Dont-Get-Expelled
 
