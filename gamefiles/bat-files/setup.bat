@@ -10,6 +10,8 @@ echo -------------------Dont-Get-Expelled--------------------
 echo ---------------------Version 0.5.0----------------------
 echo.
 echo This program is going to install the game aswell as python and other necessary libraries if you dont already have them.
+echo.
+pause
 if %installed%==1 (
 		echo.
 		echo The game is already installed!
@@ -52,15 +54,15 @@ cd %USERPROFILE%\Documents\Dont-Get-Expelled
 
 del /Q Dont-Get-Expelled.zip
 
-ren Dont-Get-Expelled-main Dont-Get-Expelled
+move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-move Dont-Get-Expelled\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
+move gamefiles\bat-files\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\
 
-move gamefiles\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\
+move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-move gamefiles\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled
+del /Q Dont-Get-Expelled-main
 
-rmdir Dont-Get-Expelled
+rmdir Dont-Get-Expelled-main
 
 cls
 
