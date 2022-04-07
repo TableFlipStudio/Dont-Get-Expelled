@@ -665,8 +665,6 @@ class DoGeX():
         for item in self.items.sprites():
             item.rect.center = ((item.obj.x), (item.obj.y))
 
-            if item.id =='kartka':
-                item.shown = True
 
     def _update_screen(self):
         """Aktualizacja zawartości ekranu"""
