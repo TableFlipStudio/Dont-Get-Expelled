@@ -4,4 +4,4 @@ del /Q %USERPROFILE%\Desktop\START-Dont-Get-Expelled-The-Batory-game.bat
 
 cd %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
-python dontgetexpelled.py
+start dontgetexpelled.py
