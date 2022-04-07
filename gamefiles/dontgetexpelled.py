@@ -754,7 +754,7 @@ def intro(dogex):
 
 def _run_game_over(dogex):
     """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
-    gmovr = GameOverScreen(dogex)
+    #gmovr = GameOverScreen(dogex)
     intro_screen.black_screen()
     pygame.display.flip()
     pygame.time.wait(300)
@@ -792,7 +792,7 @@ if __name__ == '__main__':
     while True:
         dogex = DoGeX()
         intro_screen = IntroScreen(dogex)
-        ntro(dogex)
+        intro(dogex)
         menu = MainMenu(dogex)
 
         _run_main_menu(dogex)
