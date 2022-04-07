@@ -58,7 +58,7 @@ move Dont-Get-Expelled\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
 move gamefiles\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\
 
-move gamefiles\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
+move gamefiles\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled
 
 rmdir Dont-Get-Expelled
 
