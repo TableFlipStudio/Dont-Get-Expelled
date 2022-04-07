@@ -16,7 +16,7 @@ if %installed%==1 (
 		echo.
 		pause
 	exit /B
-)	
+)
 
 echo.
 echo initializing the download...
@@ -29,17 +29,17 @@ if %i%==1 (
 
 		echo.
 		echo installing Python...
-		echo. 
-		echo WAIT PATIENTLY! 
-		echo.  
-		
+		echo.
+		echo WAIT PATIENTLY!
+		echo.
+
 		curl https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe -o %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
-		
-		echo. 
-		
+
+		echo.
+
 		cd %USERPROFILE%\Downloads/
-		
-		
+
+
 		python-3.10.4-amd64.exe /quiet PrependPath=1
 )
 echo Python installed!
@@ -56,11 +56,11 @@ ren Dont-Get-Expelled-main Dont-Get-Expelled
 
 move Dont-Get-Expelled\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-move gamefiles\START-Dont-Get-Expelled-The-Batory-game.bat %USERPROFILE%\Desktop\
+move gamefiles\DOWNLOAD_LIBS.bat %USERPROFILE%\Desktop\
 
 rmdir Dont-Get-Expelled
 
 cls
 
-echo The program is now installed, RESTART the system and open the START-Dont-Get-Expelled-The-Batory-game.bat file
+echo The program is now installed, RESTART the system and open the DOWNLOAD_LIBS.bat file
 pause
