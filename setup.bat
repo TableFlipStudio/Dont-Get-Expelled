@@ -56,11 +56,13 @@ ren Dont-Get-Expelled-main Dont-Get-Expelled
 
 move Dont-Get-Expelled\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-move gamefiles\START-Dont-Get-Expelled-The-Batory-game.bat %USERPROFILE%\Desktop\
+move gamefiles\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\
+
+move gamefiles\uninstall.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
 
 rmdir Dont-Get-Expelled
 
 cls
 
-echo The program is now installed, RESTART the system and open the START-Dont-Get-Expelled-The-Batory-game.bat file
+echo The program is now installed, RESTART the system and open the START-Dont-Get-Expelled.bat file
 pause
