@@ -60,7 +60,7 @@ move gamefiles\DOWNLOAD_LIBS.bat %USERPROFILE%\Desktop\
 
 rmdir Dont-Get-Expelled
 
-:: cls
+cls
 
 echo The program is now installed, RESTART the system and open the DOWNLOAD_LIBS.bat file
 pause
