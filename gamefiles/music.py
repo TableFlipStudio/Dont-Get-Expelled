@@ -20,7 +20,8 @@ class Music():
             'gameover': 'sounds/Wywalenie_z_domu.wav',
             'interakcja': 'sounds/interakcja.wav',
             'game_over_better': 'sounds/game_over_better.wav',
-            'yaaaay': 'sounds/yaaaay.mp3'
+            'yaaaay': 'sounds/yaaaay.mp3',
+            'fault': 'sounds/fault_commited.wav'
         }
         self.music_playing = None
         self.sound_playing = None

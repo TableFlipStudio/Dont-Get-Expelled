@@ -7,6 +7,7 @@ class Expelling():
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
         self.settings = dogex.settings
+        self.sounds = dogex.sounds
 
         self.font = pygame.font.SysFont(None, 32)
         self.text_color = (255, 255, 255)
@@ -37,6 +38,7 @@ class Expelling():
         for fault in self.faults[:]:
             self.fault_counter -= fault
             self.faults.remove(fault)
+            self.sounds.play_sound('fault')
         self._update_msg()
 
     def check_expelled(self):
