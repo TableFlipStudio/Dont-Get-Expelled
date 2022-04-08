@@ -18,7 +18,7 @@ if %installed%==1 (
 		echo.
 		pause
 	exit /B
-)	
+)
 
 echo.
 echo initializing the download...
@@ -32,17 +32,17 @@ if %i%==1 (
     echo Python is not installed!
 		echo.
 		echo Installing Python...
-		echo. 
+		echo.
 		echo WAIT PATIENTLY!!!
-		echo.  
-		
+		echo.
+
 		curl https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe -o %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
-		
-		echo. 
-		
-		cd %USERPROFILE%\Downloads/
-		
-		
+
+		echo.
+
+		cd/d %USERPROFILE%\Downloads/
+
+
 		python-3.10.4-amd64.exe /quiet PrependPath=1
 )
 echo Python installed!
@@ -59,7 +59,7 @@ mkdir DoGeX
 
 cd /d %USERPROFILE%\Documents\Dont-Get-Expelled
 
-del /Q Dont-Get-Expelled.zip
+del /Q /F Dont-Get-Expelled.zip
 
 move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 

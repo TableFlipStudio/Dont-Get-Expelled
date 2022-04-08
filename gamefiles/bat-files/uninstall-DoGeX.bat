@@ -1,4 +1,4 @@
-@echo off 
+@echo off
 
 echo This program is going to uninstall the game!!
 pause
@@ -14,3 +14,4 @@ echo The game has been uninstalled.
 pause
 
 rmdir /Q /s %USERPROFILE%\Desktop\DoGeX
+
