@@ -55,7 +55,7 @@ powershell expand-archive %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Exp
 
 cd /d %USERPROFILE%\Desktop
 
-mkdir DoGeX
+mkdir Dont-Get-Expelled
 
 cd /d %USERPROFILE%\Documents\Dont-Get-Expelled
 
@@ -63,9 +63,9 @@ del /Q /F Dont-Get-Expelled.zip
 
 move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-move gamefiles\bat-files\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\DoGeX
+move gamefiles\bat-files\START-DoGeX.bat %USERPROFILE%\Desktop\Dont-Get-Expelled\
 
-move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Desktop\DoGeX
+move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Desktop\Dont-Get-Expelled\
 
 rmdir /Q /s Dont-Get-Expelled-main
 

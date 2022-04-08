@@ -13,5 +13,5 @@ echo The game has been uninstalled.
 
 pause
 
-rmdir /Q /s %USERPROFILE%\Desktop\DoGeX
+rmdir /Q /s %USERPROFILE%\Desktop\Dont-Get-Expelled
 
