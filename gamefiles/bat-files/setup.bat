@@ -3,6 +3,8 @@ set /A installed=0
 
 mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\ || set /A installed=1
 
+set /A python=0
+python --version || set /A python=1
 cls
 
 echo -----------------INSTALLER OF THE GAME------------------
@@ -22,12 +24,9 @@ if %installed%==1 (
 
 echo.
 echo initializing the download...
+echo.
 
-set /A i=0
-python --version || set /A i=1
-
-
-if %i%==1 (
+if %python%==1 (
 
     echo Python is not installed!
 		echo.
