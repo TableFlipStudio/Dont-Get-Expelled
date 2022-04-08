@@ -4,16 +4,21 @@ echo This program is going to uninstall the game!!
 echo.
 pause
 
-cd /d %USERPROFILE%\Documents\
-
-rmdir /Q /s Dont-Get-Expelled
-
 cd /d %USERPROFILE%\Desktop
+
+del /Q %USERPROFILE%\Desktop\START-DoGeX.bat
+
+del /Q %USERPROFILE%\Desktop\RUN-DoGeX.bat
+
+cls
 
 echo.
 echo The game has been uninstalled.
 echo.
 pause
 
-rmdir /Q /s %USERPROFILE%\Desktop\Dont-Get-Expelled
+
+cd /d %USERPROFILE%\Documents\
+
+rmdir /Q /s Dont-Get-Expelled
 
