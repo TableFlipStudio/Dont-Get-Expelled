@@ -2,7 +2,7 @@
 
 del /Q %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-rmdir /q /s %USERPROFILE%\Documents\Dont-Get-Expelled
+rmdir /Q %USERPROFILE%\Documents\Dont-Get-Expelled
 
 del /Q %USERPROFILE%\Desktop\RUN-Dont-Get-Expelled.bat
 
