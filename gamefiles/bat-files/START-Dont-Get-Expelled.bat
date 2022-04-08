@@ -3,6 +3,10 @@
 python -m pip install pygame 
 python -m pip install pytmx 
 
-move %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles\bat-files\RUN-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\
+cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
-start %USERPROFILE%\Desktop\RUN-Dont-Get-Expelled.bat && del /Q %USERPROFILE%\Desktop\START-Dont-Get-Expelled.bat
+move bat-files\RUN-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\DoGeX
+
+cd /d %USERPROFILE%\Desktop\DoGeX
+
+start RUN-Dont-Get-Expelled.bat && del /Q %USERPROFILE%\Desktop\DoGeX\START-Dont-Get-Expelled.bat

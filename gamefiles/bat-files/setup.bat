@@ -53,21 +53,21 @@ curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/m
 
 powershell expand-archive %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-cd %USERPROFILE%\Documents\Dont-Get-Expelled
+cd /d %USERPROFILE%\Desktop
+
+mkdir DoGeX
+
+cd /d %USERPROFILE%\Documents\Dont-Get-Expelled
 
 del /Q Dont-Get-Expelled.zip
 
 move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-mkdir %USERPROFILE%\Desktop\DoGeX
+move gamefiles\bat-files\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop
 
-move gamefiles\bat-files\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\DoGeX
+move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Desktop
 
-move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Desktop\DoGeX
-
-del /Q Dont-Get-Expelled-main
-
-rmdir Dont-Get-Expelled-main
+rmdir /Q /s Dont-Get-Expelled-main
 
 cls
 
