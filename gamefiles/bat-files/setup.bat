@@ -29,10 +29,11 @@ python --version || set /A i=1
 
 if %i%==1 (
 
+    echo Python is not installed!
 		echo.
-		echo installing Python...
+		echo Installing Python...
 		echo. 
-		echo WAIT PATIENTLY! 
+		echo WAIT PATIENTLY!!!
 		echo.  
 		
 		curl https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe -o %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
@@ -45,7 +46,9 @@ if %i%==1 (
 		python-3.10.4-amd64.exe /quiet PrependPath=1
 )
 echo Python installed!
-
+echo.
+echo Installing and unpacking the main game files...
+echo.
 curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/main.zip -o %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip
 
 powershell expand-archive %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip %USERPROFILE%\Documents\Dont-Get-Expelled\
