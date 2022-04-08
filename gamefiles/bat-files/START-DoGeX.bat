@@ -5,7 +5,7 @@ python -m pip install pytmx
 
 cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
-move bat-files\RUN-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\Dont-Get-Expelled
+move bat-files\RUN-DoGeX.bat %USERPROFILE%\Desktop\Dont-Get-Expelled
 
 cd /d %USERPROFILE%\Desktop\Dont-Get-Expelled
 
