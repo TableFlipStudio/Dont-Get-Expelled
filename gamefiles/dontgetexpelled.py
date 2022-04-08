@@ -98,7 +98,7 @@ class DoGeX():
 
         self.sounds.play_music('background', 0.1)
 
-        
+
         #self.sounds.play_music('background')
 
         while True:
@@ -373,7 +373,7 @@ class DoGeX():
         """Reakcja na zdarzenia wywołane przez klawiaturę i mysz"""
 
         for event in pygame.event.get():
-            
+
             if event.type == pygame.QUIT:
                 sys.exit()
 
@@ -414,7 +414,7 @@ class DoGeX():
 
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
-        
+
         if event.key == pygame.K_UP:
             if self.window.active:
                 self._change_selection(-1)
@@ -463,9 +463,9 @@ class DoGeX():
 
         if event.key == pygame.K_LSHIFT:
             self.sounds.corridor.stop()
-            self.sounds.corridor = pygame.mixer.Sound('sounds/chodzenie_korytarz_x2.wav')    
+            self.sounds.corridor = pygame.mixer.Sound('sounds/chodzenie_korytarz_x2.wav')
             self.sounds.corridor.set_volume(0)
-            self.sounds.corridor.play(-1)         
+            self.sounds.corridor.play(-1)
             self.settings.character_speed *= 2
 
         elif event.key == pygame.K_q:
@@ -515,7 +515,7 @@ class DoGeX():
 
     def _check_keyup_events(self, event):
         """Reakcja na puszczenie klawisza"""
-        
+
         if event.key == pygame.K_RIGHT:
             self.character.moving_right = False
             self.map.moving_left = False
@@ -751,43 +751,27 @@ def intro(dogex):
     pygame.time.wait(1000)
     intro_screen.fadeout(0.3)
 
-
-def _run_game_over(dogex):
-    """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
-    #gmovr = GameOverScreen(dogex)
-    intro_screen.black_screen()
-    pygame.display.flip()
-    pygame.time.wait(300)
-    dogex.sounds.play_sound('game_over_better')
-    pygame.time.wait(1700)
-    intro_screen.fadein(gmovr.static_img, 0.3)
-    gmovr.blitme()
-    pygame.display.flip()
-    
-    while True:
-        # Patrz: _run_main_menu()
-        relaunch = gmovr.check_events(dogex)
-        if relaunch:
-            break
-
 def _run_game_over(dogex, game_won):
     """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
-    gmovr = GameOverScreen(dogex, False)
+    gmovr = GameOverScreen(dogex, game_won)
     intro_screen.black_screen()
     pygame.display.flip()
     pygame.time.wait(250)
-    dogex.sounds.play_sound('game_over_better')
+    if not game_won:
+        dogex.sounds.play_sound('game_over_better')
+    else:
+        dogex.sounds.play_sound('yaaaay')
     pygame.time.wait(1700)
     intro_screen.fadein(gmovr.static_img, 0.3, 100)
     gmovr.blitme()
     pygame.display.flip()
-    
+
     while True:
         # Patrz: _run_main_menu()
         relaunch = gmovr.check_events(dogex)
         if relaunch:
             break
-        
+
 if __name__ == '__main__':
     while True:
         dogex = DoGeX()
