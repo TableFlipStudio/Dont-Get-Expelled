@@ -63,9 +63,9 @@ del /Q /F Dont-Get-Expelled.zip
 
 move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-move gamefiles\bat-files\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop
+move gamefiles\bat-files\START-Dont-Get-Expelled.bat %USERPROFILE%\Desktop\DoGeX
 
-move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Desktop
+move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Desktop\DoGeX
 
 rmdir /Q /s Dont-Get-Expelled-main
 

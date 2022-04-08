@@ -11,3 +11,5 @@ cd /d %USERPROFILE%\Desktop\DoGeX
 
 start RUN-Dont-Get-Expelled.bat && del /Q %USERPROFILE%\Desktop\DoGeX\START-Dont-Get-Expelled.bat
 
+exit
+
