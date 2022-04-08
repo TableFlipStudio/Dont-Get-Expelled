@@ -4,6 +4,7 @@ class Music():
 
     def __init__(self, dogex):
         self.character = dogex.character
+        self.dogex = dogex
 
         self.corridor = pygame.mixer.Sound('sounds/chodzenie_korytarz.wav')
         self.corridor.set_volume(0)
@@ -74,10 +75,12 @@ class Music():
             sound.stop()
             self.sound_playing = None
 
-    def check_walking_sound(self):
+    def check_walking_sound(self, state='play'):
         """sprawdza czy dzwiek chodzenia jest włączony i włącza go"""
 
-        if self.character.can_move_down() or self.character.can_move_up() or self.character.can_move_left() or self.character.can_move_right():
+        if (state == 'stop'):
+            self.corridor.set_volume(0)
+        elif self.character.can_move_down() or self.character.can_move_up() or self.character.can_move_left() or self.character.can_move_right():
             self.corridor.set_volume(1)
         elif not (self.character.can_move_down() and self.character.can_move_up() and self.character.can_move_left() and self.character.can_move_right()):
             self.corridor.set_volume(0)

@@ -13,6 +13,7 @@ class StoryEvents():
         self.window = dogex.window
         self.character = dogex.character
         self.dogex = dogex
+        self.sounds = dogex.sounds
 
         # List of quest codenames and index to decide, which quest is active
         self.quests = ['math']
@@ -78,6 +79,7 @@ class StoryEvents():
 
             found_npc = self.dogex._find_npc_collision()
             if found_npc and found_npc.id == 'zyzio':
+                self.sounds.check_walking_sound('stop')
                 self.window.active = True
                 self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
                 self.window.load_dialogue(found_npc)
@@ -101,6 +103,7 @@ class StoryEvents():
                 concierge.width, concierge.height)
 
             if self.character.rect.colliderect(concierge_rect):
+                self.sounds.check_walking_sound('stop')
                 self.window.active = True
                 self.window.node = self.window.dialogues['concierge']
                 self.window.load_dialogue()
@@ -113,6 +116,7 @@ class StoryEvents():
                 office.width, office.height)
 
             if self.character.rect.colliderect(office_rect):
+                self.sounds.check_walking_sound('stop')
                 self.window.active = True
                 self.window.node = self.window.dialogues['office']
                 self.window.load_dialogue()
@@ -126,7 +130,8 @@ class StoryEvents():
                     exit.width, exit.height)
 
                 if self.character.rect.colliderect(exit_rect):
-                    print('collision!')
+                    self.sounds.check_walking_sound('stop')
+                    #print('collision!')
                     self.dogex.game_won = True
 
         self._update_msg()

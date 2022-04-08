@@ -116,7 +116,8 @@ class DoGeX():
                 self.map.update('all')
                 self._update_npcs()
                 self._update_items()
-
+            else:
+                self.sounds.check_walking_sound('stop')
             self._update_screen()
             self.clock.tick(self.settings.fps)
 
