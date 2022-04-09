@@ -13,6 +13,8 @@ if %local% == %origin% (
     echo "You have the latest version"
     echo.
 
+    timeout /t 2
+
     cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
     python dontgetexpelled.py 
@@ -20,13 +22,15 @@ if %local% == %origin% (
 ) else (
     echo You don't have the latest version
     echo.
+    timeout /t 3
+    echo.
     echo Downloading...
 
     rmdir /Q /s %USERPROFILE%\Documents\Dont-Get-Expelled
 
     mkdir %USERPROFILE%\Documents\Dont-Get-Expelled
 
-    curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/testy.zip -o %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip
+    curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/main.zip -o %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip
 
     powershell expand-archive %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip %USERPROFILE%\Documents\Dont-Get-Expelled\
 
@@ -36,7 +40,7 @@ if %local% == %origin% (
 
     del /Q /F Dont-Get-Expelled.zip
 
-    move Dont-Get-Expelled-testy\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
+    move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
     move gamefiles\bat-files\START-DoGeX.bat %USERPROFILE%\Desktop\
 
@@ -44,7 +48,7 @@ if %local% == %origin% (
 
     mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\temporary
 
-    rmdir /Q /s Dont-Get-Expelled-testy
+    rmdir /Q /s Dont-Get-Expelled-main
     cls
 
     echo the game has been updated and is now installed, please restart the system and open the START-Dont-Get-Expelled.bat file
