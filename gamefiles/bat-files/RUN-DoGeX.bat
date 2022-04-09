@@ -8,12 +8,15 @@ set /p origin=< %USERPROFILE%\Documents\Dont-Get-Expelled\temporary\version.txt
 
 set /p local=< %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles\version.txt
 
+cls
+
 if %local% == %origin% (
     echo.
     echo "You have the latest version"
     echo.
 
     timeout /t 2
+    echo.
 
     cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
