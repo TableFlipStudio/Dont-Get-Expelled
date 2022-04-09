@@ -3,8 +3,6 @@
 curl https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/testy/gamefiles/version.txt -o %USERPROFILE%\Documents\Dont-Get-Expelled/temporary\version.txt 
 
 set /p origin=< %USERPROFILE%\Documents\Dont-Get-Expelled\temporary\version.txt
-# TODO: this the downloaded file
-
 
 set /p local=< %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles\version.txt
 
