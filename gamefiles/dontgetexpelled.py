@@ -95,7 +95,7 @@ class DoGeX():
         """Uruchomienie pętli głównej gry"""
         i = 0
 
-        self.sounds.play_music('bg', 0.2)
+        self.sounds.play_music('bg', 0.3)
 
 
         #self.sounds.play_music('background')
