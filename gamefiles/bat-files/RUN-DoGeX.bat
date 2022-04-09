@@ -1,5 +1,7 @@
 @echo off
 
+del /Q %USERPROFILE%\Documents\Dont-Get-Expelled\temporary
+
 curl https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/testy/gamefiles/version.txt -o %USERPROFILE%\Documents\Dont-Get-Expelled/temporary\version.txt 
 
 set /p origin=< %USERPROFILE%\Documents\Dont-Get-Expelled\temporary\version.txt
@@ -11,7 +13,8 @@ if %local% == %origin% (
     
     cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
-    python dontgetexpelled.py && 
+    python dontgetexpelled.py 
+
 ) else (
     echo You don't have the latest version
     echo.
