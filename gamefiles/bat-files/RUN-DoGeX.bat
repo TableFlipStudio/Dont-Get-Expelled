@@ -20,7 +20,7 @@ if %local% == %origin% (
 
     cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
-    python dontgetexpelled.py 
+    python dontgetexpelled.py && exit /B 
 
 ) else (
     echo You don't have the latest version
@@ -60,5 +60,7 @@ if %local% == %origin% (
     del /Q /F %USERPROFILE%\Desktop\RUN-DoGeX.bat
 
 )
+
+exit /B
     
 
