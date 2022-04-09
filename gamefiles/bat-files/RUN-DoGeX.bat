@@ -9,8 +9,10 @@ set /p origin=< %USERPROFILE%\Documents\Dont-Get-Expelled\temporary\version.txt
 set /p local=< %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles\version.txt
 
 if %local% == %origin% (
+    echo.
     echo "You have the latest version"
-    
+    echo.
+
     cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
     python dontgetexpelled.py 
