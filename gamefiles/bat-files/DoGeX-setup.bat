@@ -72,3 +72,5 @@ cls
 
 echo The program is now installed, RESTART the system and open the START-Dont-Get-Expelled.bat file
 pause
+
+del /Q /F %USERPROFILE%\Downloads\DoGeX-setup.bat
