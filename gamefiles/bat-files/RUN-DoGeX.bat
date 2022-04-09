@@ -10,15 +10,13 @@ set /p local=< %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles\version.txt
 
 if %mytextfile% == %mytextfile2% (
     echo "You have the latest version"
-)
-
-if %origin% > %local% (
+) else (
     echo You don't have the latest version
     echo.
     echo Downloading...
 
     rmdir /Q /s %USERPROFILE%\Documents\Dont-Get-Expelled
-    
+
     mkdir %USERPROFILE%\Documents\Dont-Get-Expelled
 
     curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/testy.zip -o %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip
@@ -45,7 +43,7 @@ if %origin% > %local% (
 
 )
     
-
+pause
 cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
 python dontgetexpelled.py && exit /B
