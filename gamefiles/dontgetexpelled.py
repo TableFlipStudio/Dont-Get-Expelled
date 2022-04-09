@@ -33,7 +33,7 @@ class DoGeX():
 
         pygame.mixer.music.load('sounds/background.wav')
         pygame.mixer.music.set_volume(0.2)
-    
+
         #Wczytanie ekranu i nadanie tytułu
         self.screen = pygame.display.set_mode((self.settings.screen_width,
             self.settings.screen_height))
@@ -246,7 +246,7 @@ class DoGeX():
 
         faultcntr = self.expelling.fault_counter
         stages = {}
-        
+
 
 
         for npc in self.npcs.sprites():
@@ -650,7 +650,8 @@ class DoGeX():
                 for slot in self.slots.sprites():
                     #Umieść przedmiot tylko raz
                     if slot.content is None:
-                        self.expelling.faults.append(item.faultValue)
+                        if item.faultValue > 0:
+                            self.expelling.faults.append(item.faultValue)
                         slot.content = item
                         break
 
