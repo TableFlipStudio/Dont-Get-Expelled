@@ -168,7 +168,7 @@ class MainCharacter():
         self.stationary_image = pygame.image.load('animation/down/fwrd0.png')
 
         #Wczytanie prostokąta postaci i wycentrowanie go
-        self.rect = self.image.get_rect()
+        self.rect = pygame.Rect(0, 0, 40, 100)#self.image.get_rect()
         #self.rect.center = self.screen_rect.center
 
         #Położenie postaci przechowywane jest w zmienniej zmiennoprzecinkwej
