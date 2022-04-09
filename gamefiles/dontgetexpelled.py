@@ -247,6 +247,7 @@ class DoGeX():
 
         faultcntr = self.expelling.fault_counter
         stages = {}
+        
 
 
         for npc in self.npcs.sprites():
