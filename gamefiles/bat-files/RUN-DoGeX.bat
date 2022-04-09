@@ -2,7 +2,7 @@
 
 del /Q %USERPROFILE%\Documents\Dont-Get-Expelled\temporary
 
-curl https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/testy/gamefiles/version.txt -o %USERPROFILE%\Documents\Dont-Get-Expelled/temporary\version.txt 
+curl https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/version.txt -o %USERPROFILE%\Documents\Dont-Get-Expelled/temporary\version.txt 
 
 set /p origin=< %USERPROFILE%\Documents\Dont-Get-Expelled\temporary\version.txt
 
