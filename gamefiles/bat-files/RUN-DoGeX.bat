@@ -8,8 +8,12 @@ set /p origin=< %USERPROFILE%\Documents\Dont-Get-Expelled\temporary\version.txt
 
 set /p local=< %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles\version.txt
 
-if %mytextfile% == %mytextfile2% (
+if %local% == %origin% (
     echo "You have the latest version"
+    
+    cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
+
+    python dontgetexpelled.py && 
 ) else (
     echo You don't have the latest version
     echo.
@@ -38,12 +42,13 @@ if %mytextfile% == %mytextfile2% (
     mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\temporary
 
     rmdir /Q /s Dont-Get-Expelled-testy
-
     cls
+
+    echo the game has been updated and is now installed, please restart the system and open the START-Dont-Get-Expelled.bat file
+    pause
+    
+    del /Q /F %USERPROFILE%\Desktop\RUN-DoGeX.bat
 
 )
     
-pause
-cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
-python dontgetexpelled.py && exit /B
