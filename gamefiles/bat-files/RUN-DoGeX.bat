@@ -15,9 +15,6 @@ if %local% == %origin% (
     echo "You have the latest version"
     echo.
 
-    timeout /t 2
-    echo.
-
     cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
     python dontgetexpelled.py && exit /B 
