@@ -33,8 +33,7 @@ class DoGeX():
 
         pygame.mixer.music.load('sounds/background.wav')
         pygame.mixer.music.set_volume(0.2)
-        #pygame.mixer.music.play(-1) #to be deleted
-
+    
         #Wczytanie ekranu i nadanie tytułu
         self.screen = pygame.display.set_mode((self.settings.screen_width,
             self.settings.screen_height))
@@ -96,7 +95,7 @@ class DoGeX():
         """Uruchomienie pętli głównej gry"""
         i = 0
 
-        self.sounds.play_music('background', 0.1)
+        self.sounds.play_music('bg', 0.1)
 
 
         #self.sounds.play_music('background')
@@ -726,7 +725,7 @@ def _run_main_menu(dogex):
     """Uruchomienie menu głównego - wykrywanie zdarzeń itd."""
     #commented ponieważ przyciski są działające a fade in zajmuje się obrazem
 
-    dogex.sounds.play_music('background')
+    dogex.sounds.play_music('bg')
 
     intro_screen.fadein(menu.static_img, 0.2, 50)
     menu.blitme()

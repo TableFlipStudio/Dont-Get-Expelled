@@ -13,6 +13,7 @@ class Music():
 
         self.music = {
             'background': 'sounds/background.wav',
+            'bg': 'sounds/bg.wav'
         }
 
         self.sounds = {
@@ -20,6 +21,7 @@ class Music():
             'corridor': 'sounds/chodzenie_korytarz.wav',
             'gameover': 'sounds/Wywalenie_z_domu.wav',
             'interakcja': 'sounds/interakcja.wav',
+            'dialogi': 'sounds/mniej_ostra_interakcja.wav',
             'game_over_better': 'sounds/game_over_better.wav',
             'yaaaay': 'sounds/yaaaay.mp3',
             'fault': 'sounds/fault_commited.wav'

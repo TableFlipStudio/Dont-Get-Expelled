@@ -342,7 +342,7 @@ class DialogueWindow():
         odpowiedzi"""
         for msg in self.msgs:
             if msg['id'] == self.selectedID:
-                self.sounds.play_sound('interakcja', 0.1)
+                self.sounds.play_sound('dialogi', 0.1)
                 self.pointer_rect.midright = msg['rect'].midleft
 
     def _prep_msg(self, msg, yPos, id=None):
