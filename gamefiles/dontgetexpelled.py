@@ -95,7 +95,7 @@ class DoGeX():
         """Uruchomienie pętli głównej gry"""
         i = 0
 
-        self.sounds.play_music('bg', 0.1)
+        self.sounds.play_music('bg', 0.2)
 
 
         #self.sounds.play_music('background')
@@ -725,7 +725,7 @@ def _run_main_menu(dogex):
     """Uruchomienie menu głównego - wykrywanie zdarzeń itd."""
     #commented ponieważ przyciski są działające a fade in zajmuje się obrazem
 
-    dogex.sounds.play_music('bg')
+    dogex.sounds.play_music('bg',0.3)
 
     intro_screen.fadein(menu.static_img, 0.2, 50)
     menu.blitme()
