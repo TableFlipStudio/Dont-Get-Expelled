@@ -1,4 +1,4 @@
-# Dont-Get-Expelled - The Batory Game (Demo)
+# Dont-Get-Expelled - The Batory Game (Beta)
 
 ## Game Manual file
 Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
