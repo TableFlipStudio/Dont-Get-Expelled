@@ -39,4 +39,4 @@ class Settings():
         self.button_space = 1.5 * self.slot_height # Pusta przestrzeń między przyciskami
 
         # Napisy końcowe
-        self.credits_speed = 0.125
+        self.credits_speed = 0.2

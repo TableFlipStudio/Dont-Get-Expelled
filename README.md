@@ -1,4 +1,4 @@
-# Dont-Get-Expelled - The Batory Game (Demo)
+# Dont-Get-Expelled - The Batory Game (Beta)
 
 ## Game Manual file
 Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
@@ -58,4 +58,5 @@ This is the Minimap. It shows the entire map with all rooms and NPC marked on it
 
 ##
 
-![studio](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/intro_good.png)
+![studio](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/logo.jpeg)
+# **TABEFLIP STUDIO**

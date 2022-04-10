@@ -30,7 +30,8 @@ class NPC(Sprite):
             'cud': 'images/npc/lbos.png',
             'zyzio': 'images/npc/zyzio.png',
             'andrzej': 'images/npc/kolega.png',
-            'deezlegz': 'images/npc/trampkowiara.png'
+            'deezlegz': 'images/npc/trampkowiara.png',
+            'kanciapa': 'images/npc/kanciapa.png',
         }
         self.image = pygame.image.load(image[id])
         self.rect = self.image.get_rect()

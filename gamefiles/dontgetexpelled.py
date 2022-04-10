@@ -86,6 +86,7 @@ class DoGeX():
         self.npcs.add(NPC(self, 'zyzio'))
         self.npcs.add(NPC(self, 'andrzej', -1))
         self.npcs.add(NPC(self, 'deezlegz'))
+        self.npcs.add(NPC(self, 'kanciapa', -1))
 
         self.map.set_spawn("player")
 
@@ -761,7 +762,7 @@ def _run_game_over(dogex, game_won):
     else:
         dogex.sounds.play_sound('yaaaay')
     pygame.time.wait(1700)
-    intro_screen.fadein(gmovr.static_img, 0.3, 100)
+    intro_screen.fadein(gmovr.static_img, 0.3, 150)
     gmovr.blitme()
     pygame.display.flip()
 
