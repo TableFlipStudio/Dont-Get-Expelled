@@ -32,6 +32,11 @@ if %python%==1 (
 		echo.
 		echo Installing Python...
 		echo.
+		cls
+		echo Now there will be a window with a shield open, select yes.
+		echo.
+		pause 
+		echo.
 		echo WAIT PATIENTLY!!!
 		echo.
 
@@ -65,6 +70,8 @@ move gamefiles\bat-files\START-DoGeX.bat %USERPROFILE%\Desktop\
 move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
 
 move gamefiles\bat-files\Game-Manual.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
+
+del /Q %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
 
 mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\temporary
 
