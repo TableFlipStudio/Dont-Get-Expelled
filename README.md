@@ -1,5 +1,3 @@
-![studio](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/intro_good.png)
-
 # Dont-Get-Expelled - The Batory Game (Demo)
 Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
 
@@ -53,3 +51,7 @@ You can move your items freely between the storage slots by **clicking** on them
 ## Minimap
 ![minimap](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/minimap.png)
 This is the Minimap. It shows the entire map with all rooms and NPC marked on it. Use it, if you do not know where to go.
+
+##
+
+![studio](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/intro_good.png)
