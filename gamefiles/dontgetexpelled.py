@@ -469,9 +469,6 @@ class DoGeX():
             self.sounds.corridor.play(-1)
             self.settings.character_speed *= 2
 
-        elif event.key == pygame.K_q:
-            sys.exit()
-
     def check_moving_keys(self):
         keys = pygame.key.get_pressed()
 
