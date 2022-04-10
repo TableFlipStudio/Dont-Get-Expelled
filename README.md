@@ -1,3 +1,4 @@
+![studio](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/intro_good.png)
 
 # Dont-Get-Expelled - The Batory Game (Demo)
 Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
