@@ -9,7 +9,7 @@ class IntroScreen():
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
 
-        self.image = pygame.image.load("images/intro_better.png")#amogus.bmp")
+        self.image = pygame.image.load("images/intro_good.png")#amogus.bmp")
         self.image = pygame.transform.scale(self.image, (self.settings.screen_width, self.settings.screen_height))
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft

@@ -64,6 +64,8 @@ move gamefiles\bat-files\START-DoGeX.bat %USERPROFILE%\Desktop\
 
 move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
 
+move gamefiles\bat-files\Game-Manual.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
+
 mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\temporary
 
 rmdir /Q /s Dont-Get-Expelled-main
