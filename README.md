@@ -43,6 +43,7 @@ Both types of quests are displayed in the bottom-left corner of the screen:
 
 ## Inventory
 ![inventory](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/inventory.png)
+
 This is your inventory – should you not know, you store your items here. 
 The slots are divided into two types: 
 - **storage slots** (the two rows of eight slots) 
@@ -52,6 +53,7 @@ You can move your items freely between the storage slots by **clicking** on them
 > In order to throw an item out of the inventory, put it in the drop slot.
 ## Minimap
 ![minimap](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/minimap.png)
+
 This is the Minimap. It shows the entire map with all rooms and NPC marked on it. Use it, if you do not know where to go.
 
 ##
