@@ -38,7 +38,8 @@ class Expelling():
         for fault in self.faults[:]:
             self.fault_counter -= fault
             self.faults.remove(fault)
-            self.sounds.play_sound('fault')
+            if fault > 0:
+                self.sounds.play_sound('fault')
         self._update_msg()
 
     def check_expelled(self):

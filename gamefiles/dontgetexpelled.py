@@ -123,6 +123,7 @@ class DoGeX():
             # Zatrzymaj grę, jeśli wyrzucono gracza ze szkoły
             if self.expelling.check_expelled() or self.game_won:
                 pygame.mixer.music.pause()
+                self.sounds.check_walking_sound('stop')
                 break
 
         return self.game_won

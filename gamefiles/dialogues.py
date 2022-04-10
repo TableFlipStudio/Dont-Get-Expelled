@@ -172,7 +172,7 @@ class DialogueWindow():
             not_found = DialogueTreeNode("QUIT")
 
             trainers = DialogueTreeNode(dp+'got_trainers.txt', targetItem='trampki', changeQuest=('remove', 'trainers'))
-            end = DialogueTreeNode("QUIT", giveItem='trainers', faultValue=-2, stageUp=1)
+            end = DialogueTreeNode("QUIT", giveItem='trampki', faultValue=-2, stageUp=1)
 
             trainers.add_child(end, '0')
             liar.add_child(after_liar, '0')
