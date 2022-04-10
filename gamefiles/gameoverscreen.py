@@ -11,6 +11,7 @@ class GameOverScreen():
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
         self.sounds = dogex.sounds
+        self.game_won = game_won
 
         self.image = pygame.image.load('images/game_over_better.bmp') if not game_won else pygame.image.load("images/gamewon.bmp")
         self.static_img = pygame.image.load('images/game_over_better.bmp') if not game_won else pygame.image.load("images/gamewon.bmp")
@@ -22,8 +23,13 @@ class GameOverScreen():
         mmpos = (self.screen_rect.centerx, self.screen_rect.centery + 100)
         self.mainmenubutton = Button(self, mmpos, "Main menu")
 
-        qpos = (mmpos[0], mmpos[1] + self.settings.button_space)
+        if game_won:
+            cpos = (mmpos[0], mmpos[1] + self.settings.button_space)
+            self.creditbutton = Button(self, cpos, "Credits")
+
+        qpos = (cpos[0], cpos[1] + self.settings.button_space) if game_won else (mmpos[0], mmpos[1] + self.settings.button_space)
         self.quitbutton = Button(self, qpos, "Quit")
+
 
     def check_events(self, dogex):
         """Metoda identyczna jak _check_events() klasy DoGeX(), służy
@@ -40,7 +46,6 @@ class GameOverScreen():
                 if self.mainmenubutton.rect.collidepoint(mouse_pos):
 
                     self.sounds.play_sound('interakcja')
-                    dogex._reset_save()
                     return True
 
                 elif self.quitbutton.rect.collidepoint(mouse_pos):
@@ -51,3 +56,5 @@ class GameOverScreen():
         self.screen.blit(self.image, self.rect)
         self.mainmenubutton.blit_button()
         self.quitbutton.blit_button()
+        if self.game_won:
+            self.creditbutton.blit_button()
