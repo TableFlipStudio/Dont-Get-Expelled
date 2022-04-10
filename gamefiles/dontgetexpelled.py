@@ -38,7 +38,7 @@ class DoGeX():
         self.screen = pygame.display.set_mode((self.settings.screen_width,
             self.settings.screen_height))
         self.screen_rect = self.screen.get_rect()
-        pygame.display.set_caption("Don't Get Expelled! The Batory Game")
+        pygame.display.set_caption("Don't Get Expelled! The Batory Game - Beta")
 
         #Wczytanie zasobów z pliku
         self.character = MainCharacter(self)
@@ -75,7 +75,7 @@ class DoGeX():
 
         # Utworzenie przedmiotów i NPC
         self.items.add(Item(self, 'energy_drink'))
-        self.items.add(Item(self, 'kartka', True))
+        self.items.add(Item(self, 'kartka'))
         self.items.add(Item(self, 'trampki', True))
         self.items.add(Item(self, 'zubr', True, 1))
 
@@ -290,7 +290,7 @@ class DoGeX():
         chpos = (0, 0)
         invcnt = []
         items = [
-            Item(self, 'kartka', True),
+            Item(self, 'kartka'),
             Item(self, 'trampki', True),
             Item(self, 'zubr', True, 1),
             Item(self, 'energy_drink')
