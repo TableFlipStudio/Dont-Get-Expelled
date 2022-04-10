@@ -2,6 +2,7 @@ import pygame
 import sys
 
 from save import Button
+from credits import Credits
 
 class GameOverScreen():
     """Ekran do wyświetlania po przegranej"""
@@ -12,6 +13,7 @@ class GameOverScreen():
         self.screen_rect = dogex.screen_rect
         self.sounds = dogex.sounds
         self.game_won = game_won
+        self.credits = Credits(self)
 
         self.image = pygame.image.load('images/game_over_better.bmp') if not game_won else pygame.image.load("images/gamewon.bmp")
         self.static_img = pygame.image.load('images/game_over_better.bmp') if not game_won else pygame.image.load("images/gamewon.bmp")
@@ -51,6 +53,16 @@ class GameOverScreen():
                 elif self.quitbutton.rect.collidepoint(mouse_pos):
                     self.sounds.play_sound('interakcja')
                     sys.exit()
+
+                try:
+                    button_pressed = self.creditbutton.rect.collidepoint(mouse_pos)
+                except AttributeError:
+                    pass
+                else:
+                    if button_pressed:
+                        self.sounds.play_sound('interakcja')
+                        self.credits.launch_credits()
+                        return True
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)

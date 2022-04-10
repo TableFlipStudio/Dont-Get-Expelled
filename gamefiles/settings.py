@@ -37,3 +37,6 @@ class Settings():
         self.button_size = (self.screen_width / 4, self.slot_height)
         self.button_color = (0, 255, 0)
         self.button_space = 1.5 * self.slot_height # Pusta przestrzeń między przyciskami
+
+        # Napisy końcowe
+        self.credits_speed = 0.125
