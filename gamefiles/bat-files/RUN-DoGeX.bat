@@ -22,7 +22,7 @@ if %local% == %origin% (
 ) else (
     echo You don't have the latest version
     echo.
-    timeout /t 3
+    timeout /t 2
     echo.
     echo Downloading...
 
