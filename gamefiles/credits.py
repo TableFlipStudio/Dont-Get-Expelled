@@ -4,11 +4,12 @@ import sys
 class Credits:
     """Napisy końcowe"""
 
-    def __init__(self, gmovrs):
+    def __init__(self, gmovrs): # Game Over Screen
         self.settings = gmovrs.settings
         self.screen = gmovrs.screen
         self.screen_rect = self.screen.get_rect()
-        self.gmovrs = gmovrs # Game Over Screen
+        self.sounds = gmovrs.sounds
+        self.gmovrs = gmovrs
 
         self.image = pygame.image.load('images/credits.png')
         self.rect = self.image.get_rect()
@@ -19,6 +20,7 @@ class Credits:
     def launch_credits(self):
         """Uruchomienie napisów końcowych"""
         self.screen.fill((0, 0, 0))
+        self.sounds.play_music('bg', 0.3)
 
         while True:
 
@@ -31,6 +33,7 @@ class Credits:
             pygame.display.flip()
 
             if self.rect.bottom < 0:
+                pygame.mixer.music.pause()
                 break
 
     def update(self):
