@@ -439,6 +439,10 @@ class DoGeX():
         if event.key == pygame.K_ESCAPE:
             if not self.interface_active("menu"):
                 self.menu.active = not self.menu.active
+            else:
+                self.map.active = False
+                self.inventory.active = False
+                self.menu.active = False
 
         if event.key == pygame.K_e:
             found_npc = self._find_npc_collision()
