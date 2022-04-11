@@ -48,17 +48,19 @@ class Inventory():
             # Nie umieszczaj przedmiotu jeśli kolidowałby z przedmiotem już leżącym
             if self._check_item_collides(dogex, item):
                 return
-            item.rect.midleft = dogex.character.rect.center
-            ((item.obj.x), (item.obj.y)) = item.rect.center
-            item.shown = True
-            self.grabbed_item = None
+            if item:
+                item.rect.midleft = dogex.character.rect.center
+                ((item.obj.x), (item.obj.y)) = item.rect.center
+                item.shown = True
+                self.grabbed_item = None
 
     def _check_item_collides(self, dogex, item):
         """Sprawdzenie, czy przedmiot umieszczany na mapie koliduje z jakimś
         innym przedmiotem"""
         for map_item in dogex.items.sprites():
-            if item.rect.colliderect(map_item) and map_item.shown is True:
-                return True
+            if item:
+                if item.rect.colliderect(map_item) and map_item.shown is True:
+                    return True
 
     def _put_item_in_slot(self, dogex, mouse_pos):
         """Umieszczenie pochwyconego myszą przedmiotu w slocie,
