@@ -17,10 +17,10 @@ class NPC(Sprite):
         # Identyfikator NPC - używany np. do wczytywania dialogów
         self.id = id
 
-        # Etap 'relacji' z NPC - przed questem, w trakcie, po queście itd.
+        # Etap 'relacji' z NPC - przed questem, w trakcie, po queście itp.
         self.stage = stage
 
-        # Obecność na mapie
+        # Obecność na mapie. Patrz: atrybut shown klasy Item
         self.shown = shown
 
         image = {

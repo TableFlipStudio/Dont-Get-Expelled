@@ -9,7 +9,6 @@ class Credits:
         self.screen = gmovrs.screen
         self.screen_rect = self.screen.get_rect()
         self.sounds = gmovrs.sounds
-        self.gmovrs = gmovrs
 
         self.image = pygame.image.load('images/credits.png')
         self.rect = self.image.get_rect()
@@ -23,7 +22,7 @@ class Credits:
         self.sounds.play_music('bg', 0.3)
 
         while True:
-
+            # Takie trochę _check_events()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
@@ -38,7 +37,6 @@ class Credits:
 
     def update(self):
         """Przesunięcie napisów w górę"""
-        #self.y = float(self.rect.y)
         self.y -= self.settings.credits_speed
         self.rect.y = self.y
 

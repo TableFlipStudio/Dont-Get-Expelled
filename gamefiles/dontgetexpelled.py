@@ -54,6 +54,7 @@ class DoGeX():
 
         self.window_options = IntroScreen(self)# ta klasa występuje też pod nazwą intro_screen tylko dla głównej pętli gry (na dole)
 
+        # Do tych grup dodawane będą poszczególne sprite'y
         self.slots = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
         self.npcs = pygame.sprite.Group()
@@ -65,6 +66,7 @@ class DoGeX():
         #Utworzenie slotów
         self._create_slots()
 
+        # Przyciski menu pauzy
         # Te przyciski jeszcze nie istnieją, atrybuty dla przejrzystości
         self.savebutton = None
         self.snquitbutton = None
@@ -90,11 +92,12 @@ class DoGeX():
 
         self.map.set_spawn("player")
 
+        # Flaga kończąca działanie gry w momencie jej wygrania
         self.game_won = False
 
     def run_game(self):
         """Uruchomienie pętli głównej gry"""
-        i = 0
+        i = 0 # Wskaźnik, czy pętla wykonywana jest po raz pierwszy. Potrzebne ze względów technicznych.
 
         self.sounds.play_music('bg', 0.3)
 
@@ -104,18 +107,19 @@ class DoGeX():
         while True:
             self._check_events()
             self.expelling.check_fault_committed()
-            self.map.collision()
+            self.map.collision() # Detekcja kolizji
 
+            # Otwarcie jakiegokolwiek okna (interfejsu, dialogi, ekwipunek itd.) pauzuje grę
             if not self.interface_active():
                 pygame.mixer.music.unpause()
                 self.character.update()
                 self.sounds.check_walking_sound()
                 if self.m_menu._check_save_exists() and i < 1:
-                    self.map.update('static_only')
+                    self.map.update('static_only') # Patrz: TiledMap.py, linijka ok. 114
                     i += 1
-                self.map.update('all')
-                self._update_npcs()
-                self._update_items()
+                self.map.update('all') # Przesuwa wszystkie obiekty na mapie, ale razem z mapą
+                self._update_npcs() # Aktualizacja położenia przedmiotów i NPC (ich rectów) na podstawie
+                self._update_items() # odpowiadających im obiektów Tiled
             else:
                 self.sounds.check_walking_sound('stop')
             self._update_screen()
@@ -209,30 +213,21 @@ class DoGeX():
         """Umieszczenie przedmiotów wczytanych z items.json z powrotem
         w self.items (a więc na mapie)"""
         self.items.empty() # Tworzymy tę grupę od nowa
-        for itemdata in items:
-            item = Item(self, itemdata[0])
-            (item.obj.x, item.obj.y) = (itemdata[1][0] + 30, itemdata[1][1] + 30)
-            item.rect.center = (itemdata[1])
-            item.shown = itemdata[2]
-            item.faultValue = itemdata[3]
+        for name, pos, shown, faultV in items:
+            item = Item(self, name, shown, faultV)
+            (item.obj.x, item.obj.y) = (pos[0] + 30, pos[1] + 30)
+            item.rect.center = pos
             self.items.add(item)
 
     def _place_loaded_NPCs(self, npcs):
         """Umieszczenie przedmiotów wczytanych z npcs.json z powrotem
         w self.npcs (a więc na mapie)"""
         self.npcs.empty() # Tworzymy tę grupę od nowa
-        for NPCdata in npcs:
-            npc = NPC(self, NPCdata[0])
-            (npc.obj.x, npc.obj.y) = (NPCdata[1][0] + 30, NPCdata[1][1] + 30)
-            npc.rect.center = (NPCdata[1])
+        for name, pos in npcs:
+            npc = NPC(self, name)
+            (npc.obj.x, npc.obj.y) = (pos[0] + 30, pos[1] + 30)
+            npc.rect.center = pos
             self.npcs.add(npc)
-
-    def _list_to_group(self, myList):
-        """Utworzenie grupy sprite'ów na podstawie listy ich ID,
-        wczytanej przez moduł JSON"""
-        group = pygame.sprite.Group()
-        for spriteid in myList:
-            pass
 
     def _write_save(self):
         """Zapisanie postępu w grze"""
@@ -305,8 +300,8 @@ class DoGeX():
             NPC(self, 'andrzej', -1),
             NPC(self, 'deezlegz')
             ]
-        items = [(item.id, item.rect.topleft) for item in items]
-        npcs = [(npc.id, npc.rect.center) for npc in npcs]
+        items = [(item.id, item.rect.topleft, item.shown, item.faultValue) for item in items] # Przepisanie listy z tych samych
+        npcs = [(npc.id, npc.rect.center) for npc in npcs] # przyczyn co w group_to_list()
         faultcntr = self.settings.faults_to_be_expelled
         stages = {}
         quest = ['math']
@@ -386,16 +381,18 @@ class DoGeX():
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
-            self.check_moving_keys()
+            self.check_moving_keys() # Poruszanie się postaci głównej
 
             if event.type == pygame.MOUSEBUTTONDOWN:
 
                 mouse_pos = pygame.mouse.get_pos()
 
+                # Pochwycenie myszą przedmiotu w ekwipunku
                 if (self.inventory.grabbed_item is None and
                 self.inventory.active):
                     self.inventory.grab_item(self, mouse_pos)
 
+                # Menu pauzy (zapisu) - interakcja z przyciskami
                 elif self.menu.active:
                     if self.savebutton.rect.collidepoint(mouse_pos):
                         self.sounds.play_sound('interakcja')
@@ -410,17 +407,18 @@ class DoGeX():
                         sys.exit()
 
             elif event.type == pygame.MOUSEBUTTONUP and self.inventory.active:
+                # Upuszczenie przedmiotu do slotu w ekwipunku
                 mouse_pos = pygame.mouse.get_pos()
                 self.inventory.release_item(self, mouse_pos)
 
-        self.story._check_story_events()
+        self.story._check_story_events() # Zdarzenia związane z fabułą gry, nie z podstawowym silnikiems
 
     def _check_keydown_events(self, event):
         """Reakcja na naciśnięcie klawisza"""
 
         if event.key == pygame.K_UP:
             if self.window.active:
-                self._change_selection(-1)
+                self._change_selection(-1) # Wybieranie odpowiedzi w dialogach
 
         if event.key == pygame.K_DOWN:
             if self.window.active:
@@ -435,9 +433,9 @@ class DoGeX():
                 self.map.active = not self.map.active
 
         if event.key == pygame.K_RETURN:
-            self._choose_answer()
+            self._choose_answer() # Zatwierdzenie odpowiedzi w dialogach
 
-        if event.key == pygame.K_ESCAPE:
+        if event.key == pygame.K_ESCAPE: # Wł/wył manu pauzy LUB wyjście z każdego innego okne (oprócz dialogowego)
             if not self.interface_active("menu"):
                 self.menu.active = not self.menu.active
             else:
@@ -449,7 +447,7 @@ class DoGeX():
             found_npc = self._find_npc_collision()
             if not self.interface_active():
                 if found_npc is None:
-                    self._pickup_item()
+                    self._pickup_item() # Jeśli nie ma NPC w pobliżu, to jest to interakcja z przedmiotem
                 else:
                     # Jesli ten NPC nie ma dialogów, nie wczytuj
                     try:
@@ -463,7 +461,7 @@ class DoGeX():
                             self.window.node = self.window.dialogues[found_npc.id][found_npc.stage]
                             self.window.load_dialogue(found_npc)
 
-        if event.key == pygame.K_LSHIFT:
+        if event.key == pygame.K_LSHIFT: # Sprintowanie
             self.sounds.corridor.stop()
             self.sounds.corridor = pygame.mixer.Sound('sounds/chodzenie_korytarz_x2.wav')
             self.sounds.corridor.set_volume(0)
@@ -492,7 +490,7 @@ class DoGeX():
     def _change_selection(self, UpOrDown: "-1 or 1 (int)"):
         """Zmnienia zaznaczenie odpowiedzi gracza w oknie dialogowym
         (przesuwa strzałkę)"""
-        self.window.selectedID += 1 * UpOrDown
+        self.window.selectedID += 1 * UpOrDown # Zmiana ID wybranej odpowiedzi
         id = self.window.selectedID
         id_limit = self.window.msgs[-1]['id']
         if id < 0 or id > id_limit:
@@ -656,12 +654,12 @@ class DoGeX():
                 item.shown = False
 
     def _update_npcs(self):
-        """Uaktualnienie pozycji wszystkich NPC"""
+        """Uaktualnienie pozycji wszystkich NPC na podstawie ich obiektów Tiled"""
         for npc in self.npcs.sprites():
             npc.rect.center = ((npc.obj.x), (npc.obj.y))
 
     def _update_items(self):
-        """Uaktualnienie pozycji wszystkich przedmiotów"""
+        """Uaktualnienie pozycji wszystkich przedmiotów na podstawie ich obiektów Tiled"""
         for item in self.items.sprites():
             item.rect.center = ((item.obj.x), (item.obj.y))
 
@@ -671,7 +669,6 @@ class DoGeX():
 
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.map_image, (self.map.x, self.map.y))
-        #pygame.draw.rect(self.screen, ((0,255,0)), self.map.rect) #TOBEDELETED
         self.character.blitme()
         self.expelling.blitmsg()
         self.story.blitmsg()
@@ -752,7 +749,7 @@ def intro(dogex):
     intro_screen.fadeout(0.3)
 
 def _run_game_over(dogex, game_won):
-    """Uruchomienie ekranu końca gry - tak jak _run_main_menu()"""
+    """Uruchomienie ekranu końca gry (lub wygranej) - tak jak _run_main_menu()"""
     gmovr = GameOverScreen(dogex, game_won)
     intro_screen.black_screen()
     pygame.display.flip()

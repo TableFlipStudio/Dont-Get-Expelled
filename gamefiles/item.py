@@ -23,9 +23,12 @@ class Item(Sprite):
 
         self.obj = self.map._access_Object('items.'+item_type)
 
-        #Położenie zależy od atrybutu xyPos (krotka)
         self.id = item_type
 
+        # Decyduje, czy przedmiot jest widoczny i interaktywny.
+        # De facto, decyduje czy przedmiot znajduje się na mapie.
+        # Podnoszone przedmioty ze względów technicznych nie są fizycznie usuwane z mapy
+        # (DoGeX().slots) tylko ich atrybuty shown są zmieniane na False
         self.shown = shown
 
         # How bad is to pick up this item?

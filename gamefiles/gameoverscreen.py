@@ -12,7 +12,8 @@ class GameOverScreen():
         self.screen = dogex.screen
         self.screen_rect = dogex.screen_rect
         self.sounds = dogex.sounds
-        self.game_won = game_won
+        self.game_won = game_won # True jeśli wygrano grę, False jeśli wyrzucono gracza za szkoły
+                                 # Od tego zależy, jaki ekran wczytywać
         self.credits = Credits(self)
 
         self.image = pygame.image.load('images/game_over_better.bmp') if not game_won else pygame.image.load("images/gamewon.bmp")
@@ -22,10 +23,11 @@ class GameOverScreen():
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
 
+        # Przyciski menu wygranej/przegranej
         mmpos = (self.screen_rect.centerx, self.screen_rect.centery + 100)
         self.mainmenubutton = Button(self, mmpos, "Main menu")
 
-        if game_won:
+        if game_won: # Ten przycisk występuje tylko po wygranej
             cpos = (mmpos[0], mmpos[1] + self.settings.button_space)
             self.creditbutton = Button(self, cpos, "Credits")
 
@@ -46,7 +48,6 @@ class GameOverScreen():
                 mouse_pos = pygame.mouse.get_pos()
 
                 if self.mainmenubutton.rect.collidepoint(mouse_pos):
-
                     self.sounds.play_sound('interakcja')
                     return True
 
@@ -55,11 +56,11 @@ class GameOverScreen():
                     sys.exit()
 
                 try:
-                    button_pressed = self.creditbutton.rect.collidepoint(mouse_pos)
-                except AttributeError:
+                    credits_pressed = self.creditbutton.rect.collidepoint(mouse_pos)
+                except AttributeError: # Ten przycisk nie istnieje jeśli to menu porażki
                     pass
                 else:
-                    if button_pressed:
+                    if credits_pressed:
                         self.sounds.play_sound('interakcja')
                         self.credits.launch_credits()
                         return True
