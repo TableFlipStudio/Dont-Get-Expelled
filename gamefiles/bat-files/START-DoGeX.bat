@@ -1,18 +1,63 @@
 @echo off
 
-python -m pip install pygame
-python -m pip install pytmx
+del /Q %USERPROFILE%\Documents\Dont-Get-Expelled\temporary
 
-cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
+curl https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/version.txt -o %USERPROFILE%\Documents\Dont-Get-Expelled\temporary\version.txt 
 
-move bat-files\RUN-DoGeX.bat %USERPROFILE%\Desktop
+set /p origin=< %USERPROFILE%\Documents\Dont-Get-Expelled\temporary\version.txt
 
-echo.
-echo The START-DoGeX file was replaced by a RUN-DoGeX file on your Desktop
-echo.
-pause
+set /p local=< %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles\version.txt
 
-cd /d %USERPROFILE%\Desktop
+cls
 
-start RUN-DoGeX.bat & del /Q %USERPROFILE%\Desktop\START-DoGeX.bat & exit /B
+if %local% == %origin% (
+    echo.
+    echo "You have the latest version"
+    echo.
+
+    cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
+
+    python dontgetexpelled.py && exit /B 
+
+) else (
+    echo You don't have the latest version
+    echo.
+    timeout /t 2
+    echo.
+    echo Downloading...
+
+    rmdir /Q /s %USERPROFILE%\Documents\Dont-Get-Expelled
+
+    mkdir %USERPROFILE%\Documents\Dont-Get-Expelled
+
+    curl -L https://github.com/TabeFlipStudio/Dont-Get-Expelled/archive/refs/heads/main.zip -o %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip
+
+    powershell expand-archive %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip %USERPROFILE%\Documents\Dont-Get-Expelled\
+
+    cd /d %USERPROFILE%\Desktop
+
+    cd /d %USERPROFILE%\Documents\Dont-Get-Expelled
+
+    del /Q /F Dont-Get-Expelled.zip
+
+    move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
+
+    move gamefiles\bat-files\START-DoGeX.bat %USERPROFILE%\Desktop\
+
+    move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
+
+    mkdir %USERPROFILE%\Documents\Dont-Get-Expelled\temporary
+
+    rmdir /Q /s Dont-Get-Expelled-main
+    cls
+
+    echo the game has been updated and is now installed, please restart the system and open the START-Dont-Get-Expelled.bat file
+    pause
+    
+    del /Q /F %USERPROFILE%\Desktop\RUN-DoGeX.bat
+
+)
+
+exit /B
+    
 

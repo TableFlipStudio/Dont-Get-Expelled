@@ -65,7 +65,7 @@ del /Q /F Dont-Get-Expelled.zip
 
 move Dont-Get-Expelled-main\gamefiles %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-move gamefiles\bat-files\START-DoGeX.bat %USERPROFILE%\Desktop\
+move gamefiles\bat-files\STARTER-DoGeX.bat %USERPROFILE%\Desktop\
 
 move gamefiles\bat-files\uninstall-DoGeX.bat %USERPROFILE%\Documents\Dont-Get-Expelled\
 
@@ -79,7 +79,8 @@ rmdir /Q /s Dont-Get-Expelled-main
 
 cls
 
-echo The program is now installed, RESTART the system and open the START-Dont-Get-Expelled.bat file
+echo The program is now installed, RESTART the system and open the STARTER-Dont-Get-Expelled.bat file
 pause
 
+del /Q /F %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
 del /Q /F %USERPROFILE%\Downloads\DoGeX-setup.bat
