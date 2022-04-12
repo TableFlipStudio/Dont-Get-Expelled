@@ -6,9 +6,9 @@ pause
 
 cd /d %USERPROFILE%\Desktop
 
-del /Q %USERPROFILE%\Desktop\START-DoGeX.bat
+del /Q %USERPROFILE%\Desktop\STARTER-DoGeX.bat
 
-del /Q %USERPROFILE%\Desktop\RUN-DoGeX.bat
+del /Q %USERPROFILE%\Desktop\START-DoGeX.bat
 
 cls
 

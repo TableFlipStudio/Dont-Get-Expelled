@@ -80,6 +80,9 @@ rmdir /Q /s Dont-Get-Expelled-main
 cls
 
 echo The program is now installed, RESTART the system and open the STARTER-Dont-Get-Expelled.bat file
+echo.
+echo Game manual and uninstaller is located in the Documents folder
+
 pause
 
 del /Q /F %USERPROFILE%\Downloads\python-3.10.4-amd64.exe
