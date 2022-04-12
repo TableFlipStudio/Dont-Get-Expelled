@@ -17,6 +17,8 @@ class MainMenu():
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
 
+
+        # Przyciski manu głównego
         ngpos = (self.settings.screen_width / 5,
             self.settings.screen_height / 2.5)
         self.newgamebutton = Button(self, ngpos, "New game")
@@ -46,8 +48,8 @@ class MainMenu():
 
                 elif (
                     self.loadgamebutton.rect.collidepoint(mouse_pos)
-                    and self._check_save_exists()
-                        ):
+                    and self._check_save_exists() # Przycisk jest zablokowany jeśli zapis nie istnieje
+                ):
                     self.sounds.play_sound('interakcja')
                     dogex._load_save()
                     return True
@@ -59,8 +61,8 @@ class MainMenu():
     def _check_save_exists(self):
         with open('jsondata/character_pos.json') as file:
             test = file.read()
-        if '[0, 0]' not in test:
-            return True
+        if '[0, 0]' not in test: # Takie koordynaty na w zasadzie mogą wystąpić tylko po uruchomieniu nowej gry.
+            return True # Jeśli użytkonik akurat zapisze grę w tym miejscu to jego problem
         else:
             return False
 

@@ -9,16 +9,13 @@ class MainCharacter():
         self.screen_rect = self.screen.get_rect()
         self.screen_height = self.screen_rect.height
         self.screen_width = self.screen_rect.width
-        #self.sounds = dogex.sounds
-
-        self.run = False
 
         self.settings = dogex.settings
 
         #var for animation loop
         self.l = 0
 
-        #Wczytanie obrazu głównej postaci
+        #Wczytanie klatek głównej postaci, składających się na obraz.
         self.image = pygame.image.load('animation/down/fwrd0.png')
         self.down_list =  [
             pygame.image.load('animation/down/fwrd0.png'),
@@ -175,13 +172,14 @@ class MainCharacter():
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
-        #Opcje wskazujące na poruszanie się
+        #Opcje wskazujące na poruszanie się (True po wciśnięciu klawiszy)
         self.moving_right = False
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
 
     def can_move_right(self):
+        """Sprawdzanie, czy postać może poruszyć się w prawo"""
         output = (
             self.moving_right
             and
@@ -191,6 +189,7 @@ class MainCharacter():
         return output
 
     def can_move_left(self):
+        """Patrz can_move_right()"""
         output = (
             self.moving_left
             and
@@ -199,6 +198,7 @@ class MainCharacter():
         return output
 
     def can_move_up(self):
+        """Patrz can_move_right()"""
         output = (
             self.moving_up
             and
@@ -207,6 +207,7 @@ class MainCharacter():
         return output
 
     def can_move_down(self):
+        """Patrz can_move_right()"""
         output = (
             self.moving_down
             and
@@ -215,7 +216,7 @@ class MainCharacter():
         return output
 
     def animation_list(self):
-    
+
         if self.moving_up and self.moving_down:
             return self.stationary_image
 
@@ -234,7 +235,7 @@ class MainCharacter():
         elif self.moving_left:
             return self.left_list[self.animation_loop(9)]
 
-        
+
         else:
             return self.stationary_image
 
@@ -271,8 +272,8 @@ class MainCharacter():
         self.rect.x = self.x
         self.rect.y = self.y
 
-        
-            
+
+
 
     def blitme(self):
         """Wyświetlenie postaci głównej na ekranie"""

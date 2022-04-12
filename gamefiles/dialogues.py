@@ -18,7 +18,7 @@ class DialogueWindow():
         self.screen_rect = self.screen.get_rect()
         self.settings  = dogex.settings
         self.expelling = dogex.expelling
-        self.dogex = dogex
+        self.dogex = dogex # Egzemplarz klasy głównej do odnoszenia się do mniej standardowych atrybutów
         self.sounds = dogex.sounds
 
         self.rect = pygame.Rect(0, 0, self.settings.screen_width,
@@ -184,7 +184,7 @@ class DialogueWindow():
         return root
 
     def build_maths_tree(self):
-        """Drzewo dialogowe do pytań matematycznych na początku gry"""
+        """Drzewo dialogowe do pytań matematycznych na początku gr - FABUŁA"""
         dp = "Dialogues/maths/"
 
         root = DialogueTreeNode(dp+"root.txt")
@@ -218,6 +218,7 @@ class DialogueWindow():
         return root
 
     def build_concierge_tree(self):
+        """Drzewo dialogowe do wydarzeń na portierni - FABUŁA"""
         dp = 'Dialogues/concierge/'
 
         root = DialogueTreeNode(dp+'root.txt')
@@ -230,6 +231,7 @@ class DialogueWindow():
         return root
 
     def build_office_tree(self):
+        """Drzewo dialogowe do wydarzeń w sekretariacie - FABUŁA"""
         dp = 'Dialogues/office/'
 
         root = DialogueTreeNode(dp+'root.txt')
@@ -293,8 +295,7 @@ class DialogueWindow():
             self._update_pointer()
 
     def _load_msg_from_node(self):
-        """Wczytanie kwestii NPC z pliku po podaniu jego ID
-        (zwykle jego nazwa)"""
+        """Wczytanie kwestii NPC z pliku na podstawie self.node"""
         filename = self.node.data
         with open(filename) as file:
             lines = file.readlines()
@@ -308,8 +309,7 @@ class DialogueWindow():
 
     def _load_answs_from_node(self):
         # WARNING: Function crashes on multi-line answers. Don't make multi-line answers.
-        """Wczytanie możliwych odpowiedzi gracza po ID NPC,
-        z którym go prowadzi"""
+        """Wczytanie możliwych odpowiedzi gracza na postawie self.node"""
         filename  = self.node.data
         lines = self._prepare_anwsers(filename)
 

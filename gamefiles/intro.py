@@ -1,4 +1,4 @@
-import pygame 
+import pygame
 
 
 class IntroScreen():
@@ -19,23 +19,21 @@ class IntroScreen():
         self.done = False
 
     def fadeout(self, speed=0.5):
-        
+        """Eleganckia animacja zanikania"""
         fadeout = pygame.Surface((self.settings.screen_width, self.settings.screen_height))
         fadeout = fadeout.convert()
-        #fadeout.fill(black)
-        #for i in range(0,255,speed):
         i = 0
         done = True
         while done:
-            #pygame.time.wait(10)
             fadeout.set_alpha(i)
             self.screen.blit(fadeout, (0, 0))
             pygame.display.update()
-            i+=speed
+            i += speed
             if i >= 200:
                 done = False
-        
+
     def fadein(self, image,speed=0.1, duration=255):
+        """Elegancka animacja stopniowego pojawiania się"""
         if image == None:
             fadein = pygame.Surface((self.settings.screen_width, self.settings.screen_height))
         else:
@@ -43,33 +41,29 @@ class IntroScreen():
 
         fadein = fadein.convert()
         i = 0
-        #for i in range(255,0):
         done = True
         while done:
-            #pygame.time.wait(10)
             fadein.set_alpha(i)
             self.screen.blit(fadein, (0, 0))
             pygame.display.update()
-            i+=speed
+            i += speed
             if i >= duration:
                 done = False
-        
+
 
     def intro_fadein(self, speed=1):
-        fadein = self.image #pygame.Surface((self.settings.screen_width, self.settings.screen_height))
+        fadein = self.image
         fadein = fadein.convert()
         i = 0
-        #for i in range(255,0):
         done = True
         while done:
-            #pygame.time.wait(10)
             fadein.set_alpha(i)
             self.screen.blit(fadein, (0, 0))
             pygame.display.update()
             i+=speed
             if i >= 255:
                 done = False
-    
+
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)

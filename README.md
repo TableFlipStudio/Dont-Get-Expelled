@@ -59,7 +59,6 @@ This is the Minimap. It shows the entire map with all rooms and NPC marked on it
 ## 
 
 
-
 [^1]:
  **TABEFLIP STUDIO** :laughing:
 

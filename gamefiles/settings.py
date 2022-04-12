@@ -31,6 +31,7 @@ class Settings():
         self.tab_Ypos = self.screen_height // 4
         self.answ_tab_Ypos = self.screen_height * 0.6
 
+        # Limit przewinień możliwych do popełnienia przed zostaniem wyrzuconym
         self.faults_to_be_expelled = 5
 
         # Ustawienia dotyczące przycisków zapisu i resetu

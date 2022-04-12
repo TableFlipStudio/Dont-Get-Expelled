@@ -34,6 +34,10 @@ class Inventory():
         """Upuszczenie przedmiotu z powrotem do slotu lub wyrzucenie
         z ekwipunku"""
         pygame.mixer.Sound('sounds/podnoszenie_przedmiotu.wav').play()
+
+        # Te trzy funkcje się wzajemnie wykluczają, jednak jeśli którakolwiek z nich
+        # wykona swoje zadanie, pozostałe będą operowały na wartościach None
+        # więc de facto nic nie będą robiły
         self._lay_item(dogex, mouse_pos)
         self._put_item_in_slot(dogex, mouse_pos)
         self._put_item_back(dogex)
@@ -48,17 +52,19 @@ class Inventory():
             # Nie umieszczaj przedmiotu jeśli kolidowałby z przedmiotem już leżącym
             if self._check_item_collides(dogex, item):
                 return
-            item.rect.midleft = dogex.character.rect.center
-            ((item.obj.x), (item.obj.y)) = item.rect.center
-            item.shown = True
-            self.grabbed_item = None
+            if item: # Wykonaj tylko, jesli jest pochwyony jakiś przedmiot
+                item.rect.midleft = dogex.character.rect.center
+                ((item.obj.x), (item.obj.y)) = item.rect.center
+                item.shown = True
+                self.grabbed_item = None
 
     def _check_item_collides(self, dogex, item):
         """Sprawdzenie, czy przedmiot umieszczany na mapie koliduje z jakimś
         innym przedmiotem"""
         for map_item in dogex.items.sprites():
-            if item.rect.colliderect(map_item) and map_item.shown is True:
-                return True
+            if item: # Wykonaj tylko, jesli jest pochwyony jakiś przedmiot
+                if item.rect.colliderect(map_item) and map_item.shown:
+                    return True
 
     def _put_item_in_slot(self, dogex, mouse_pos):
         """Umieszczenie pochwyconego myszą przedmiotu w slocie,
@@ -76,7 +82,7 @@ class Inventory():
             if slot.content is None:
                 slot.content = self.grabbed_item
                 self.grabbed_item = None
-                break   #Umieść przedmiot tylko raz
+                break # Umieść przedmiot tylko raz
 
     def display_grabbed_item(self):
         """Wyświetlenie przedmiotu podniesionego przy użyciu myszy"""
