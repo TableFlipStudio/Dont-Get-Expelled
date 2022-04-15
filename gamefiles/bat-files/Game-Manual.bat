@@ -1,3 +1,3 @@
 @echo off
 
-START https://github.com/TabeFlipStudio/Dont-Get-Expelled
+START https://tabeflipstudio.github.io/Dont-Get-Expelled/
