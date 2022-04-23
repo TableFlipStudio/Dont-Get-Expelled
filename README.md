@@ -49,7 +49,7 @@ So don't get mad if you spam E near an NPC and nothing happens - it's not a bug,
 
 ## Save system :heavy_check_mark:
 This game has a save system - any time you want, you can save the game (press ESC and click the 'Save' button), close it,
-get some rest (get a life you nerd!) and then, load it from main menu and continue
+get some rest (get a life you nerd!) and then load it from main menu and continue
 playing from the very point you have finished. If you don't have a game saved,
 you cannot load it, so please don't spam the 'Load Game' button like a maniac.
 
