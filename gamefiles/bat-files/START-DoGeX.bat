@@ -17,7 +17,7 @@ if %local% == %origin% (
 
     cd /d %USERPROFILE%\Documents\Dont-Get-Expelled\gamefiles
 
-    python dontgetexpelled.py && exit /B 
+    python3 dontgetexpelled.py 
 
 ) else (
     echo You don't have the latest version
@@ -34,7 +34,6 @@ if %local% == %origin% (
 
     powershell expand-archive %USERPROFILE%\Documents\Dont-Get-Expelled\Dont-Get-Expelled.zip %USERPROFILE%\Documents\Dont-Get-Expelled\
 
-    cd /d %USERPROFILE%\Desktop
 
     cd /d %USERPROFILE%\Documents\Dont-Get-Expelled
 

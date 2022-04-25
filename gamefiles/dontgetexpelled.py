@@ -31,8 +31,8 @@ class DoGeX():
 
         self.clock = pygame.time.Clock()
 
-        pygame.mixer.music.load('sounds/background.wav')
-        pygame.mixer.music.set_volume(0.2)
+        #pygame.mixer.music.load('sounds/background.wav')
+        #pygame.mixer.music.set_volume(0.2)
 
         #Wczytanie ekranu i nadanie tytułu
         self.screen = pygame.display.set_mode((self.settings.screen_width,
