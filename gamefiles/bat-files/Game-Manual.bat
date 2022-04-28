@@ -1,3 +1,4 @@
 @echo off
 
-START https://tabeflipstudio.github.io/Dont-Get-Expelled/
+::open the game github page (game manual) in the default browser
+START https://github.com/TableFlipStudio/Dont-Get-Expelled
