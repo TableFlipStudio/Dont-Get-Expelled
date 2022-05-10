@@ -3,6 +3,33 @@
 ## Game Manual file
 Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
 
+## Installation
+Due to technical issues, the installation file may be malfunctioning. If you find
+yourself unable to install the game by setup file, here is an instruction on how
+to do it step-by-step.
+
+<details>
+<summary><b>Step-by-step installation</b></summary>
+
+# Install Python
+Go to Python's website (https://www.python.org), then **Downloads** section and
+click the *Download* button. Save the installation file and open it. Follow instructions
+of the Python installer. **Make sure that the *add Python to Path* box is checked, otherwise you will have to do several more things you don't want to do** (Forgot to do it anyway? See the end of this section for instructions on how to fix it).
+
+# Install Python libraries
+*Don't Get Expelled!* needs several important files to run properly. In order to install them:
+1. Go to *Start*, find the search box and type *cmd*, then press Enter.
+2. You should see something like this
+![commandline](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/cmd.png)
+3. Type the following line: `python -m pip install --user pygame` and press Enter. Then `python -m pip install --user pytmx` and press Enter again.
+Make sure to type in exactly these, without any typos. After pressing Enter both times, you should see something like this:
+![instaling libraries](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/libs.png)
+4. Close the black window
+
+<!--insert instructions on downloading the game files here AND instruction on how to add python to Path-->
+
+</details>
+
 ## Main objective
 Your main task in this game is to survive several days in Batory without ending up expelled for crimes against humanity (in demo version there is only one day). There will be many opportunities to do something bad: doing so will make you closer to being expelled!
 
