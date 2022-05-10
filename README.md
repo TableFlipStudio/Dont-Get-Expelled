@@ -11,12 +11,13 @@ to do it step-by-step.
 <details>
 <summary><b>Step-by-step installation</b></summary>
 
-# Install Python
+### Install Python
 Go to Python's website (https://www.python.org), then **Downloads** section and
 click the *Download* button. Save the installation file and open it. Follow instructions
 of the Python installer. **Make sure that the *add Python to Path* box is checked, otherwise you will have to do several more things you don't want to do** (Forgot to do it anyway? See the end of this section for instructions on how to fix it).
+![python and path](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/python_install.png)
 
-# Install Python libraries
+### Install Python libraries
 *Don't Get Expelled!* needs several important files to run properly. In order to install them:
 1. Go to *Start*, find the search box and type *cmd*, then press Enter.
 2. You should see something like this
