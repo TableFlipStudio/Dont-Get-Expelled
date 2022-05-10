@@ -773,7 +773,7 @@ if __name__ == '__main__':
     while True:
         dogex = DoGeX()
         intro_screen = IntroScreen(dogex)
-        intro(dogex)
+        #intro(dogex)
         menu = MainMenu(dogex)
 
         _run_main_menu(dogex)
