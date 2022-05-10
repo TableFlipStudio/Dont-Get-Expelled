@@ -22,9 +22,13 @@ of the Python installer. **Make sure that the *add Python to Path* box is checke
 1. Go to *Start*, find the search box and type *cmd*, then press Enter.
 2. You should see something like this
 ![commandline](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/cmd.png)
-3. Type the following line: `python -m pip install --user pygame` and press Enter. Then `python -m pip install --user pytmx` and press Enter again.
+3. Type the following lines: 
+- `python -m pip install --user pygame` and press Enter.
+- `python -m pip install --user pytmx` and press Enter again.
+
 Make sure to type in exactly these, without any typos. After pressing Enter both times, you should see something like this:
 ![instaling libraries](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/libs.png)
+
 4. Close the black window
 
 <!--insert instructions on downloading the game files here AND instruction on how to add python to Path-->
