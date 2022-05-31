@@ -41,6 +41,7 @@ of the Python installer. **Make sure that the *add Python to Path* box is checke
 - `python -m pip install --user pytmx` and press Enter again.
 
 Make sure to type in exactly these, without any typos. After pressing Enter both times, you should see something like this:
+	
 ![instaling libraries](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/libs.png)
 
 4. Close the black window
