@@ -1,5 +1,9 @@
 # Dont-Get-Expelled - The Batory Game (Beta)
 
+## :exclamation: :exclamation: (ERROR) YOU DON'T HAVE THE LASTEST VERSION OF THE GAME: :exclamation::exclamation:
+
+If you are having trouble running the game, or see an error message saying that the game is out of date (look up), you can try to update the game by repeating the process form the installation tab.
+
 ## Game Manual file
 Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
 
@@ -19,7 +23,7 @@ To do this, go to the GitHub page for the game, click on the green Code button, 
 ### Unzip the game
 Use your favorite unzip tool to unzip the game files onto your computer.
 
-##
+
 
 ### Install Python (if not already installed)
 Go to Python's website (https://www.python.org), then **Downloads** section and
