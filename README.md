@@ -4,12 +4,18 @@
 Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
 
 ## Installation
-Due to technical issues, the installation file may be malfunctioning. If you find
-yourself unable to install the game by setup file, here is an instruction on how
-to do it step-by-step.
+Here is an instruction on how
+to install the game step-by-step.
 
 <details>
 <summary><b>Step-by-step installation</b></summary>
+
+### Install the game
+When downloading materials to your laptop, it is easiest to download the entire repository. 
+To do this, go to the GitHub page for the game, click on the green Code button, then download the repository as a ZIP file.
+
+![github installation]()
+
 
 ### Install Python
 Go to Python's website (https://www.python.org), then **Downloads** section and
