@@ -36,7 +36,8 @@ of the Python installer. **Make sure that the *add Python to Path* box is checke
 1. Go to *Start*, find the search box and type *cmd*, then press Enter.
 2. You should see something like this
 ![commandline](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/cmd.png)
-3. Type the following lines: 
+3. Type the following lines:
+
 - `python -m pip install --user pygame` and press Enter.
 - `python -m pip install --user pytmx` and press Enter again.
 
@@ -50,10 +51,13 @@ Make sure to type in exactly these, without any typos. After pressing Enter both
 </details>
 
 ## Main objective
+
 Your main task in this game is to survive several days in Batory without ending up expelled for crimes against humanity (in demo version there is only one day). There will be many opportunities to do something bad: doing so will make you closer to being expelled!
 
 # Some mechanics :wrench:
+
 ## Controls
+
 - :video_game: In game:
 	-   **Arrow Keys** – Move
 
