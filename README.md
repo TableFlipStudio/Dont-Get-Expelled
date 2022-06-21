@@ -4,10 +4,7 @@
 
 If you are having trouble running the game, or see an error message saying that the game is out of date (look up), you can try to update the game by repeating the process form the installation tab.
 
-## Game Manual file
-Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
-
-## Installation
+# Installation
 Here is an instruction on how
 to install the game step-by-step.
 
@@ -50,6 +47,9 @@ Make sure to type in exactly these, without any typos. After pressing Enter both
 <!--insert instructions on downloading the game files here AND instruction on how to add python to Path-->
 
 </details>
+
+## Game Manual file
+Welcome! This manual should be an in-game feature but the **programmers** are lazy sleaze bags so here comes a markdown file!
 
 ## Main objective
 
