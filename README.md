@@ -13,7 +13,7 @@ to install the game step-by-step.
 When downloading materials to your laptop, it is easiest to download the entire repository.
 To do this, go to the GitHub page for the game, click on the green Code button, then download the repository as a ZIP file.
 
-![github installation](https://raw.githubusercontent.com/TableFlipStudio/Dont-Get-Expelled/main/gamefiles/images/github%20(1).png)
+![github installation](https://raw.githubusercontent.com/TableFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/install_repo.png)
 
 ### Unzip the game
 
@@ -39,22 +39,55 @@ of the Python installer. **Make sure that the *add Python to Path* box is checke
 - `python -m pip install --user pytmx` and press Enter again.
 
 Make sure to type in exactly these, without any typos. After pressing Enter both times, you should see something like this:
- 
+
 ![instaling libraries](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/libs.png)
 
 4. Close the black window
-
-<!--insert instructions on downloading the game files here AND instruction on how to add python to Path-->
 
 ## To run the game you need to double click on the 'dontgetexpelled.py' file  in ../%GAMEDIRECTORY%/gamefiles/dontgetexpelled.py
 
 </details>
 
-## :exclamation: :exclamation: ERRORS  :exclamation::exclamation:
+## :question: :exclamation: Q&A  :exclamation::question:
 
-- YOU DON'T HAVE THE LASTEST VERSION OF THE GAME:
+
+- <details><summary>You don't have the latest version of the game:</summary>
 
     If you are having trouble running the game, or see an error message saying that the game is out of date (look up), you can try to update the game by repeating the process form the installation tab.
+
+</details>
+- <details><summary>You've forgotten to add Python to PATH:</summary>
+    1. Go to *Start*, find the search box, type *python*
+    2. You should see something like this:
+    ![finding python](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/finding_python.png)
+    3. Find *Python 3.9 (64-bit)* (the numbers are not important at all - it
+    might be 3.10 (32-bit) or whatever else, depending on the version of Python
+    on your computer) and **right-click** it
+    4. Click *Otwórz lokalizację pliku*
+    5. You should see something like this:
+    ![Python lnk dir](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/python_env.png)
+    (if instead you see something like in point 7., skip point 6.)
+    6. Repeat steps 3. and 4.
+    7. You should see something like this:
+    ![Python environment](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/python_env2.png)
+    8. Copy the path above (highlighted on blue)
+    9. Go again to *Start*, find the search box and type *zmienne środowiskowe* (english: *environmental variables*)
+    10. You should see this:
+    ![Advanced system settings](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/adv_sys_set.png)
+    11. Click *Zmienne środowiskowe...*
+    12. You should see something like this:
+    ![env vars](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/envars.png)
+    :exclamation: **WARNING: Be careful not to delete anything here, or you might damage your operating system!** :exclamation:
+    13. In the top box, find *Path* (highlighted on blue) and **double-click** it
+    14. See something like this:
+    ![PATH](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/PATH.png)
+    15. Click *Nowy*
+    16. Paste the path from point 8.
+    17. Click *OK*
+    18. Click *OK* again
+    19. ...and yet again (you should have got rid of all tabs opened from point 9 and on)
+    20. You have successfully added Python to PATH. Phew, that was easy!
+  </details>
 
 ## Game Manual file
 
@@ -94,7 +127,7 @@ This is the Fault Counter – it shows how many bad things you can commit before
 
 Some faults are significant enough to subtract **more than one point** from this counter, so can put the skids under you faster. The most serious crimes can even get you expelled instantly! But do not worry – helping others selflessly is a valued quality in this school! There are some deeds you can commit that can **increase** the Fault Counter, that is to avert you from expulsion.
 
-## Quests  :question: 
+## Quests  :question:
 
 Quests in this game are divided into 2 types:
 
