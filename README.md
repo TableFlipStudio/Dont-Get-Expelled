@@ -23,7 +23,7 @@ Use your favorite unzip tool to unzip the game files onto your computer.
 
 Go to Python's website (<https://www.python.org>), then **Downloads** section and
 click the *Download* button. Save the installation file and open it. Follow instructions
-of the Python installer. **Make sure that the *add Python to Path* box is checked, otherwise you will have to do several more things you don't want to do** (Forgot to do it anyway? See the end of this section for instructions on how to fix it).
+of the Python installer. **Make sure that the *add Python to Path* box is checked, otherwise you will have to do several more things you don't want to do** (Forgot to do it anyway? See the Q&A section for instructions on how to fix it).
 ![python and path](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/python_install.png)
 
 ### Install Python libraries
@@ -96,7 +96,7 @@ Welcome! This manual should be an in-game feature but the **programmers** are la
 
 ## Main objective
 
-Your main task in this game is to survive several days in Batory without ending up expelled for crimes against humanity (in demo version there is only one day). There will be many opportunities to do something bad: doing so will make you closer to being expelled!
+Your main task in this game is to survive several days in Batory without ending up expelled for crimes against humanity (in this beta version there is only one day). There will be many opportunities to do something bad: doing so will make you closer to being expelled!
 
 # Some mechanics :wrench:
 
