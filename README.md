@@ -46,7 +46,6 @@ Make sure to type in exactly these, without any typos. After pressing Enter both
 
 ## To run the game you need to double click on the 'dontgetexpelled.py' file  in ../%GAMEDIRECTORY%/gamefiles/dontgetexpelled.py
 
-</details>
 
 ## :question: :exclamation: Q&A  :exclamation::question:
 
@@ -57,6 +56,7 @@ Make sure to type in exactly these, without any typos. After pressing Enter both
 
 </details>
 - <details><summary>You've forgotten to add Python to PATH:</summary>
+
     1. Go to *Start*, find the search box, type *python*
     2. You should see something like this:
     ![finding python](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/finding_python.png)
@@ -87,6 +87,7 @@ Make sure to type in exactly these, without any typos. After pressing Enter both
     18. Click *OK* again
     19. ...and yet again (you should have got rid of all tabs opened from point 9 and on)
     20. You have successfully added Python to PATH. Phew, that was easy!
+  </details>
   </details>
 
 ## Game Manual file
