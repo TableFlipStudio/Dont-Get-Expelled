@@ -47,7 +47,7 @@ Make sure to type in exactly these, without any typos. After pressing Enter both
 ## To run the game you need to double click on the 'dontgetexpelled.py' file  in ../%GAMEDIRECTORY%/gamefiles/dontgetexpelled.py
 
 
-## :question: :exclamation: Q&A  :exclamation::question:
+## :question: Q&A
 
 
 - <details><summary>You don't have the latest version of the game:</summary>
