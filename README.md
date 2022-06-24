@@ -53,8 +53,8 @@ Make sure to type in exactly these, without any typos. After pressing Enter both
 - <details><summary>You don't have the latest version of the game:</summary>
 
     If you are having trouble running the game, or see an error message saying that the game is out of date (look up), you can try to update the game by repeating the process form the installation tab.
+  </details>
 
-</details>
 - <details><summary>You've forgotten to add Python to PATH:</summary>
 
     1. Go to *Start*, find the search box, type *python*
