@@ -35,8 +35,7 @@ of the Python installer. **Make sure that the *add Python to Path* box is checke
 ![commandline](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/cmd.png)
 3. Type the following lines:
 
-- `python -m pip install --user pygame` and press Enter.
-- `python -m pip install --user pytmx` and press Enter again.
+- `python -m pip install --user pygame pytmx` and press Enter.
 
 Make sure to type in exactly these, without any typos. After pressing Enter both times, you should see something like this:
 

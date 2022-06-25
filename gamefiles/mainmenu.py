@@ -1,6 +1,5 @@
 import pygame
 import sys
-import requests
 
 from save import Button
 
@@ -19,31 +18,7 @@ class MainMenu():
         self.rect.topleft = self.screen_rect.topleft
         
         #info about the game version
-        self.version = pygame.font.SysFont('comicsansms', 30)
-        self.version_text = self.version.render('You don\'t have the lastest version', True, (139,0,0), None)
-        self.version_rect = self.version_text.get_rect()
-        self.version_rect.center = (self.screen_rect.centerx+ self.screen_rect.width/4, self.screen_rect.centery - self.screen_rect.height/6)
         
-        #getting the latest version number from github
-        
-        v = ''   #cloud version 
-        r = requests.get(
-            'https://raw.githubusercontent.com/TableFlipStudio/Dont-Get-Expelled/main/gamefiles/version.txt', stream=True)  # pobieranie wersji
-
-        for chunk in r.iter_content(chunk_size=None):
-            chunk = chunk.decode('utf-8')   # chunk is a byte string
-        for i in chunk:
-            if i.isdigit(): # if i is a digit
-                v += i      # add it to v
-                
-        with open('version.txt', 'r') as file:
-            lv = file.readline() # lv - local version 
-        
-        if v != lv:
-            self.lastest = False
-        else:
-            self.lastest = True
-            
 
         # Przyciski manu głównego
         ngpos = (self.settings.screen_width / 5,
