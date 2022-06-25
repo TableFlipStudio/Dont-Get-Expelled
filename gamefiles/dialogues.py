@@ -255,7 +255,7 @@ class DialogueWindow():
         if self.node.faultValue != 0:
             self.expelling.faults.append(self.node.faultValue)
 
-        if npc: # uruchom tylko, jesli to dialog z NPC (nieszczęsne pytania matematyczne)
+        if npc: # uruchom tylko, jesli to dialog z NPC (Obsługa dialogów bez przypisanych NPC)
             if self.node.stageUp > 0:
                 npc.stage += self.node.stageUp
 
@@ -282,7 +282,9 @@ class DialogueWindow():
                 self.dogex.story.quests.remove(quest[1])
 
     def load_dialogue(self, npc=None):
-        """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem"""
+        """Wczytanie całego dialogu, razem z odpowiedziami i interfejsem.
+        Domyślny NPC to None, żeby móc obsługiwać dialogi bez NPC takie jak pytania
+        matematycznr czy rozmową z panią na portierni"""
         self.msgs = [] # Wyczyszczenie ewentualnych poprzednich wiadomości
 
         self._check_node_events(npc)
@@ -316,7 +318,7 @@ class DialogueWindow():
         enumerated_lines = list(enumerate(lines)) #Potrzebne jako ID do odnoszenia
         yPos = self.answ_tab_rect.y               #się do danej odpowiedzi
         for msgid, line in enumerated_lines:
-            #Pusta linijka oddzielająca poszczególne odpowiedzi
+            # Pusta linijka oddzielająca poszczególne odpowiedzi
             if line[0] == ">":
                 yPos += self.font.get_sized_height()
 

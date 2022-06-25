@@ -16,9 +16,9 @@ class MainMenu():
         self.static_img = pygame.image.load("images/static_img/mMenu.png")
         self.rect = self.image.get_rect()
         self.rect.topleft = self.screen_rect.topleft
-        
+
         #info about the game version
-        
+
 
         # Przyciski manu głównego
         ngpos = (self.settings.screen_width / 5,
@@ -67,13 +67,11 @@ class MainMenu():
             return True # Jeśli użytkonik akurat zapisze grę w tym miejscu to jego problem
         else:
             return False
-        
-    
+
+
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
         self.newgamebutton.blit_button()
         self.loadgamebutton.blit_button()
         self.quitbutton.blit_button()
-        if not self.lastest:
-            self.screen.blit(self.version_text, self.version_rect)
