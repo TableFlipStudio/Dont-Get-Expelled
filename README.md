@@ -43,7 +43,7 @@ Make sure to type in exactly these, without any typos. After pressing Enter both
 
 4. Close the black window
 
-## To run the game you need to double click on the 'dontgetexpelled.py' file  in ../%GAMEDIRECTORY%/gamefiles/dontgetexpelled.py
+## To run the game you need to double click on the 'dontgetexpelled.py' file in 'gamefiles' folder in your game's directory (Dont-Get-Expelled)
 
 
 ## :question: Q&A
