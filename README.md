@@ -10,14 +10,14 @@ to install the game step-by-step.
 
 ## Install the game
 
-When downloading materials to your laptop, it is easiest to download the entire repository.
+When downloading materials to your laptop, it is easiest to download the entire repository (the folder containing the game file and all auxiliary files).
 To do this, go to the GitHub page for the game, click on the green Code button, then download the repository as a ZIP file.
 
 ![github installation](https://raw.githubusercontent.com/TableFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/install_repo.png)
 
 ### Unzip the game
 
-Use your favorite unzip tool to unzip the game files onto your computer.
+Use your favorite unzip tool (7-zip, WinRAR, etc.) to unzip the game files onto your computer.
 
 ### Install Python (if not already installed)
 
@@ -33,11 +33,11 @@ of the Python installer. **Make sure that the *add Python to Path* box is checke
 1. Go to *Start*, find the search box and type *cmd*, then press Enter.
 2. You should see something like this
 ![commandline](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/cmd.png)
-3. Type the following lines:
+3. Type the following line:
 
 - `python -m pip install --user pygame pytmx` and press Enter.
 
-Make sure to type in exactly these, without any typos. After pressing Enter both times, you should see something like this:
+Make sure to type in exactly this, without any typos. After pressing Enter both times, you should see something like this:
 
 ![instaling libraries](https://raw.githubusercontent.com/TabeFlipStudio/Dont-Get-Expelled/main/gamefiles/images/manual_images/libs.png)
 
