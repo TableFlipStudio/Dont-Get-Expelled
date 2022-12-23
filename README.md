@@ -36,6 +36,9 @@ of the Python installer. **Make sure that the *add Python to Path* box is checke
 3. Type the following line:
 
 - `python -m pip install --user pygame pytmx` and press Enter.
+**WARNING!** If the Python version you have downloaded is 3.11 (and it probably is, since it's the latest (at 23.12.2022)), you must use the following two lines instead:"
+- `python -m pip install --user pygame --pre`
+- `python -m pip install --user pytmx`
 
 Make sure to type in exactly this, without any typos. After pressing Enter both times, you should see something like this:
 
